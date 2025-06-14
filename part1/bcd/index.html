@@ -80,5 +80,50 @@
     </pre>
 
     <p>But usually defining event handlers within JSX-templates is not a good idea</p>
+
+
+    <h2>Spread syntax (...)</h2>
+    <p><b>object spread syntax</b> <code>{ ...clicks }</code> creates a new object that has copies of all of the properties of the clicks object. When we specify a particular property - e.g. right in <code>{ ...clicks, right: 1 }</code>, the value of the right property in the new object will be 1.</p>
+
+    <p><span style="color:red">Technically you are returning a new copy of the state every time you run <code>setState</code>.</span> But do note that the ... syntax is doing shallow copy, not deep copy, and deep copy is usually not required.</p>
+
+    <p style="color:blue">The piece of state stored in <code>allClicks</code> is now set to be an array that contains all of the items of <span style="color: red">the previous state array</span> plus the letter L. <span style="color:black">Adding the new item to the array is accomplished with the concat method,</span> which does not mutate the existing array but rather <span style="color: red"> returns a new copy of the array</span> with the item added to it.</p>
+
+    <pre>
+        <code>
+            const [<span style="color:blue">allClicks</span>, setAll] = useState([]);
+
+            const handleLeftClick = () =&gt; {
+                <span style="color:blue">setAll(allClicks.concat(&#39;L&#39;))</span>
+                setLeft(left + 1)
+            }
+        </code>
+    </pre>
+
+    <p>The application below appears to work. However, <b>it is forbidden in React to mutate state directly</b>, since it can result in <a href="https://stackoverflow.com/questions/37755997/why-cant-i-directly-modify-a-components-state-really/40309023#40309023">unexpected side effects</a>. Changing state has to always be done by setting the state to a new object. If properties from the previous state object are not changed, they need to simply be copied, which is done by copying those properties into a new object and setting that as the new state.</p>
+
+    <pre>
+        <code>
+            const handleLeftClick = () =&gt; {
+                <span style="color:red">clicks.left++</span>
+                setClicks(clicks)
+            }
+        </code>
+    </pre>
+
+    <p>Storing all of the state in a single state object is a bad choice for this particular application; there's no apparent benefit and the resulting application is a lot more complex.</p>
+    <pre>
+        <code>
+            const [ clicks, setClicks ] = useState({left: 0, right: 0})
+        </code>
+    </pre>
+
+    <p>So, instead, storing the click counters into separate pieces of state is a far more suitable choice.</p>
+    <pre>
+        <code>
+            const [left, setLeftClick] = useState(0);
+            const [right, setRightClick] = useState(0);
+        </code>
+    </pre>
 </body>
 </html>
