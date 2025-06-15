@@ -79,8 +79,37 @@
         </code>
     </pre>
 
-    <p>But usually defining event handlers within JSX-templates is not a good idea</p>
+    <p>But usually defining event handlers within JSX-templates is not a good idea. And defining event handlers directly in the attribute of the button is not necessarily the best possible idea.</p>
 
+    <pre>
+        <code>
+            &lt;button onClick={<span style="color: red">() =&gt; setValue(0)</span>}&gt;button&lt;/button&gt;
+        </code>
+    </pre>
+
+    <pre>
+        <code>
+            const App = () =&gt; {
+            const [value, setValue] = useState(10)
+
+            <span style="color: red">
+            const handleClick = () =&gt; console.log(&#39;clicked the button&#39;)
+            </span>
+            return (
+                &lt;div&gt;
+                {value}
+                &lt;button onClick={<span style="color: red">handleClick</span>}&gt;button&lt;/button&gt;
+                &lt;/div&gt;
+                )
+            }
+        </code>
+
+        <p>The handleClick variable is now assigned to a reference to the function. The reference is passed to the button as the onClick attribute:</p>
+
+        <code>
+            &lt;button onClick={<span style="color: red">handleClick</span>}&gt;button&lt;/button&gt;
+        </code>
+    </pre>
 
     <h2>Spread syntax (...)</h2>
     <p><b>object spread syntax</b> <code>{ ...clicks }</code> creates a new object that has copies of all of the properties of the clicks object. When we specify a particular property - e.g. right in <code>{ ...clicks, right: 1 }</code>, the value of the right property in the new object will be 1.</p>
