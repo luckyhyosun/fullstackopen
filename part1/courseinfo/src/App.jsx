@@ -1,48 +1,20 @@
 import { useState } from 'react';
 
-const History = (props) => {
-  // console.log(props);
-
-  if(props.clicks.length === 0){
-    return <p><i>Plz click the L/R buttons.</i></p>
-  }else{
-    return <p>History of clicks: {props.clicks.join("+")}</p>
-  }
-}
-
-const Button = ({onClick, name}) => {
-  return <button onClick={onClick}>{name}</button>
+const Button = ({onClick, text}) => {
+  return <button onClick={onClick}>{text}</button>
 }
 
 const App = () => {
-  const [left, setLeftClick] = useState(0);
-  const [right, setRightClick] = useState(0);
-  const [all, setAllClick] = useState([]);
-  const [total, setTotalClick] = useState(0);
-
-  const handleLeftClick = () => {
-    setAllClick(all.concat("L"));
-    const updatedLeft = left + 1;
-    setLeftClick(updatedLeft);
-    setTotalClick(updatedLeft + right);
-  }
-
-  const handleRightClick = () => {
-    setAllClick(all.concat("R"));
-    const updatedRight = right + 1;
-    setRightClick(updatedRight);
-    setTotalClick(left + updatedRight);
-  }
+  const [currentVal, setValue] = useState(0);
 
   return (
     <div>
-    {left}
-    <Button onClick = {handleLeftClick} name = "Left"/>
+      <h1>{currentVal}</h1>
+      <Button onClick = {() => {setValue(1000)}} text = "Thousand"/>
 
-    <Button onClick = {handleRightClick} name = "Right" />
-    {right}
-    <History clicks = {all}/>
-    <p>Total click counts: {total}</p>
+      <Button onClick = {() => {setValue(0)}} text = "Reset" />
+
+      <Button onClick = {() => {setValue(currentVal + 1)}} text = "increment" />
     </div>
   )
 }

@@ -111,6 +111,54 @@
         </code>
     </pre>
 
+    <h3>But a function that returns a function can...</h3>
+
+    <pre>
+        <code>
+            const App = () =&gt; {
+            const [value, setValue] = useState(10)
+
+            const hello = () =&gt; {
+                <span style="color: red">const handler = () =&gt; console.log(&#39;hello world&#39;)
+                return handler</span>
+            }
+
+            return (
+                &lt;div&gt;
+                {value}
+                &lt;button onClick={<span style="color: red">hello()</span>}&gt;button&lt;/button&gt;
+                &lt;/div&gt;
+                )
+            }
+        </code>
+    </pre>
+    <p>The event handler is now set to a function call: Earlier on we stated that an event handler may not be a call to a function and that it has to be a function or a reference to a function. Why then does a function call work in this case?</p>
+
+    <p>When the component is rendered, the following function gets executed:</p>
+    <pre>
+        <code>
+            const hello = () =&gt; {
+                const handler = () =&gt; console.log(&#39;hello world&#39;)
+
+                return handler
+            }
+        </code>
+    </pre>
+    <p>The return value of the function is another function that is assigned to the handler variable:</p>
+    <pre>
+        <code>
+            &lt;button onClick={hello()}&gt;button&lt;/button&gt;
+        </code>
+    </pre>
+    <p>It assigns the return value of hello() to the onClick attribute. Essentially the line gets transformed into:</p>
+    <pre>
+        <code>
+            &lt;button onClick={() =&gt; console.log(&#39;hello world&#39;)}&gt;
+                button
+            &lt;/button&gt;
+        </code>
+    </pre>
+
     <h2>Spread syntax (...)</h2>
     <p><b>object spread syntax</b> <code>{ ...clicks }</code> creates a new object that has copies of all of the properties of the clicks object. When we specify a particular property - e.g. right in <code>{ ...clicks, right: 1 }</code>, the value of the right property in the new object will be 1.</p>
 
