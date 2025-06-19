@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-const App = () => {
-  const anecdotes = [
+const anecdotes = [
     '0: If it hurts, do it more often.',
     '1: Adding manpower to a late software project makes it later!',
     '2: The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
@@ -12,27 +11,51 @@ const App = () => {
     '7: The only way to go fast, is to go well.'
   ]
 
+const MaxAnecdote = (props) => {
+  if(props){
+    return (
+    <div>
+      <p>
+        The most famous anecdote is... <br/>
+        <b>{anecdotes[props.maxAnecdote]}</b>
+      </p>
+      <p>has {props.maxVote} votes.</p>
+    </div>
+  )
+  }
+}
+
+const App = () => {
   const [selected, setSelected] = useState(0);
-  const [voteArray, setVoteArray] = useState([]);
+  const [votes, setVotes] = useState(new Array(8).fill(0));
+  const [mostAnecdote, setMostAnecdote] = useState({});
 
   const randomNum = Math.floor(Math.random()* (anecdotes.length));
 
-  const votes = new Array(8).fill(0);
-
   const voteFunction = () => {
-    console.log(selected);
+    console.log("selected anecdote index is: ", selected);
     const newVoteArray = [...votes];
     newVoteArray[selected] += 1;
-    setVoteArray(newVoteArray);
-    console.log(voteArray);
+    setVotes(newVoteArray);
 
+    const maxVote = Math.max(...newVoteArray);
+    const maxAnecdote = newVoteArray.indexOf(maxVote);
+    console.log("maxVote is: ", maxVote, "maxAnecdote index is: ", maxAnecdote);
+    setMostAnecdote({maxVote, maxAnecdote});
   }
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
+      <h1>Anecdote of the day</h1>
+      <p>
+        {anecdotes[selected]} <br />
+        <i>has {votes[selected]} vote yet</i>
+      </p>
       <button onClick={voteFunction}>Vote</button>
       <button onClick={() => {setSelected(randomNum)}}>Next Anecdote</button>
+
+      <h1>Anecdote with the most votes</h1>
+      <MaxAnecdote maxAnecdote={mostAnecdote.maxAnecdote} maxVote = {mostAnecdote. maxVote}/>
     </div>
   )
 }
