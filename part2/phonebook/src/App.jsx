@@ -2,12 +2,33 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
-  ])
-  const [newName, setNewName] = useState('')
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ]);
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [filterName, setFilterName] = useState('');
+  const [filteredNames, setFilteredName] = useState([]);
 
   const handleNameChange = (event) => {
-    setNewName(event.target.value)
+    setNewName(event.target.value);
+  }
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
+  }
+  const handleFilterNameChange = (event) => {
+    setFilterName(event.target.value);
+    persons.filter(person => {
+      if(person.name.toLowerCase().includes(filterInput.toLowerCase())){
+        const filteredObj = {
+          name: person.name,
+          number: person.number
+        }
+        setFilteredName(filteredNames.concat(filteredObj))
+      }
+    })
   }
   const handleAddButtton = (event) => {
     event.preventDefault();
@@ -16,18 +37,38 @@ const App = () => {
     }
     console.log(personObj);
 
-    setPersons(persons.concat(personObj));
-    setNewName('');
+    persons.forEach(person => {
+      if(person.name === personObj.name){
+        alert(`${newName} is already added to phonebook`);
+        setPersons(persons);
+      }else{
+        setPersons(persons.concat(personObj));
+      }
+      setNewName('');
+      setNewNumber('');
+    })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with <input
+          value={filterName}
+          onChange={handleFilterNameChange}
+        />
+      </div>
+      <h2>Add a New User</h2>
       <form>
         <div>
           name: <input
           value={newName}
           onChange={handleNameChange}/>
+        </div>
+        <div>
+          number: <input
+          value={newNumber}
+          onChange={handleNumberChange}/>
         </div>
         <div>
           <button
@@ -36,11 +77,15 @@ const App = () => {
           >add</button>
         </div>
       </form>
-      <h2>Numbers</h2>
-      <p>{persons.map(person => {
+      <h2>Fitered Numbers</h2>
+      {/* <p>{persons.map(person => {
         person.name
-      })}</p>
-      <div>debug: {newName}</div>
+      })}</p> */}
+      <p>
+        {filteredNames.map(name => {
+          name.name
+        })}
+      </p>
     </div>
   )
 }
