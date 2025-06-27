@@ -21,7 +21,7 @@ const App = () => {
   const handleFilterNameChange = (event) => {
     setFilterName(event.target.value);
     persons.filter(person => {
-      if(person.name.toLowerCase().includes(filterInput.toLowerCase())){
+      if(person.name.toLowerCase().includes(filterName.toLowerCase())){
         const filteredObj = {
           name: person.name,
           number: person.number
