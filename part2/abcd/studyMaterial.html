@@ -132,6 +132,77 @@
         }, <span style="color:blue">0</span>)
         </code>
     </pre>
+
+    <h1>Phonebook Exercise!</h1>
+    <p>From the phonebook exercise, I found a confusing step.</p>
+
+    <p>inside a <span style="color:blue">filter()</span> loop, and repeatedly calling <span style="color:red">setFilteredName(...)</span> based on the current filteredNames value, which has not updated yet due to <b>React batching</b> and <b>async behavior</b>. <br />So every time you call setFilteredName, it's still working with the initial state (likely []) instead of accumulating results as you expect.</p>
+    <pre>
+        <code>
+            const [filterName, setFilterName] = useState(&#39;&#39;);
+            const [filteredNames, setFilteredName] = useState([]);
+
+            const handleFilterNameChange = (event) =&gt; {
+
+                setFilterName(event.target.value);
+
+                if(!event.target.value){
+                    setFilteredName([]);
+                }else{
+                    persons.<span style="color:blue">filter</span>(person =&gt; {
+                    if(person.name.toLowerCase().includes(event.target.value.toLowerCase())){
+                        const filteredObj = {
+                        name: person.name,
+                        number: person.number,
+                        id: person.id
+                        }
+                        console.log(filteredObj);
+                        <span style="color:red">setFilteredName</span>(filteredNames.<span style="color:green">concat</span>(filteredObj));
+                    }else{
+                        setFilteredName([]);
+                    }
+                    })
+                }
+            }
+
+            setFilteredName(filteredNames.concat(filteredObj));
+
+        </code>
+    </pre>
+
+    <p>So, the solution is, instead of trying to update state inside the loop, collect the filtered results first, then update the state once.</p>
+    <pre>
+        <code>
+            const handleFilterNameChange = (event) =&gt; {
+
+                const inputValue = event.target.value;
+
+                setFilterName(inputValue);
+
+                if (!inputValue) {
+                    setFilteredName([]);
+                } else {
+                    const filtered = persons.filter(person =&gt;
+                    person.name.toLowerCase().includes(inputValue.toLowerCase())
+                    );
+                    setFilteredName(filtered);
+                }
+                };
+
+        </code>
+    </pre>
+
+    <h3>Why <span style="color:green">filteredNames</span> array is always empty?/ Why we do not use <span style="color:green">concat</span> in handleFilterNameChange?</h3>
+    <p>From the code above, this is because the purpose of <span style="color:blue">filter()</span> is to select matching items from a list — not to <span style="color:green">incrementally add them</span>. Using <span style="color:green">.concat()</span> implies you are building up a list over time, but that is not what you want when the user types a new filter. Instead, you want to <span style="color:blue">replace the filtered list</span> with fresh results based on the latest input.</p>
+
+    <h3>Avoiding stale state bugs </h3>
+    <pre>
+        <code>
+            setFilteredName(filteredNames.concat(filteredObj));
+        </code>
+    </pre>
+    <p>you're using filteredNames (which is from the previous render). Since React state updates are <span style="color:red">asynchronous</span>, filteredNames does not reflect the items you have already added in this loop — so your concat keeps starting from an empty array.</p>
+
     <script>
         const orders = [
             {amount: 100},

@@ -19,21 +19,25 @@ const App = () => {
     setNewNumber(event.target.value);
   }
   const handleFilterNameChange = (event) => {
-    setFilterName(event.target.value);
-    persons.filter(person => {
-      if(person.name.toLowerCase().includes(filterName.toLowerCase())){
-        const filteredObj = {
-          name: person.name,
-          number: person.number
-        }
-        setFilteredName(filteredNames.concat(filteredObj))
-      }
-    })
+  const inputValue = event.target.value;
+  setFilterName(inputValue);
+
+  if (!inputValue) {
+    setFilteredName([]);
+  } else {
+    const filtered = persons.filter(person =>
+      person.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setFilteredName(filtered);
   }
+};
+
   const handleAddButtton = (event) => {
     event.preventDefault();
     const personObj = {
-      name: newName
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1
     }
     console.log(personObj);
 
@@ -78,14 +82,14 @@ const App = () => {
         </div>
       </form>
       <h2>Fitered Numbers</h2>
-      {/* <p>{persons.map(person => {
-        person.name
-      })}</p> */}
-      <p>
-        {filteredNames.map(name => {
-          name.name
-        })}
-      </p>
+
+      <div>
+        {filteredNames.map(person => (
+          <div key={person.id}>
+            <p>{person.name} {person.number}</p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
