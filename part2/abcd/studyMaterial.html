@@ -203,6 +203,15 @@
     </pre>
     <p>you're using filteredNames (which is from the previous render). Since React state updates are <span style="color:red">asynchronous</span>, filteredNames does not reflect the items you have already added in this loop — so your concat keeps starting from an empty array.</p>
 
+    <h1>useState vs useEffect</h1>
+    <h3>useState</h3>
+    <p>For storing and updating local state</p>
+    <p>Think of it as a variable that "remembers" its value between renders.<br /> It causes the component to re-render when the state changes</p>
+
+    <h3>useEffect</h3>
+    <p>For side effects</p>
+    <p>Use it when you need to run code after the component renders.<br /> Common for: Fetching data/ Setting up subscriptions/ Directly manipulating the DOM/ Setting timers <br /> Does not return a value; it runs code for its effects.</p>
+
     <script>
         const orders = [
             {amount: 100},
