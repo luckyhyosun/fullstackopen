@@ -1,5 +1,51 @@
 import { useState } from 'react'
 
+const Filter = (props) => {
+  return (
+    <div>
+        filter shown with <input
+          value={props.value}
+          onChange={props.onChange}
+        />
+      </div>
+  )
+}
+
+const PersonForm = (props) => {
+  return (
+    <form>
+        <div>
+          name: <input
+          value={props.nameValue}
+          onChange={props.nameOnChange}/>
+        </div>
+        <div>
+          number: <input
+          value={props.numberValue}
+          onChange={props.numberOnChange}/>
+        </div>
+        <div>
+          <button
+            type="submit"
+            onClick={props.btnOnClick}
+          >add</button>
+        </div>
+      </form>
+  )
+}
+
+const Persons = ({filteredNames}) => {
+  return (
+    <div>
+        {filteredNames.map(person => (
+          <div key={person.id}>
+            <p>{person.name} {person.number}</p>
+          </div>
+        ))}
+      </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -56,40 +102,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input
-          value={filterName}
-          onChange={handleFilterNameChange}
-        />
-      </div>
-      <h2>Add a New User</h2>
-      <form>
-        <div>
-          name: <input
-          value={newName}
-          onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input
-          value={newNumber}
-          onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button
-            type="submit"
-            onClick={handleAddButtton}
-          >add</button>
-        </div>
-      </form>
-      <h2>Fitered Numbers</h2>
+      <Filter value={filterName} onChange={handleFilterNameChange}/>
 
-      <div>
-        {filteredNames.map(person => (
-          <div key={person.id}>
-            <p>{person.name} {person.number}</p>
-          </div>
-        ))}
-      </div>
+      <h2>Add a New User</h2>
+      <PersonForm
+        nameValue={newName}
+        nameOnChange={handleNameChange}
+        numberValue={newNumber}
+        numberOnChange={handleNumberChange}
+        btnOnClick={handleAddButtton}
+      />
+
+      <h2>Fitered Numbers</h2>
+      <Persons filteredNames = {filteredNames}/>
     </div>
   )
 }
