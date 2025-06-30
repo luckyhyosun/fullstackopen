@@ -212,6 +212,10 @@
     <p>For side effects</p>
     <p>Use it when you need to run code after the component renders.<br /> Common for: Fetching data/ Setting up subscriptions/ Directly manipulating the DOM/ Setting timers <br /> Does not return a value; it runs code for its effects.</p>
 
+    <h3>🧠 Why useEffect?</h3>
+    <p><span style="color:red">React doesn't want you to run side effects during rendering</span> — that would make it unpredictable. Instead, it gives you useEffect, <span style="color:red">which runs after the component renders</span>.</p>
+
+
     <script>
         const orders = [
             {amount: 100},
