@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Java Script</h1>
+
+    <h3>JavaScript engines</h3>
+    <p>So called, runtime environments, follow the <span style="color:red">asynchronous model</span>. This means that code execution continues immediately after calling an IO function, without waiting for it to return.</p>
+
+    <p>When an asynchronous operation is completed, or, more specifically, at some point after its completion, the JavaScript engine calls the event handlers registered to the operation.</p>
+
+    <p>Currently, JavaScript engines are <span style="color:red">single-threaded</span>, which means that they cannot execute code in parallel. As a result, it is a requirement in practice to use a <span style="color:red">non-blocking model</span> for executing IO operations.</p>
+
+    <h3>axios library</h3>
+    <p>This is library for communication between the browser and server. It functions like <code>fetch</code> but is somewhat more pleasant to use. Another good reason to use axios is our getting familiar with adding external libraries, so-called <i>npm packages</i>, to React projects.</p>
+
+    <p><b>NB:</b> npm-commands should always be <span style="color:red">run in the project root directory</span>, which is where the <span style="color:red">package.json</span> file can be found.</p>
+
+    <p> Install json-server as a <span style="color:blue">development dependency (only used during development)</span>, which means it is used for assistance during software development, by executing the command:</p>
+    <pre>
+        <code>
+            npm install json-server <span style="color:blue">--save-dev</span>
+        </code>
+    </pre>
+
+    <p>We can now conveniently, without parameter definitions, start the json-server from the project root directory with the command:</p>
+    <pre>
+        <code>
+            by adding this line in the <span style="color:blue">package.json</span> file:
+
+            {
+                // ...
+                "scripts": {
+                    "dev": "vite",
+                    "build": "vite build",
+                    "lint": "eslint .",
+                    "preview": "vite preview",
+                    <span style="color:blue">"server": "json-server -p 3001 db.json"</span>
+                },
+            }
+        </code>
+    </pre>
+
+    <p>And the run this code to the terminal: </p>
+    <pre>
+        <code>
+            npm run server
+        </code>
+    </pre>
+
+    <p><b>axio</b> is installed as <span style="color:red">a runtime dependency</span> of the application because the execution of the program requires the existence of the library. </p>
+
+    <h1>Promise 👌</h1>
+    <p>A Promise is <span style="color:red">an object</span> representing the <span style="color:red">eventual completion or failure</span> of an asynchronous operation.</p>
+
+    <p>In other words, a promise is an object that represents an asynchronous operation. A promise can have three distinct states:</p>
+    <ul>
+        <li>The promise is <i><span style="color:red">pending</span></i>: It means that the asynchronous operation corresponding to the promise has not yet finished and the final value is not available yet.</li>
+        <li>The promise is <i><span style="color:red">fulfilled</span></i>: It means that the operation has been completed and the final value is available, which generally is a successful operation.</li>
+        <li>The promise is <i><span style="color:red">rejected</span></i>: It means that an error prevented the final value from being determined, which generally represents a failed operation.</li>
+    </ul>
+
+    <h1>Then 🤞</h1>
+    <p>If, and when, we want to access the <span style="color:red">result of the operation represented by the <b>promise</b></span>, we must register <b>an event handler</b> to the promise. This is achieved using the method <span style="color:red">then</span>:</p>
+    <pre>
+        <code>
+            const promise = axios.get(&#39;http://localhost:3001/notes&#39;)
+
+            promise.<span style="color:red">then</span>(response =&gt; {
+                console.log(response)
+            })
+        </code>
+    </pre>
+
+    <h1>Response</h1>
+    <p>The JavaScript runtime environment calls the callback function registered by the then method providing it with <span style="color:red">a response object</span> as a parameter. The response object contains all the essential data related to <span style="color:red">the response of an HTTP GET request</span>, which would include the returned data, status code, and headers.</p>
+
+    <pre>
+        <code>
+            axios
+                <span style="color:red">.get</span>(&#39;http://localhost:3001/notes&#39;)
+                <span style="color:red">.then</span>(response =&gt; {
+                    const notes = response.data
+                    console.log(notes)
+                })
+        </code>
+    </pre>
+
+    <p><b>NB:</b> The data returned by the server is plain text, basically just one long string. The axios library is still able to parse the data into a JavaScript array.</p>
+</body>
+</html>

@@ -214,7 +214,26 @@
 
     <h3>🧠 Why useEffect?</h3>
     <p><span style="color:red">React doesn't want you to run side effects during rendering</span> — that would make it unpredictable. Instead, it gives you useEffect, <span style="color:red">which runs after the component renders</span>.</p>
+    <pre>
+        <code>
+            const App = (props) =&gt; {
+                const [notes, setNotes] = useState([]);
 
+                useEffect(() =&gt; {
+                    console.log(&#39;effect&#39;)
+                    axios
+                        .get(&#39;http://localhost:3001/notes&#39;)
+                        .then(response =&gt; {
+                            console.log(&#39;promise fulfilled&#39;)
+                            setNotes(response.data)
+                        })
+                }, <span style="color:blue"><b>[]</b></span>)
+            }
+        </code>
+    </pre>
+
+    <p><b>NB: </b>by default, the effect is always run after the component has been rendered.</p>
+    <p> The second parameter of useEffect is used to <span style="color:blue">specify how often the effect is run</span>. If the second parameter is <span style="color:blue">an empty array []</span>, then the effect is <span style="color:blue">only run along with the first render<span style="color:blue"></span> of the component.</p>
 
     <script>
         const orders = [
