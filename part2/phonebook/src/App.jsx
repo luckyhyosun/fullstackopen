@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import pplService from './services/people';
 
 const Filter = (props) => {
   return (
@@ -35,12 +35,13 @@ const PersonForm = (props) => {
   )
 }
 
-const Persons = ({filteredNames}) => {
+const Persons = (props) => {
   return (
     <div>
-        {filteredNames.map(person => (
+        {props.filteredNames.map(person => (
           <div key={person.id}>
-            <p>{person.name} {person.number}</p>
+            <p>{person.name} {person.number}
+            <button onClick={() => props.deleteBtnClick(person.id)}>Delete</button></p>
           </div>
         ))}
       </div>
@@ -49,11 +50,10 @@ const Persons = ({filteredNames}) => {
 
 const App = () => {
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log("data fectched!");
-        setPersons(response.data);
+    pplService
+      .getAllUser()
+      .then(initialPpl => {
+        setPersons(initialPpl);
       })
   },[])
   const [persons, setPersons] = useState([]);
@@ -84,23 +84,36 @@ const App = () => {
 
   const handleAddButtton = (event) => {
     event.preventDefault();
+
+    if(persons.some(person => person.name.toLowerCase() === newName.toLowerCase())){
+      alert("Already added");
+      return;
+    }
     const personObj = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
     }
     console.log(personObj);
 
-    persons.forEach(person => {
-      if(person.name === personObj.name){
-        alert(`${newName} is already added to phonebook`);
-        setPersons(persons);
-      }else{
-        setPersons(persons.concat(personObj));
-      }
-      setNewName('');
-      setNewNumber('');
-    })
+    pplService
+      .adduser(personObj)
+      .then(returnedPpl => {
+        setPersons(persons.concat(returnedPpl))
+        setNewName('');
+        setNewNumber('');;
+      })
+  }
+
+  const handleDeleteButtton = (id) => {
+    const findTheUser = persons.find(person => person.id === id);
+    const confirmQuestion = window.confirm(`Do you really want to delete ${findTheUser.name}?`);
+    if (confirmQuestion) {
+    pplService
+      .deleteUser(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id));
+      })
+    }
   }
 
   return (
@@ -118,7 +131,16 @@ const App = () => {
       />
 
       <h2>Fitered Numbers</h2>
-      <Persons filteredNames = {filteredNames}/>
+      <Persons
+        filteredNames = {filteredNames}
+        deleteBtnClick = {handleDeleteButtton}
+      />
+
+      <h2><i>All Users</i></h2>
+      <Persons
+      filteredNames = {persons}
+      deleteBtnClick = {handleDeleteButtton}
+      />
     </div>
   )
 }
