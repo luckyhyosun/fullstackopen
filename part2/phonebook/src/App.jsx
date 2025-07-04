@@ -85,23 +85,42 @@ const App = () => {
   const handleAddButtton = (event) => {
     event.preventDefault();
 
-    if(persons.some(person => person.name.toLowerCase() === newName.toLowerCase())){
-      alert("Already added");
-      return;
-    }
     const personObj = {
       name: newName,
       number: newNumber
     }
-    console.log(personObj);
 
-    pplService
-      .adduser(personObj)
-      .then(returnedPpl => {
-        setPersons(persons.concat(returnedPpl))
-        setNewName('');
-        setNewNumber('');;
-      })
+    const findTheUser = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
+    if(findTheUser){
+      const updatedUser = {...findTheUser, number:newNumber}
+      console.log(findTheUser);
+      const confirmQuestion = window.confirm(`${findTheUser.name} is already existed. Do you want to update the old number with the new one?`);
+      if(confirmQuestion){
+      pplService
+        .updateUser(findTheUser.id, updatedUser)
+        .then(returnedPpl => {
+          console.log(returnedPpl);
+          const updatedUsers = persons.map(person => person.id === findTheUser.id ? updatedUser : person)
+          setPersons(updatedUsers);
+        })
+      }else{
+        return;
+      }
+    }else{
+      pplService
+        .adduser(personObj)
+        .then(returnedPpl => {
+          setPersons(persons.concat(returnedPpl))
+        })
+    }
+
+    setNewName('');
+    setNewNumber('');
+
+    // if(persons.some(person => person.name.toLowerCase() === newName.toLowerCase())){
+    //   alert("Already added");
+    //   return;
+    // }
   }
 
   const handleDeleteButtton = (id) => {
