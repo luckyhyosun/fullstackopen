@@ -1,11 +1,24 @@
 import { useState, useEffect } from 'react'
 import Note from './components/Note'
+import Footer from './components/Footer'
 import noteSerive from './services/notes'
+
+const Notification = ({message}) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
 
 const App = (props) => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("a new note...");
   const [showAll, setShowAll] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   useEffect(() => {
     console.log('effect')
@@ -31,8 +44,10 @@ const App = (props) => {
         }))
       })
       .catch(error => {
-        alert(`The note '${note.content}' was already deleted from server`);
-
+        setErrorMessage(`The note '${note.content}' was already deleted from server`);
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
         setNotes(notes.filter(note => note.id !== id))
       })
   }
@@ -61,6 +76,7 @@ const App = (props) => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage}/>
       <div>
         <button onClick={() => setShowAll(!showAll)}>show {showAll ? "important" : "all"}</button>
       </div>
@@ -82,6 +98,8 @@ const App = (props) => {
         />
         <button type="submit">save</button>
       </form>
+
+      <Footer />
     </div>
   )
 }
