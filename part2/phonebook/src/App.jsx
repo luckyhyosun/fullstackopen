@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react'
 import pplService from './services/people';
 
+const Notification = (props) => {
+  if(props.message === null){
+    return null
+  }
+  return (
+    <div className='success'>
+      {props.message}
+    </div>
+  )
+}
+
 const Filter = (props) => {
   return (
     <div>
@@ -61,6 +72,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [filterName, setFilterName] = useState('');
   const [filteredNames, setFilteredName] = useState([]);
+  const [successMessage, setErrorMessage] = useState('Loading...')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -113,7 +125,8 @@ const App = () => {
           setPersons(persons.concat(returnedPpl))
         })
     }
-
+    setErrorMessage(`Added ${personObj.name}`);
+    setTimeout(() =>{setErrorMessage(null)},3000);
     setNewName('');
     setNewNumber('');
 
@@ -138,6 +151,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       <Filter value={filterName} onChange={handleFilterNameChange}/>
 
       <h2>Add a New User</h2>
