@@ -28,7 +28,10 @@ const Result = (props) => {
     </div>
   }else {
     message = foundCountries.map(country => (
-      <div key={country.cca3}>{country.name.common}</div>
+      <div key={country.cca3}>
+        {country.name.common}
+        <button>Show</button>
+      </div>
     ));
   }
 
