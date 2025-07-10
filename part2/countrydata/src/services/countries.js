@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const baseUrl = ' https://studies.cs.helsinki.fi/restcountries';
+const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
 const getAllCountries = () => {
     const request = axios.get(`${baseUrl}/api/all`)
