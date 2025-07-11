@@ -67,30 +67,6 @@ function App() {
       .catch(err => console.error('Error fetching weather:', err));
   }
 
-  // if(foundCountries.length > 200){
-  //   message = ''
-  // }else if(foundCountries.length > 9 && foundCountries.length < 200){
-  //   message = 'Too many matches! Specify the country please:)'
-  // }else if(foundCountries.length === 1){
-  //   const finalCountry = foundCountries[0];
-  //   // console.log(finalCountry);
-
-  //   message =
-  //     <h2>Weather in {finalCountry.capital}</h2>
-  //     <p>Temperature {weather.main.temp} Celsius</p>
-  //     <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt="" />
-  //     {/* <p>weather icon {weather.weather[0].icon}</p> */}
-  //     <p>Wind {weather.wind.speed} m/s</p>
-  //   </div>
-  // }else {
-  //   message = foundCountries.map(country => (
-  //     <div key={country.cca3}>
-  //       {country.name.common}
-  //       <button onClick={()=>handleShowBtn(country)} value={country}>Show</button>
-  //     </div>
-  //   ));
-  // }
-
   return (
     <div>
       find counturies <input onChange={handleInputChange}/>

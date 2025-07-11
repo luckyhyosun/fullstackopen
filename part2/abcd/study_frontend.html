@@ -251,18 +251,38 @@
     <p><b>NB: </b>by default, the effect is always run after the component has been rendered.</p>
     <p> The second parameter of useEffect is used to <span style="color:blue">specify how often the effect is run</span>. If the second parameter is <span style="color:blue">an empty array []</span>, then the effect is <span style="color:blue">only run along with the first render<span style="color:blue"></span> of the component.</p>
 
-    <script>
-        const orders = [
-            {amount: 100},
-            {amount: 200},
-            {amount: 350},
-            {amount: 450},
-        ]
+    <h1>JSX Conditional Mapping</h1>
+    <p>JSX Conditional Mapping refers to the pattern of rendering a list of components or elements based on some condition using <code>.map()</code> inside JSX (JavaScript XML)</p>
 
-        const totalAmount = orders.reduce((sum, order)=> {return sum + order.amount}, 0)
+    <b>1. ✅ Using filter().map():</b>
+    <pre>
+        <code>
+            {items
+                .filter(item =&gt; item.visible)
+                .map(item =&gt; (
+                    &lt;div key={item.id}&gt;{item.label}&lt;/div&gt;
+                ))
+            }
+        </code>
+    </pre>
 
-        console.log(totalAmount);
+    <b>2. ✅ Inline with a ternary:</b>
+    <pre>
+        <code>
+            {items.map(item =&gt;
+                item.visible <span style="color:red">?</span> &lt;div key={item.id}&gt;{item.label}&lt;/div&gt; : null
+            )}
+        </code>
+    </pre>
 
-    </script>
+    <b>3. ✅ Combining with short-circuit (&&):</b>
+    <p style="color:red">The fallback is null (i.e., show nothing when the condition is false).</p>
+    <pre>
+        <code>
+            {items.map(item =&gt; (
+                item.visible <span style="color:red">&amp;&amp;</span> &lt;div key={item.id}&gt;{item.label}&lt;/div&gt;
+            ))}
+        </code>
+    </pre>
 </body>
 </html>
