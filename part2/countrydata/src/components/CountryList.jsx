@@ -1,7 +1,7 @@
 import Weather from './Weather';
 
 const Country = ({country}) => {
-    const languages = Object.values(country.languages);
+    const foundLanguages = Object.values(country.languages);
     // console.log(languages);
 
     return (
@@ -12,7 +12,7 @@ const Country = ({country}) => {
 
             <h2>Language</h2>
             <ul>
-                {languages.map(lang => {
+                {foundLanguages.map(lang => {
                     return <li key={lang}>{lang}</li>
                 })}
             </ul>
@@ -24,21 +24,21 @@ const Country = ({country}) => {
     )
 }
 
-const CountryList = ({countries, showCountry}) => {
-    if (countries.length > 10) {
+const CountryList = ({foundCountries, showCountry}) => {
+    if (foundCountries.length > 10) {
         return <div>Too many matches, specify another filter</div>
     }
-    if(countries.length > 1) {
-        console.log(countries);
-        return countries.map(c => (
+    if(foundCountries.length > 1) {
+        console.log(foundCountries);
+        return foundCountries.map(c => (
             <div key={c.cca3}>
                 {c.name.common}{' '}
                 <button onClick={() => showCountry(c.name.common)}>Show</button>
             </div>
         ))
     }
-    if(countries.length = 1){
-        return <Country country={countries[0]}/>
+    if(foundCountries.length = 1){
+        return <Country country={foundCountries[0]}/>
     }
 
 }

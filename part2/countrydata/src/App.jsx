@@ -26,7 +26,7 @@ const App = () => {
       <input value={search} onChange={e => setSearch(e.target.value)}/>
     </div>
       {search === '' ? null : (
-        <CountryList countries={foundCountries} showCountry={setSearch} />
+        <CountryList foundCountries={foundCountries} showCountry={setSearch} />
       )}
     </>
   )

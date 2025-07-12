@@ -9,14 +9,14 @@ const Weather = ({country}) => {
 
     useEffect(() => {
         const [lat, lon] = country.latlng
-        console.log(lat, lon);
+        // console.log(lat, lon);
         const baseUrl = `${WEATHER_API_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${WEATHER_API_KEY}`
 
         axios.get(baseUrl).then(res => setWeather(res.data));
     }, []);
 
     if(!weather){return null}
-    console.log(weather);
+    // console.log(weather);
 
     const icon = weather.weather[0].icon;
     const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
