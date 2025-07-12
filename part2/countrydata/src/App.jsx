@@ -1,92 +1,34 @@
-import { useState, useEffect } from 'react'
-import countryService from './services/countries'
-import weatherService from './services/weather'
-const api_key = import.meta.env.VITE_WEATHER_API_KEY;
+import {useState, useEffect} from 'react';
+import axios from 'axios';
+import CountryList from './components/CountryList'
 
-const Result = ({ country, weather }) => {
-  return (
-    <div>
-      <h1>{country.name.common}</h1>
-      <p>Capital: {country.capital}<br />
-      Area: {country.area}</p>
-      <h2>Language</h2>
-      <ul>
-      {Object.values(country.languages).map(lang => <li key={lang}>{lang}</li>)}
-      </ul>
-      <img src={country.flags.png} alt="" />
+const App = () => {
+  const [search, setSearch] = useState('');
+  const [countries, setCountries] = useState([]);
 
-      {weather && (
-        <div>
-          <h2>Weather in {country.capital}</h2>
-          <p>Temperature: {weather.main.temp} °C</p>
-          <img
-            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-            alt="weather icon"
-          />
-          <p>Wind: {weather.wind.speed} m/s</p>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function App() {
-  const [allCountries, setAllCountries] = useState([]);
-  const [countryName, setCountryName] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [weather, setWeather] = useState(null);
+  const baseUrl = ' https://studies.cs.helsinki.fi/restcountries';
 
   useEffect(() => {
-    countryService
-      .getAllCountries()
-      .then(initialCounties => {
-        setAllCountries(initialCounties);
-      })
-  }, []);
+    axios
+      .get(`${baseUrl}/api/all`)
+      .then(res => {
+        // console.log(response.data);
+        setCountries(res.data);
+      });
+  },[])
 
-  const handleInputChange = (event) => {
-    setCountryName(event.target.value);
-    setSelectedCountry(null);
-  }
-
-  const foundCountries = allCountries.filter(country =>
-    country.name.common.toLowerCase().includes(countryName.toLowerCase())
-  )
-
-  const handleShowBtn = (country) => {
-    setSelectedCountry(country);
-    setWeather(null);
-    const lat = country.latlng[0];
-    const lng = country.latlng[1];
-
-    weatherService
-      .weatherData(lat, lng, api_key)
-      .then(weatherData => {
-        console.log(weather);
-        setWeather(weatherData)})
-      .catch(err => console.error('Error fetching weather:', err));
-  }
+  const foundCountries = countries.filter(c => c.name.common.toLowerCase().includes(search.toLocaleLowerCase()))
 
   return (
+    <>
     <div>
-      find counturies <input onChange={handleInputChange}/>
-      {foundCountries.length > 100 && <p></p>}
-      {foundCountries.length > 9 && foundCountries.length < 101 && <p>Too many matches, specify another filter</p>}
-      {foundCountries.length > 1 && foundCountries.length < 11 && (
-        <div>
-          {foundCountries.map(country => (
-            <div key={country.cca3}>
-              {country.name.common}
-              <button onClick={() => handleShowBtn(country)}>Show</button>
-            </div>
-          ))}
-        </div>
-      )}
-      {foundCountries.length === 1 && (
-        <Result country={foundCountries[0]} weather={weather} />
-      )}
-      {selectedCountry && <Result country={selectedCountry} weather={weather} />}
+      find countries{' '}
+      <input value={search} onChange={e => setSearch(e.target.value)}/>
     </div>
+      {search === '' ? null : (
+        <CountryList countries={foundCountries} showCountry={setSearch} />
+      )}
+    </>
   )
 }
 
