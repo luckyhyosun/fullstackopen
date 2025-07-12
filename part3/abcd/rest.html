@@ -1,0 +1,86 @@
+<h1>RESTful HTTP API</h1>
+<p><span style="color:red">Representational State Transfer</span>, aka <a href="https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm">REST</a>, is an architectural style meant for building scalable web applications</p>
+<p>REST APIs are interfaces that are intended for programmatic use, and the error status code is all that is needed.</p>
+
+<h2>Terms</h2>
+<ul>
+    <li>Resource(s)</li>
+    <p>are singular things, like <i>notes</i> in the case of our application, are called <i>resources</i> in RESTful thinking. Every resource has an associated URL which is the resource's unique address.</p>
+    <pre>
+        <code>
+            let notes = [
+                {
+                    id: &quot;1&quot;,
+                    content: &quot;HTML is easy&quot;,
+                    important: true
+                },
+                {
+                    id: &quot;2&quot;,
+                    content: &quot;Browser can execute only JavaScript&quot;,
+                    important: false
+                },
+                {
+                    id: &quot;3&quot;,
+                    content: &quot;GET and POST are the most important methods of HTTP protocol&quot;,
+                    important: true
+                }
+            ]
+        </code>
+    </pre>
+
+    <li>Identifier</li>
+    <p>is like an <i>id</i>, which is creating unique addresses is to combine the name of the resource type with the resource's unique identifier.<br />
+    <pre>
+        <i>www.example.com/api/notes/</i> means find all notes.<br/>
+        <i>www.example.com/api/notes<span style="color:red">/10</span></i> means find a single note with the id 10.
+    </pre></p>
+
+    <p>We can define parameters for routes in Express by using the colon syntax:</p>
+    <pre>
+        <code>
+            app.get(&#39;/api/notes/<span style="color:red">:id</span>&#39;, (request, response) =&gt; {
+                const id = request.params.id
+                const note = notes.find(note =&gt; note.id === id)
+                response.json(note)
+            })
+        </code>
+    </pre>
+
+    <li>Get/ Post/ Delete/ Put/ Patch Request </li>
+    <p>is how we manage to roughly define what REST refers to as a <span style="color:red">uniform interface</span>, which means a consistent way of defining interfaces that makes it possible for systems to cooperate.</p>
+
+    <li>Routing</li>
+    <p>refers to how an application's endpoints (URIs) respond to client requests.</p>
+</ul>
+
+<h1>Spread Syntax</h1>
+<p>used in two completely different contexts with different purposes.</p>
+
+<h2>🔢  1. Spread in <code>Math.max(...[1, 2, 3])</code></h2>
+<p>📌 Used to <span style="color:red">unpack array elements</span> as arguments to a function. This spreads the elements of an array into individual values:</p>
+<pre>
+    <code>
+        const numbers = [1, 2, 3];
+        Math.max(<span style="color:red">...numbers</span>); <span style="color:grey">// same as Math.max(1, 2, 3)</span>
+    </code>
+</pre>
+
+<h2>🧠 2. Spread in React state: {...state}</h2>
+<p>📌 Used to make <span style="color:red">immutable updates</span> — you're creating a new object instead of mutating the original. In React, we use spread syntax to copy an object or array, often in useState updates:</p>
+<pre>
+    <code>
+        const [user, setUser] = useState({ name: &#39;Anna&#39;, age: 20 });
+
+        setUser(prev =&gt; ({
+        <span style="color:red">...prev</span>,
+        age: 21
+        }));
+    </code>
+</pre>
+
+<h2>💡 Helpful Tip</h2>
+<p>You can think of ... like a <span style="color:red">copy-unpack tool</span>:</p>
+<ul>
+    <li><b>In function calls</b>: it unpacks values from an array.</li>
+    <li><b>In object/array literals</b>: it copies values into a new structure.</li>
+</ul>
