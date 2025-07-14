@@ -3,6 +3,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        th, tr, td{
+            border: 1px solid black;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
     <i><h2>We must also develop a sufficient understanding of the principles of both the <span style="color:red">JavaScript runtime</span> and <span style="color:red">React components</span>. Guessing won't be enough.</h2></i>
@@ -98,5 +104,86 @@
 
     <h3>Data format</h3>
     <p>json-server requires all data to be sent in JSON format. What this means in practice is that <span style="color:red">the data must be a correctly formatted string</span> and that the request must contain the Content-Type request header with the value application/json</p>
+
+    <h1>Origin</h1>
+    <p>“Origin” does not mean the same root file or folder. It refers to three specific parts of a URL:</p>
+    <p>🔐 The <span style="color:red">“origin”</span> = <b>scheme (protocol) + domain (host) + port</b></p>
+    <table>
+        <tr>
+            <th>URL</th>
+            <th>Scheme (protocol)</th>
+            <th>domain (host)</th>
+            <th>port</th>
+        </tr>
+        <tr>
+            <td>https://example.com</td>
+            <td>https</td>
+            <td>example.com</td>
+            <td>443</td>
+        </tr>
+        <tr>
+            <td>http://example.com</td>
+            <td>https</td>
+            <td>example.com</td>
+            <td>80</td>
+        </tr>
+        <tr>
+            <td>http://api.example.com</td>
+            <td>https</td>
+            <td>api.example.com</td>
+            <td>80</td>
+        </tr>
+    </table>
+
+    <p>✅ Same origin example:</p>
+    <p>
+        Main page: <code><span style="color:red">https://example.com/</span>index.html</code> <br />
+        Resource: <code><span style="color:red">https://example.com/</span>style.css</code>
+    </p>
+    <p>
+        Both use:
+        <ul>
+            <li>The same protocol: <span style="background-color:lightgrey">https</span></li>
+            <li>The same domain: <span style="background-color:lightgrey">example.com</span></li>
+            <li>The same port (default <span style="background-color:lightgrey">443</span> for https)</li>
+        </ul>
+        ✅ So this is a same-origin request.
+    </p>
+
+    <p>❌ Different origin examples:</p>
+    <p>
+        Main page: <code><span style="color:red">https:</span></code>//example.com <br />
+        Resource: <code><span style="color:red">http:</span></code>//example.com/script.js
+    </p>
+    <p>
+        This is not same-origin because:
+        <ul>
+            <li>Protocols are different: <span style="background-color:lightgrey">https</span> vs <span style="background-color:lightgrey">http</span></li>
+        </ul>
+    </p>
+
+    <p>❌ Different origin examples:</p>
+    <p>
+        Main page: http://<code><span style="color:red">example.com</span></code> <br />
+        Resource: http://<code><span style="color:red">api.example.com/</span></code>data.js
+    </p>
+    <p>
+        Different domain (example.com vs api.example.com) → ❌ different origin
+    </p>
+
+    <h1>CORS</h1>
+    <p>CORS (Cross-Origin Resource Sharing) is a system created by W3C (the web standards group) that lets servers say: <br />
+        <pre>
+            Yes, it's okay for that other site to load this resource.
+        </pre>
+    By setting proper CORS headers, a server can safely allow cross-origin (a request is made from one website to a different origin) requests.
+    </p>
+
+    <h3>Why CORS matters?</h3>
+    <p>Browsers block cross-origin requests by default when they try to read sensitive responses (like API data). If you want to allow it, the server must set special headers — this is called CORS (Cross-Origin Resource Sharing).</p>
+
+    <h1>cors Middleware</h1>
+    <p>We can allow requests from other origins by using Node's <b>cors</b> middleware.</p>
+
 </body>
 </html>
