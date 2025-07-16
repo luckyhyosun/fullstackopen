@@ -25,6 +25,7 @@ app.use(express.json());
 //Custom middleware
 app.use(requestLogger);
 app.use(unknownEndpoint);
+app.use(express.static('dist'))
 
 let notes = [
   {
