@@ -16,15 +16,15 @@ const requestLogger = (req, res, next) => {
   next();
 }
 
-const unknownEndpoint = (req, res) => {
-  res.status(404).send({ error: 'unknown endpoint' })
-}
+// const unknownEndpoint = (req, res) => {
+//   res.status(404).send({ error: 'unknown endpoint' })
+// }
 
 //we need the help of the Express json-parser which transform JSON to JS object.
 app.use(express.json());
 //Custom middleware
 app.use(requestLogger);
-app.use(unknownEndpoint);
+// app.use(unknownEndpoint);
 app.use(express.static('dist'));
 
 let notes = [
