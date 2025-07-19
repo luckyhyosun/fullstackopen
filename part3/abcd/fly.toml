@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for my-render-teset on 2025-07-19T22:54:09+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'my-render-teset'
+primary_region = 'fra'
+
+[build]
+
+[env]
+  PORT = "3001"
+
+[http_service]
+  internal_port = 3001
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

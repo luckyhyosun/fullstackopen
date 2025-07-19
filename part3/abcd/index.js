@@ -7,6 +7,7 @@
 //Express library
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 const requestLogger = (req, res, next) => {
   console.log('Method:', req.method)
@@ -16,16 +17,12 @@ const requestLogger = (req, res, next) => {
   next();
 }
 
-// const unknownEndpoint = (req, res) => {
-//   res.status(404).send({ error: 'unknown endpoint' })
-// }
-
+//Custom middleware
+app.use(cors());
+app.use(requestLogger);
+app.use(express.static('dist'));
 //we need the help of the Express json-parser which transform JSON to JS object.
 app.use(express.json());
-//Custom middleware
-app.use(requestLogger);
-// app.use(unknownEndpoint);
-app.use(express.static('dist'));
 
 let notes = [
   {
@@ -108,6 +105,12 @@ app.post('/api/notes', (req, res) => {
   notes = notes.concat(note);
   response.json(note);
 })
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
