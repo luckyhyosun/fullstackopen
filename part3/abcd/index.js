@@ -7,7 +7,7 @@
 //Express library
 const express = require('express');
 const app = express();
-const cors = require('cors');
+// const cors = require('cors');
 
 const requestLogger = (req, res, next) => {
   console.log('Method:', req.method)
@@ -18,7 +18,7 @@ const requestLogger = (req, res, next) => {
 }
 
 //Custom middleware
-app.use(cors());
+// app.use(cors());
 app.use(requestLogger);
 app.use(express.static('dist'));
 //we need the help of the Express json-parser which transform JSON to JS object.
