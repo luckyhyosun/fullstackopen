@@ -84,3 +84,31 @@
     <li><b>In function calls</b>: it unpacks values from an array.</li>
     <li><b>In object/array literals</b>: it copies values into a new structure.</li>
 </ul>
+
+<h1>⚙️ Development Mode vs 🚀 Production Build</h1>
+<p>Vite (French for “fast”) is a build tool and development server. <b>It used for both development mode and production build — it handles both parts of the frontend development workflow.</b> <br />
+Use <code><span style="color:red">vite dev</span></code> to build your app while developing and Use <code><span style="color:red">vite build</span></code> to prepare it for users.</p>
+
+<h3>Development Mode</h3>
+<ul>
+    <li>Purpose: For writing, debugging, and testing during the development process.</li>
+    <li>Feature:
+        <ul>
+            <li>Unminified code (easier to read and debug).</li>
+            <li>Run with <code><span style="color:red">npm run dev</span></code> or <code><span style="color:red">vite</span></code></li>
+        </ul>
+    </li>
+</ul>
+
+<h3>Production Build</h3>
+<ul>
+    <li>Purpose: For deployment to end users (live websites, published apps, etc.).</li>
+    <li>Feature:
+        <ul>
+            <li>Optimized and minified code to reduce size and load time.</li>
+            <li>Outputs static files in a <b>dist/</b> or <b>build/</b> folder, optimized and ready to host.</li>
+            <li>Run with <code><span style="color:red">npm run build</span></code></li>
+            <li>When it is time to deploy your app for production, simply run the <code><span style="color:red">vite build</span></code> command.</li>
+        </ul>
+    </li>
+</ul>

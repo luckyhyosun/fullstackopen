@@ -1,18 +1,8 @@
 import { useState, useEffect } from 'react'
 import Note from './components/Note'
 import Footer from './components/Footer'
+import Notification from './components/Notification'
 import noteSerive from './services/notes'
-
-const Notification = ({message}) => {
-  if (message === null) {
-    return null
-  }
-  return (
-    <div className='error'>
-      {message}
-    </div>
-  )
-}
 
 const App = (props) => {
   const [notes, setNotes] = useState([]);
