@@ -16,7 +16,8 @@
     "logs:prod": "fly logs"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^8.16.4"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.7.10",
