@@ -3,6 +3,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        td{
+            border: 1px solid grey;
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
     <h1>Document Database (Document Store)</h1>
@@ -44,10 +50,38 @@
     <p>We could use the database directly from our JavaScript code with the official <b>MongoDB Node.js driver</b> library, but it is quite cumbersome to use. We will instead use the <b style="color:red">Mongoose</b> library that offers a higher-level API.</p>
     <p>Mongoose could be described as an <span style="color:red">object document mapper (ODM)</span>, and saving JavaScript objects as Mongo documents is straightforward with this library¡.</p>
 
-    <h1>Schema</h1>
-    <p>Everything in Mongoose starts with a Schema. Each schema maps to a MongoDB collection and defines the shape of the documents within that collection.</p>
+    <h1>🧱 Schema</h1>
+    <p>A Schema defines the structure of documents within a MongoDB collection. Everything in Mongoose starts with a Schema. Each schema maps to a MongoDB collection and defines the shape of the documents within that collection.</p>
 
-    <h1>Model</h1>
-    <p>Models are fancy constructors compiled from Schema definitions. An instance of a model is called a document. Models are responsible for creating and reading documents from the underlying MongoDB database.</p>
+    <h1>🏗️  Model</h1>
+    <p>A Model is a wrapper on top of the schema. Models are constructor functions compiled from Schema definitions. An instance of a model is called a document. Models are responsible for creating and reading documents from the underlying MongoDB database. <b>Provides CRUD operations</b>. </p>
+
+    <h1>📌 Summary Table: Schema vs Model vs Collection</h1>
+    <table>
+        <tr>
+            <td>Concept</td>
+            <td>Defined In</td>
+            <td>Role</td>
+            <td>Interacts with DB</td>
+        </tr>
+        <tr>
+            <td><b>Schema</b></td>
+            <td>Mongoose</td>
+            <td>Defines the structure and rules for documents (data shape, types)</td>
+            <td>❌ No</td>
+        </tr>
+        <tr>
+            <td><b>Model</b></td>
+            <td>Mongoose</td>
+            <td>A JavaScript object created from a schema, used to interact with the database (CRUD operations)</td>
+            <td>✅ Yes</td>
+        </tr>
+        <tr>
+            <td><b>Collection</b></td>
+            <td>MongoDB</td>
+            <td>The actual storage in the database; stores many documents</td>
+            <td>✅ Yes</td>
+        </tr>
+    </table>
 </body>
 </html>
