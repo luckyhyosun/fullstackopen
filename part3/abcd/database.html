@@ -11,6 +11,14 @@
     </style>
 </head>
 <body>
+    <h1>👩‍💻Client & ⚙️Server & 🗃️Database</h1>
+    <ul>
+        <p>Imagine a restaurant:</p>
+        <li>The client (Browser / App) is a customer ordering food (makes requests e.g. "get all notes").</li>
+        <li>The server (Express / Node.js) is the waiter who takes your order and brings your food (handles requests & logic). </li>
+        <li>The database (MongoDB via Mongoose) is the kitchen where the food is actually stored and prepared (stores and retrieves data).</li>
+    </ul>
+
     <h1>Document Database (Document Store)</h1>
     <p>is data storage system designed for storing, retrieving and managing <span style="color:red">document-oriented information</span>.<br/ >
     Document-oriented databases are one of the main categories of <span style="color:red">NoSQL databases</span>.<br />
@@ -83,5 +91,25 @@
             <td>✅ Yes</td>
         </tr>
     </table>
+
+    <h1>🔄 Mongoose & Express</h1>
+    <p><b>
+        ✅ Mongoose handles data access (database layer) <br />
+        ✅ Express handles routing and HTTP (server layer)</b></p>
+    <h3>Data Access (Mongoose) + HTTP Requests (Express)</h3>
+    <p>Mongoose does not directly handle HTTP requests like GET, POST, or DELETE in the way Express does. Instead:</p>
+    <ul>
+        <li>Mongoose handles data operations: like find(), save(), deleteOne(), etc.</li>
+        <li>Express receives the HTTP requests, and inside those route handlers, you call Mongoose functions.</li>
+
+        <ul>
+            <p>Express handles routing the request which means deciding what your server should do when it receives a specific HTTP request.</p>
+            <p>Think of your web server like a receptionist at an office. When someone walks in and asks for something:</p>
+            <li>If they say, “I want a list of notes,” the receptionist sends them to the "Notes" department.</li>
+            <li>If they say, “I want to delete note #5,” the receptionist forwards them to the "Delete" desk.</li>
+        </ul>
+    </ul>
+
+
 </body>
 </html>

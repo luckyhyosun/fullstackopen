@@ -9,6 +9,8 @@ const express = require('express');
 const app = express();
 // const cors = require('cors');
 
+const Note = require('./models/note');
+
 const requestLogger = (req, res, next) => {
   console.log('Method:', req.method)
   console.log('Path:  ', req.path)
@@ -63,7 +65,10 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/notes', (request, response) => {
-  response.json(notes)
+  // response.json(notes)
+  Note.find({}).then(notes => {
+    response.json(notes)
+  })
 })
 
 app.get('/api/notes/:id', (req, res) => {
