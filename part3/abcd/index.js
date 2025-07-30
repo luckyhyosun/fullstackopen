@@ -4,6 +4,8 @@
 //ES modules: 'import'and 'export' statement
 // import http from 'http'
 
+require('dotenv').config();
+
 //Express library
 const express = require('express');
 const app = express();
@@ -117,7 +119,8 @@ const unknownEndpoint = (req, res) => {
 
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT || 3001;
+// const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
