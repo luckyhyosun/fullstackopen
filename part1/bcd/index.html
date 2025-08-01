@@ -63,8 +63,8 @@
     <p>When the state modifying function <i>setCounter</i> is called, React re-renders the component which means that the function body of the component function gets re-executed</p>
 
     <h2>Event handling</h2>
-
-    <p>We define the event handlers for our buttons where we declare their onClick attributes: <span style="color: red">The setCounter function is called <b>only when a user clicks the button</b>.</span>
+    <p>🔄 All event handlers, i.e. <code>onClick={() => ...}</code>, are callback functions, but not all callback functions, i.e. <code>() => setCounter(counter + 1)</code>, are event handlers.</p>
+    <p>We define the event handlers for our buttons where we declare their onClick attributes: <span style="color: red">The setCounter function is called (that's why it is called callback function) <b>only when a user clicks the button</b>.</span>
     </p>
     <pre>
         <code>
@@ -72,7 +72,7 @@
         </code>
     </pre>
 
-    <p>Not ussing this way! it will make  infinite loop </p>
+    <p>Not ussing this way! it will make  infinite loop. <br /> Because, in this case, You're not passing a function; <span style="color:red">you're passing the result of calling</span> <code>setCounter(...).</code> </p>
     <pre>
         <code>
             &lt;button onClick={<span style="color: red">setCounter(counter + 1)</span>}&gt;plus&lt;/button&gt;
@@ -144,7 +144,7 @@
             }
         </code>
     </pre>
-    <p>The return value of the function is another function that is assigned to the handler variable:</p>
+    <p>The return value of the function is another function that is assigned to the handler variable: </p>
     <pre>
         <code>
             &lt;button onClick={hello()}&gt;button&lt;/button&gt;
