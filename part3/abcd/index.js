@@ -13,9 +13,9 @@ const requestLogger = (req, res, next) => {
   next();
 }
 
-app.use(requestLogger);
 app.use(express.static('dist'));
 app.use(express.json());
+app.use(requestLogger);
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -29,9 +29,15 @@ app.get('/api/notes', (request, response) => {
 
 app.get('/api/notes/:id', (req, res) => {
   const id = req.params.id;
-  Note.findById(id).then((note) => {
-    response.json(note)
-  })
+  Note.findById(id)
+    .then(note => {
+      if(note){
+        response.json(note)
+      }else{
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/notes', (req, res) => {
@@ -63,6 +69,18 @@ const unknownEndpoint = (req, res) => {
 }
 
 app.use(unknownEndpoint);
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
