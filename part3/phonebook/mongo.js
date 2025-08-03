@@ -11,7 +11,7 @@ const personNumber = process.argv[4]
 
 // console.log(personName, personNumber);
 
-const url = `mongodb+srv://luckyFullstack:${password}@cluster0.dguebgx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+const url = `mongodb+srv://luckyFullstack:${password}@cluster0.dguebgx.mongodb.net/personApp?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery',false)
 
