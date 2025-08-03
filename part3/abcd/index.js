@@ -13,17 +13,27 @@ const requestLogger = (req, res, next) => {
   next();
 }
 
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
 app.use(express.static('dist'));
 app.use(express.json());
 app.use(requestLogger);
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
+app.get('/', (req, res) => {
+  res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/notes', (request, response) => {
+app.get('/api/notes', (req, res) => {
   Note.find({}).then((notes) => {
-    response.json(notes)
+    res.json(notes)
   })
 })
 
@@ -32,9 +42,9 @@ app.get('/api/notes/:id', (req, res) => {
   Note.findById(id)
     .then(note => {
       if(note){
-        response.json(note)
+        res.json(note)
       }else{
-        response.status(404).end()
+        res.status(404).end()
       }
     })
     .catch(error => next(error))
@@ -57,11 +67,31 @@ app.post('/api/notes', (req, res) => {
   })
 })
 
+app.put('/api/notes/:id', (req, res) => {
+  const id = req.params.id
+  const {content, important} = req.body;
+
+  Note.findById(id)
+    .then(note => {
+      if(!note){
+        return res.status(404).end()
+      }
+      note.content = content;
+      note.important = important;
+
+      return note.save().then(updatedNote => res.json(updatedNote))
+    })
+    .catch(error => next(error))
+})
+
 app.delete('/api/notes/:id', (req, res) => {
   const id = req.params.id;
-  notes = notes.filter(note => note.id !== id)
+  // notes = notes.filter(note => note.id !== id)
 
-  res.status(204).end()
+  // res.status(204).end()
+  Note.findByIdAndDelete(id)
+    .then(result => res.status(204).end())
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (req, res) => {
@@ -69,17 +99,6 @@ const unknownEndpoint = (req, res) => {
 }
 
 app.use(unknownEndpoint);
-
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
-
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  }
-
-  next(error)
-}
-
 app.use(errorHandler);
 
 const PORT = process.env.PORT;
