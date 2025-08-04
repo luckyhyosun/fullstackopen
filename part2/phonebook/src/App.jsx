@@ -143,7 +143,8 @@ const App = () => {
         })
         .catch(error => {
           setNotificationStatus('fail');
-          setNotificationMessage(`Information of ${personObj.name} has already been removed`);
+          // setNotificationMessage(`Information of ${personObj.name} has already been removed`);
+          setNotificationMessage(error.response.data.error)
           setTimeout(() =>{setNotificationMessage(null)},3000);
         })
     }
