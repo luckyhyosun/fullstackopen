@@ -123,7 +123,7 @@ const App = () => {
           setNotificationMessage(`Added ${personObj.name}`);
           setTimeout(() =>{setNotificationMessage(null)},3000);
         })
-        .catch(error => {
+        .catch(() => {
           setNotificationStatus('fail');
           setNotificationMessage(`Information of ${personObj.name} has already been removed`);
           setTimeout(() =>{setNotificationMessage(null)},3000);
@@ -162,7 +162,7 @@ const App = () => {
       .then(() => {
         setPersons(persons.filter(person => person.id !== id));
       })
-      .catch(error => {
+      .catch(() => {
           setNotificationMessage(`Information of ${findTheUser.name} has already been removed`);
           setNotificationStatus('fail');
           setTimeout(() =>{setNotificationMessage(null)},5000);
