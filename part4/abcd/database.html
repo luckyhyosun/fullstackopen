@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        td{
+            border: 1px solid grey;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>👩‍💻Client & ⚙️Server & 🗃️Database</h1>
+    <ul>
+        <p>Imagine a restaurant:</p>
+        <li>The client (Browser / App) is a customer ordering food (makes requests e.g. "get all notes").</li>
+        <li>The server (Express / Node.js) is the waiter who takes your order and brings your food (handles requests & logic). </li>
+        <li>The database (MongoDB via Mongoose) is the kitchen where the food is actually stored and prepared (stores and retrieves data).</li>
+    </ul>
+
+    <h1>Document Database (Document Store)</h1>
+    <p>is data storage system designed for storing, retrieving and managing <span style="color:red">document-oriented information</span>.<br/ >
+    Document-oriented databases are one of the main categories of <span style="color:red">NoSQL databases</span>.<br />
+    Document-oriented databases are inherently a subclass of the <span style="color:red">key-value store</span>, another NoSQL database concept.</p>
+
+    <h1>Collections & Document in MongoDB</h1>
+    <p>
+        <b>📦 Think of it like this:</b> <br />
+        If a database is a <span style="color:red">filing cabinet</span>, <br />
+        a collection is a <span style="color:red">folder</span> in the cabinet,   <br />
+        then a document is a <span style="color:red">file</span> inside the folder.
+    </p>
+    <h3>Collections</h3>
+    <p>It's like <span style="color:red">folders of documents</span>. uments (specifically BSON documents) which are gathered together in collections. A database stores one or more collections of documents.</p>
+
+    <h3>Document</h3>
+    <p>MongoDB stores data records as BSON documents. BSON is a binary representation of JSON documents, though it contains more data types than JSON.</p>
+
+    <h1>MongoDB</h1>
+    <p>MongoDB is the database system. <br />
+    You still need to install it, run it, and connect it to other parts of your app (like backend, frontend, hosting, etc.) <br />
+    So it's like a car engine, not a whole car. Instead, <b>connecting DB, frontend and backend can be a whole car.</b></p>
+
+    <h1>MongoDB Atlas</h1>
+    <p>
+        <b>📦 Think of it like this:</b> <br />
+        If mongoDB is like a <span style="color:red">car engine</span> (=core tool for storing data which needs setup), <br />
+        then Atlas is like <span style="color:red">Uber</span> letting you use the car without owning it.
+    </p>
+    <p>MongoDB Atlas is a cloud service that hosts your MongoDB database online. Instead of installing MongoDB on your computer or server, you can:</p>
+    <ul>
+        <li>Use Atlas to create and manage MongoDB databases in the cloud.</li>
+        <li>Connect your app to it from anywhere.</li>
+    </ul>
+
+    <h1>Mongoose</h1>
+    <p>We could use the database directly from our JavaScript code with the official <b>MongoDB Node.js driver</b> library, but it is quite cumbersome to use. We will instead use the <b style="color:red">Mongoose</b> library that offers a higher-level API.</p>
+    <p>Mongoose could be described as an <span style="color:red">object document mapper (ODM)</span>, and saving JavaScript objects as Mongo documents is straightforward with this library¡.</p>
+
+    <h1>🧱 Schema</h1>
+    <p>A Schema defines the structure of documents within a MongoDB collection. Everything in Mongoose starts with a Schema. Each schema maps to a MongoDB collection and defines the shape of the documents within that collection.</p>
+
+    <h1>🏗️  Model</h1>
+    <p>A Model is a wrapper on top of the schema. Models are constructor functions compiled from Schema definitions. An instance of a model is called a document. Models are responsible for creating and reading documents from the underlying MongoDB database. <b>Provides CRUD operations</b>. </p>
+
+    <h1>📌 Summary Table: Schema vs Model vs Collection</h1>
+    <table>
+        <tr>
+            <td>Concept</td>
+            <td>Defined In</td>
+            <td>Role</td>
+            <td>Interacts with DB</td>
+        </tr>
+        <tr>
+            <td><b>Schema</b></td>
+            <td>Mongoose</td>
+            <td>Defines the structure and rules for documents (data shape, types)</td>
+            <td>❌ No</td>
+        </tr>
+        <tr>
+            <td><b>Model</b></td>
+            <td>Mongoose</td>
+            <td>A JavaScript object created from a schema, used to interact with the database (CRUD operations)</td>
+            <td>✅ Yes</td>
+        </tr>
+        <tr>
+            <td><b>Collection</b></td>
+            <td>MongoDB</td>
+            <td>The actual storage in the database; stores many documents</td>
+            <td>✅ Yes</td>
+        </tr>
+    </table>
+
+    <h1>🔄 Mongoose & Express</h1>
+    <p><b>
+        ✅ Mongoose handles data access (database layer) <br />
+        ✅ Express handles routing and HTTP (server layer)</b></p>
+    <h3>Data Access (Mongoose) + HTTP Requests (Express)</h3>
+    <p>Mongoose does not directly handle HTTP requests like GET, POST, or DELETE in the way Express does. Instead:</p>
+    <ul>
+        <li>Mongoose handles data operations: like find(), save(), deleteOne(), etc.</li>
+        <li>Express receives the HTTP requests, and inside those route handlers, you call Mongoose functions.</li>
+
+        <ul>
+            <p>Express handles routing the request which means deciding what your server should do when it receives a specific HTTP request.</p>
+            <p>Think of your web server like a receptionist at an office. When someone walks in and asks for something:</p>
+            <li>If they say, “I want a list of notes,” the receptionist sends them to the "Notes" department.</li>
+            <li>If they say, “I want to delete note #5,” the receptionist forwards them to the "Delete" desk.</li>
+        </ul>
+    </ul>
+
+    <h1>🔄 React & Express</h1>
+    <p><b>
+        ✅ 1. React (Library)<br />
+        ✅ 2. Express (Framework)
+    </b></p>
+    <h3>React</h3>
+    <p>React is a UI library. It gives you tools to build user interfaces, but you are in control. You decide where, when, and how to use React.</p>
+    <ul>
+        <li><b>You call React functions</b></li>
+        <li>You call ReactDOM when you’re ready to render.</li>
+        <li>React doesn’t control your app’s structure — you do.</li>
+        <li>You can use other libraries with it however you like.</li>
+        <li>i.e. <code>&lt;App /&gt;, useState()</code></li>
+    </ul>
+    <h3>Express</h3>
+    <p>Express is a backend framework. It gives you structure to handle HTTP requests, and it controls when your code runs.</p>
+    <ul>
+        <li><b>Express calls your route handlers</b></li>
+        <li>You define what to do (res.send(...)), but Express handles when to do it.</li>
+        <li>Express controls the lifecycle of the request and response.</li>
+        <li>You plug your code into Express.</li>
+        <li>i.e. <code>app.get(), app.post()</code></li>
+    </ul>
+</body>
+</html>
