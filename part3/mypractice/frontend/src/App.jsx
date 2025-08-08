@@ -1,5 +1,7 @@
 import {useState} from 'react'
 import Animal from './components/Animal'
+import FilterAnimal from './components/Filter'
+import AddAnimal from './components/Add'
 
 const App = (props) => {
   const [animals, setAnimals] = useState(props.animals)
@@ -49,29 +51,23 @@ const App = (props) => {
   return (
     <div>
       <h1>🐬 Animals 🐘</h1>
-      <div>
-        <button onClick={handleClick}>I wanna see {showAll ? "Endangered" : "All"} Animals</button>
-      </div>
-      <ul>
-        {allAnimals.map(animal => <Animal key={animal.id} name={animal.name}/>)}
-      </ul>
-      <form onSubmit={addAnimal}>
-        <input
-          onChange={handleAnimalChange}
-          value={newAnimal} />
-        <button type='submit'>save</button>
-      </form>
+      <Animal
+        clickEventHandler={handleClick}
+        showAll={showAll}
+        allAnimals={allAnimals}
+      />
 
-      <div>
-        <h3>Find Animals</h3>
-        <input  onChange={handleFilterChange}/>
-        <ul>
-          {filteredAnimal.map(animal => {
-            // console.log(animal);
-            return <li key={animal.id}>{animal.name}</li>
-          })}
-        </ul>
-      </div>
+      <AddAnimal
+        clickSubmitHandler={addAnimal}
+        clickEventHandler={handleAnimalChange}
+        newAnimal={newAnimal}
+      />
+
+      <FilterAnimal
+        clickEventHandler={handleFilterChange}
+        filteredAnimal={filteredAnimal}
+      />
+
     </div>
   )
 }
