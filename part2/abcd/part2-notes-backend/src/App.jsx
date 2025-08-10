@@ -4,7 +4,7 @@ import Footer from './components/Footer'
 import Notification from './components/Notification'
 import noteSerive from './services/notes'
 
-const App = (props) => {
+const App = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("a new note...");
   const [showAll, setShowAll] = useState(true);
@@ -31,7 +31,7 @@ const App = (props) => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id === id ? returnedNote : note))
       })
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(`The note '${note.content}' was already deleted from server`);
         setTimeout(() => {
           setErrorMessage(null)

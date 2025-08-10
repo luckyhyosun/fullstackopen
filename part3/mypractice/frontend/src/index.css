@@ -1,0 +1,32 @@
+h1 {
+  color: Blue;
+  font-family: "Sansation", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+li {
+  color: grey;
+  padding-top: 3px;
+  font-size: 15px;
+}
+
+button {
+  margin: 0px 10px
+}
+
+.error {
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.fail{
+  color: red;
+}
+.success{
+  color: blue;
+}

@@ -1,29 +1,28 @@
 import {useState, useEffect} from 'react'
-import axios from 'axios'
+import animalService from './services/animals'
 import Animal from './components/Animal'
 import FilterAnimal from './components/Filter'
 import AddAnimal from './components/Add'
+import Notification from './components/Notification'
+import Footer from './components/Footer'
 
 const App = (props) => {
   const [animals, setAnimals] = useState([])
   const [newAnimal, setNewAnimal] = useState('Add your favorite Animal')
   const [showAll, setShowAll] = useState(true);
   const [filteredAnimal, setFilteredAnimal] = useState([]);
+  const [errorMsg, setErrorMsg] = useState('error message here...');
+  const [errorStatus, setErrorStatus] = useState('fail')
 
   useEffect(() => {
-    console.log("Effect Hook")
-    axios
-      .get('http://localhost:3001/animals')
-      .then(res => {
-        console.log('promise fulfilled')
-        setAnimals(res.data)
+    animalService
+      .getAll()
+      .then(initialAnimals => {
+        setAnimals(initialAnimals)
       })
   }, [])
 
-  console.log('render', animals.length, 'animals');
-
-
-  const allAnimals = showAll ? animals : animals.filter(animal => animal.endangered === true)
+  const animalsToShow = showAll ? animals : animals.filter(animal => animal.endangered === true)
 
   const addAnimal = (e) => {
     e.preventDefault()
@@ -36,10 +35,16 @@ const App = (props) => {
     const newObject = {
       name: newAnimal,
       endangered: Math.random() < 0.5,
-      id: String(animals.length + 1)
     }
-    setAnimals(animals.concat(newObject))
-    setNewAnimal('')
+
+    animalService
+      .create(newObject)
+      .then(returnedAnimal => {
+        setAnimals(animals.concat(returnedAnimal))
+        setErrorMsg(`Added ${returnedAnimal.name}`, errorStatus)
+        setErrorStatus('success');
+        setNewAnimal('')
+      })
   }
 
   const handleAnimalChange = (e) => {
@@ -52,8 +57,6 @@ const App = (props) => {
 
   const handleFilterChange = (e) => {
     const foundAnimals = animals.filter(animal => animal.name.toLowerCase().includes(e.target.value.toLowerCase()))
-    // console.log(foundAnimals);
-    // console.log(e.target.value);
 
     if(e.target.value === ''){
       setFilteredAnimal([])
@@ -62,14 +65,52 @@ const App = (props) => {
     }
   }
 
+  const handleToggle = (id) => {
+    const foundAnimal = animals.find(animal => animal.id === id)
+    const updatedAnimal = {...foundAnimal, endangered: !foundAnimal.endangered}
+
+    animalService
+    .update(id, updatedAnimal)
+    .then(returnedAnimal => {
+      setAnimals(animals.map(animal => animal.id === id ? returnedAnimal : animal))
+    })
+    .catch(() => {
+      setErrorStatus('fail')
+      setErrorMsg(`'${foundAnimal.name}' was already deleted from server`)
+      setAnimals(animals.filter(animal => animal.id !== id))
+    })
+  }
+
+  const handelDelete = (id) => {
+    animalService
+      .deleteAnimal(id)
+      .then( () =>
+        setAnimals(animals.filter(animal => animal.id !== id))
+      )
+  }
+
   return (
     <div>
       <h1>🐬 Animals 🐘</h1>
-      <Animal
-        clickEventHandler={handleClick}
-        showAll={showAll}
-        allAnimals={allAnimals}
-      />
+
+      <Notification message={errorMsg} status={errorStatus}/>
+
+      <button onClick={handleClick}>
+        I wanna see {showAll ? "Endangered" : "All"} Animals
+      </button>
+
+      <ul>
+        {animalsToShow.map(animal =>
+          <Animal
+            key={animal.id}
+            animal={animal}
+            toggleImportance={() =>
+              handleToggle(animal.id)}
+            deleteAnimal={() => {
+              handelDelete(animal.id)
+            }}/>
+        )}
+      </ul>
 
       <AddAnimal
         clickSubmitHandler={addAnimal}
@@ -81,6 +122,8 @@ const App = (props) => {
         clickEventHandler={handleFilterChange}
         filteredAnimal={filteredAnimal}
       />
+
+      <Footer />
 
     </div>
   )

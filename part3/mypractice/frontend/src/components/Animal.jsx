@@ -1,13 +1,13 @@
 const Animal = (props) => {
+    const label = props.animal.endangered ? "Mark not endangered" : "Mark endangered"
+
     return (
         <div>
-            <button onClick={props.clickEventHandler}>
-                I wanna see {props.showAll ? "Endangered" : "All"} Animals
-            </button>
-
-            <ul>
-                {props.allAnimals.map(animal => <li key={animal.id}>{animal.name}</li>)}
-            </ul>
+            <li>
+                <button onClick={props.deleteAnimal}>X</button>
+                {props.animal.name}
+                <button onClick={props.toggleImportance}>{label}</button>
+            </li>
       </div>
     )
 }
