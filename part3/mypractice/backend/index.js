@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 const animals = [
     {
       "id": "1",
@@ -44,12 +46,35 @@ const animals = [
     }
 ]
 
-app.get('/', (request, response) => {
-  response.send('<h1>Animal book!</h1>')
+app.get('/', (req, res) => {
+  res.send('<h1>Animal book!</h1>')
 })
 
-app.get('/api/animals', (request, response) => {
-  response.json(animals)
+app.get('/api/animals', (req, res) => {
+  res.json(animals)
+})
+
+app.get('/api/animals/:id', (req, res) => {
+    const id = req.params.id
+    const animal = animals.find(animal => animal.id === id)
+    if(animal){
+        res.json(animal)
+    }else{
+        res.status(404).end()
+    }
+})
+
+app.delete('/api/animals/:id', (req, res) => {
+    const id = req.params.id
+    const animal = animals.filter(animal => animal.id !== id)
+
+    res.status(204).end()
+})
+
+app.post('/api/animals', (req, res) => {
+    const animal = req.body
+    console.log(animal)
+    res.send(animal)
 })
 
 const PORT = 3001
