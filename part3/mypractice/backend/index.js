@@ -43,8 +43,29 @@ const animals = [
       "habitat": "Tropical rainforests of Central and South America",
       "importantNote": "Brightly colored as a warning; some species have skin toxins strong enough to deter predators or harm humans.",
       "endangered": true
+    },
+    {
+        "id": "6",
+        "name": "Lion",
+        "endangered": true
     }
 ]
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
+
+const generateId =() => {
+    const maxId = animals.length > 0 ? Math.max(...notes.map (n => Number(n.id))) : 0
+
+    return String(maxId + 1)
+}
 
 app.get('/', (req, res) => {
   res.send('<h1>Animal book!</h1>')
@@ -72,10 +93,27 @@ app.delete('/api/animals/:id', (req, res) => {
 })
 
 app.post('/api/animals', (req, res) => {
-    const animal = req.body
-    console.log(animal)
-    res.send(animal)
+    const body = req.body
+    if(!body.name){
+        return response.state(404).json({
+            error: 'Name field is missing'
+        })
+    }
+
+    const newAnimal = {
+        name : body.name,
+        endangered : body.emdangered || false,
+        id : generateId()
+    }
+    animals.concat(newAnimal)
+    res.send(newAnimal)
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT)

@@ -1,1 +1,7 @@
-GET http://localhost:3001/api/animals
+POST http://localhost:3001/api/animals
+Content-Type: application/json
+
+{
+    "name" : "Lion",
+    "endangered" : true
+}
