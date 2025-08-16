@@ -47,7 +47,7 @@ app.delete('/api/animals/:id', (req, res, next) => {
       .cathc(error => next(error))
 })
 
-app.post('/api/animals', (req, res) => {
+app.post('/api/animals', (req, res, next) => {
     const body = req.body
     if(!body.name){
         return response.state(404).json({
@@ -56,11 +56,17 @@ app.post('/api/animals', (req, res) => {
     }
 
     const newAnimal = new Animal({
-        name : body.name,
-        endangered : body.emdangered || false,
+        name : {
+          type: String,
+          minLength: 3,
+          required: true
+        },
+        endangered : body.endangered || false,
     })
 
-    newAnimal.save().then(savedAnimal => res.json(savedAnimal))
+    newAnimal.save()
+    .then(savedAnimal => res.json(savedAnimal))
+    .catch(error => next(error))
 })
 
 app.put('/api/animals/:id', (req, res, next) => {
@@ -92,6 +98,8 @@ const errorHandler = (error, req, res, next) => {
 
   if(error.name === 'CastError'){
     return res.status(400).send({ error: 'malformatted id' })
+  }else if(error.name === 'ValidationError'){
+    return res.status(400).send({error: error.message})
   }
   next(error)
 }
