@@ -4,9 +4,6 @@ const express = require('express')
 const app = express()
 const Animal = require('./models/animal')
 
-app.use(express.json())
-app.use(express.static('dist'))
-
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -15,6 +12,8 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
+app.use(express.static('dist'))
+app.use(express.json())
 app.use(requestLogger)
 
 app.get('/', (req, res) => {
@@ -28,13 +27,24 @@ app.get('/api/animals', (req, res) => {
 app.get('/api/animals/:id', (req, res) => {
     const id = req.params.id
     Animal.findById(id)
-      .then(animal => res.json(animal))
+      .then(animal => {
+        if(animal){
+          res.json(animal)
+        }else{
+          res.status(404).end()
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        res.status(400).send({error: 'malformatted id' })
+      })
 })
 
-app.delete('/api/animals/:id', (req, res) => {
+app.delete('/api/animals/:id', (req, res, next) => {
     const id = req.params.id
     Animal.findByIdAndDelete(id)
-      .then(animal => res.json(animal))
+      .then(animal => res.status(204).end)
+      .cathc(error => next(error))
 })
 
 app.post('/api/animals', (req, res) => {
@@ -53,11 +63,40 @@ app.post('/api/animals', (req, res) => {
     newAnimal.save().then(savedAnimal => res.json(savedAnimal))
 })
 
+app.put('/api/animals/:id', (req, res, next) => {
+  const id = req.params.id
+  const {name, endangered} = req.body
+
+  Animal.findById(id)
+    .then(animal => {
+      if(!animal){
+        return res.status(404).end()
+      }
+
+      animal.name = name
+      animal.endangered = endangered
+
+      return animal.save().then(updatedAnimal => res.json(updatedAnimal))
+    })
+    .catch(error => next(error))
+})
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, req, res, next) => {
+  console.log(error.message)
+
+  if(error.name === 'CastError'){
+    return res.status(400).send({ error: 'malformatted id' })
+  }
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT)
