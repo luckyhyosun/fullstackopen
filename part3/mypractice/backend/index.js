@@ -1,30 +1,30 @@
-require("dotenv").config();
+require('dotenv').config();
 
-const express = require("express");
+const express = require('express');
 const app = express();
-const Animal = require("./models/animal");
+const Animal = require('./models/animal');
 
 const requestLogger = (request, response, next) => {
-  console.log("Method:", request.method);
-  console.log("Path:  ", request.path);
-  console.log("Body:  ", request.body);
-  console.log("---");
+  console.log('Method:', request.method);
+  console.log('Path:  ', request.path);
+  console.log('Body:  ', request.body);
+  console.log('---');
   next();
 };
 
-app.use(express.static("dist"));
+app.use(express.static('dist'));
 app.use(express.json());
 app.use(requestLogger);
 
-app.get("/", (req, res) => {
-  res.send("<h1>Animal book!</h1>");
+app.get('/', (req, res) => {
+  res.send('<h1>Animal book!</h1>');
 });
 
-app.get("/api/animals", (req, res) => {
+app.get('/api/animals', (req, res) => {
   Animal.find({}).then((animals) => res.json(animals));
 });
 
-app.get("/api/animals/:id", (req, res) => {
+app.get('/api/animals/:id', (req, res) => {
   const id = req.params.id;
   Animal.findById(id)
     .then((animal) => {
@@ -36,24 +36,24 @@ app.get("/api/animals/:id", (req, res) => {
     })
     .catch((error) => {
       console.log(error);
-      res.status(400).send({ error: "malformatted id" });
+      res.status(400).send({ error: 'malformatted id' });
     });
 });
 
-app.delete("/api/animals/:id", (req, res, next) => {
+app.delete('/api/animals/:id', (req, res, next) => {
   const id = req.params.id;
   Animal.findByIdAndDelete(id)
     .then((animal) => res.status(204).end)
     .catch((error) => next(error));
 });
 
-app.post("/api/animals", (req, res, next) => {
+app.post('/api/animals', (req, res, next) => {
   const body = req.body;
   console.log(body);
 
   if (!body.name) {
     return response.state(404).json({
-      error: "Name field is missing",
+      error: 'Name field is missing',
     });
   }
 
@@ -68,7 +68,7 @@ app.post("/api/animals", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.put("/api/animals/:id", (req, res, next) => {
+app.put('/api/animals/:id', (req, res, next) => {
   const id = req.params.id;
   const { name, endangered } = req.body;
 
@@ -87,7 +87,7 @@ app.put("/api/animals/:id", (req, res, next) => {
 });
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: "unknown endpoint" });
+  response.status(404).send({ error: 'unknown endpoint' });
 };
 
 app.use(unknownEndpoint);
@@ -95,9 +95,9 @@ app.use(unknownEndpoint);
 const errorHandler = (error, req, res, next) => {
   console.log(error.message);
 
-  if (error.name === "CastError") {
-    return res.status(400).send({ error: "malformatted id" });
-  } else if (error.name === "ValidationError") {
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' });
+  } else if (error.name === 'ValidationError') {
     return res.status(400).send({ error: error.message });
   }
   next(error);
