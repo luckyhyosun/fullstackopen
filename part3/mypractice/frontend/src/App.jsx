@@ -93,7 +93,6 @@ const App = (props) => {
     animalService
       .deleteAnimal(id)
       .then(() => {
-        console.log(1);
         setAnimals(animals.filter((animal) => animal.id !== id))
       });
   };

@@ -43,7 +43,7 @@ app.get('/api/animals/:id', (req, res) => {
 app.delete('/api/animals/:id', (req, res, next) => {
   const id = req.params.id
   Animal.findByIdAndDelete(id)
-    .then(() => res.status(204).end)
+    .then(() => res.status(204).end())
     .catch((error) => next(error))
 })
 
