@@ -43,7 +43,7 @@ app.get('/api/animals/:id', (req, res) => {
 app.delete('/api/animals/:id', (req, res, next) => {
   const id = req.params.id
   Animal.findByIdAndDelete(id)
-    .then((animal) => res.status(204).end)
+    .then(() => res.status(204).end)
     .catch((error) => next(error))
 })
 
@@ -52,7 +52,7 @@ app.post('/api/animals', (req, res, next) => {
   console.log(body)
 
   if (!body.name) {
-    return response.state(404).json({
+    return res.state(404).json({
       error: 'Name field is missing',
     })
   }
