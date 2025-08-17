@@ -65,20 +65,6 @@ const App = (props) => {
       });
   };
 
-  const updateAnimal = (animal) => {
-    const confirmQuestion = window.confirm(
-      `${animal.name} is already added to phonebook, replace the old number with a new one?`,
-    );
-
-    if (confirmQuestion) {
-      animalService
-        .update({ ...animal, name: animal.name })
-        .then((updatedAnimal) => {
-          setAnimals();
-        });
-    }
-  };
-
   const addAnimal = (e) => {
     e.preventDefault();
     const animalAlreadyExists = animals.find(
@@ -104,8 +90,6 @@ const App = (props) => {
   };
 
   const deleteAnimal = (id) => {
-    console.log("delete");
-
     animalService
       .deleteAnimal(id)
       .then(() => {
