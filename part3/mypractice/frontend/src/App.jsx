@@ -24,30 +24,7 @@ const App = (props) => {
 
   const animalsToShow = showAll ? animals : animals.filter(animal => animal.endangered === true)
 
-  const addAnimal = (e) => {
-    e.preventDefault()
-
-    animals.forEach(animal => {
-      if(animal.name.toLowerCase() === newAnimal.toLowerCase()){
-        alert(`${newAnimal} is already existed.`)
-      }
-    })
-    const newObject = {
-      name: newAnimal,
-      endangered: Math.random() < 0.5,
-    }
-
-    animalService
-      .create(newObject)
-      .then(returnedAnimal => {
-        setAnimals(animals.concat(returnedAnimal))
-        setErrorMsg(`Added ${returnedAnimal.name}`, errorStatus)
-        setErrorStatus('success');
-        setNewAnimal('')
-      })
-  }
-
-  const handleAnimalChange = (e) => {
+    const handleAnimalChange = (e) => {
     setNewAnimal(e.target.value)
   }
 
@@ -81,10 +58,46 @@ const App = (props) => {
     })
   }
 
-  const handelDelete = (id) => {
+  const updateAnimal = (animal) => {
+    const confirmQuestion = window.confirm(`${animal.name} is already added to phonebook, replace the old number with a new one?`)
+
+    if(confirmQuestion){
+      animalService
+        .update({...animal, name: animal.name})
+        .then(updatedAnimal => {
+          setAnimals()
+        })
+    }
+  }
+
+  const addAnimal = (e) => {
+    e.preventDefault()
+    const animalAlreadyExists = animals.find(animal => animal.name.toLowerCase() === newAnimal.toLowerCase())
+
+    if(animalAlreadyExists){
+      alert(`${newAnimal} is already existed.`)
+      return
+    }
+
+    const newObject = {
+      name: newAnimal,
+      endangered: Math.random() < 0.5,
+    }
+
+    animalService
+      .create(newObject)
+      .then(returnedAnimal => {
+        setAnimals(animals.concat(returnedAnimal))
+        setErrorMsg(`Added ${returnedAnimal.name}`, errorStatus)
+        setErrorStatus('success');
+        setNewAnimal('')
+      })
+  }
+
+  const deleteAnimal = (id) => {
     animalService
       .deleteAnimal(id)
-      .then( () =>
+      .then(() =>
         setAnimals(animals.filter(animal => animal.id !== id))
       )
   }
@@ -106,8 +119,8 @@ const App = (props) => {
             animal={animal}
             toggleImportance={() =>
               handleToggle(animal.id)}
-            deleteAnimal={() => {
-              handelDelete(animal.id)
+            clickDeleteHandler={() => {
+              deleteAnimal(animal.id)
             }}/>
         )}
       </ul>

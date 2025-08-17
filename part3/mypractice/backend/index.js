@@ -41,6 +41,8 @@ app.get('/api/animals/:id', (req, res) => {
 })
 
 app.delete('/api/animals/:id', (req, res, next) => {
+  console.log(Animal);
+
     const id = req.params.id
     Animal.findByIdAndDelete(id)
       .then(animal => res.status(204).end)
@@ -49,6 +51,8 @@ app.delete('/api/animals/:id', (req, res, next) => {
 
 app.post('/api/animals', (req, res, next) => {
     const body = req.body
+    console.log(body);
+
     if(!body.name){
         return response.state(404).json({
             error: 'Name field is missing'
@@ -56,11 +60,7 @@ app.post('/api/animals', (req, res, next) => {
     }
 
     const newAnimal = new Animal({
-        name : {
-          type: String,
-          minLength: 3,
-          required: true
-        },
+        name : body.name,
         endangered : body.endangered || false,
     })
 

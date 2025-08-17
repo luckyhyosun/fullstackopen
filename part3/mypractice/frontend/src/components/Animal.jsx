@@ -4,7 +4,7 @@ const Animal = (props) => {
     return (
         <div>
             <li>
-                <button onClick={props.deleteAnimal}>X</button>
+                <button onClick={props.clickDeleteHandler}>X</button>
                 {props.animal.name}
                 <button onClick={props.toggleImportance}>{label}</button>
             </li>
