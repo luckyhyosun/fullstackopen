@@ -104,9 +104,14 @@ const App = (props) => {
   };
 
   const deleteAnimal = (id) => {
+    console.log("delete");
+
     animalService
       .deleteAnimal(id)
-      .then(() => setAnimals(animals.filter((animal) => animal.id !== id)));
+      .then(() => {
+        console.log(1);
+        setAnimals(animals.filter((animal) => animal.id !== id))
+      });
   };
 
   return (
