@@ -1,24 +1,24 @@
-import axios from 'axios'
-const baseUrl = 'api/animals'
+import axios from "axios";
+const baseUrl = "api/animals";
 
 const getAll = () => {
-    const request = axios.get(baseUrl)
-    return request.then(res => res.data)
-}
+  const request = axios.get(baseUrl);
+  return request.then((res) => res.data);
+};
 
-const create = newObject => {
-    const request = axios.post(baseUrl, newObject)
-    return request.then(res => res.data)
-}
+const create = (newObject) => {
+  const request = axios.post(baseUrl, newObject);
+  return request.then((res) => res.data);
+};
 
-const update = newObject => {
-    const request = axios.put(`${baseUrl}/${newObject.id}`, newObject)
-    return request.then(res => res.data)
-}
+const update = (newObject) => {
+  const request = axios.put(`${baseUrl}/${newObject.id}`, newObject);
+  return request.then((res) => res.data);
+};
 
-const deleteAnimal = id => {
-    const request = axios.delete(`${baseUrl}/${id}`)
-    return request.then(res => res.data)
-}
+const deleteAnimal = (id) => {
+  const request = axios.delete(`${baseUrl}/${id}`);
+  return request.then((res) => res.data);
+};
 
-export default { getAll, create, update, deleteAnimal }
+export default { getAll, create, update, deleteAnimal };
