@@ -41,8 +41,6 @@ app.get("/api/animals/:id", (req, res) => {
 });
 
 app.delete("/api/animals/:id", (req, res, next) => {
-  console.log(Animal);
-
   const id = req.params.id;
   Animal.findByIdAndDelete(id)
     .then((animal) => res.status(204).end)
