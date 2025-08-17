@@ -46,7 +46,7 @@ app.delete('/api/animals/:id', (req, res, next) => {
     const id = req.params.id
     Animal.findByIdAndDelete(id)
       .then(animal => res.status(204).end)
-      .cathc(error => next(error))
+      .catch(error => next(error))
 })
 
 app.post('/api/animals', (req, res, next) => {
