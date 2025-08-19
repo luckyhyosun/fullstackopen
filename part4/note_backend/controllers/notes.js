@@ -7,7 +7,7 @@ notesRouter.get('/', (req, res) => {
   })
 })
 
-notesRouter.get(':id', (req, res, next) => {
+notesRouter.get('/:id', (req, res, next) => {
   const id = req.params.id
   Note.findById(id)
     .then(note => {
@@ -39,15 +39,16 @@ notesRouter.post('/', (req, res, next) => {
     .catch(error => next(error))
 })
 
-notesRouter.delete(':id', (req, res, next) => {
+notesRouter.delete('/:id', (req, res, next) => {
   const id = req.params.id
+  console.log(id)
 
   Note.findByIdAndDelete(id)
     .then(() => res.status(204).end())
     .catch(error => next(error))
 })
 
-notesRouter.put(':id', (req, res, next) => {
+notesRouter.put('/:id', (req, res, next) => {
   const id = req.params.id
   const { content, important } = req.body
 

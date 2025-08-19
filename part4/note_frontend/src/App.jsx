@@ -11,14 +11,17 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   useEffect(() => {
-    console.log('effect')
     noteSerive
       .getAll()
       .then(initialNotes => {
         setNotes(initialNotes)
       })
   }, [])
-  console.log('render', notes.length, 'notes')
+  // console.log('render', notes.length, 'notes')
+
+  const notesToShow = showAll
+  ? notes
+  : notes.filter(note => note.important);
 
   const toggleImportanceOf = id => {
     console.log(`importance of ${id} needs to be toggled`)
@@ -40,6 +43,10 @@ const App = () => {
       })
   }
 
+  const handleNoteChange = (event) => {
+    setNewNote(event.target.value);
+  }
+
   const addNote = (event) => {
     event.preventDefault();
     const noteObject = {
@@ -54,12 +61,14 @@ const App = () => {
         setNewNote('');
       })
   }
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value);
+
+  const deleteNote = (id) => {
+    noteSerive
+      .deleteNote(id)
+      .then(() => {
+        setNotes(notes.filter((note) => note.id !== id))
+      })
   }
-  const notesToShow = showAll
-  ? notes
-  : notes.filter(note => note.important);
 
   return (
     <div>
@@ -74,6 +83,7 @@ const App = () => {
           <Note
             key={note.id}
             note={note}
+            deleteNote = {() => deleteNote(note.id)}
             toggleImportance = {() => toggleImportanceOf(note.id)}
           />
         ))}
