@@ -41,7 +41,6 @@ notesRouter.post('/', (req, res, next) => {
 
 notesRouter.delete('/:id', (req, res, next) => {
   const id = req.params.id
-  console.log(id)
 
   Note.findByIdAndDelete(id)
     .then(() => res.status(204).end())
