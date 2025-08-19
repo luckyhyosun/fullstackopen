@@ -24,8 +24,6 @@ const App = () => {
   : notes.filter(note => note.important);
 
   const toggleImportanceOf = id => {
-    console.log(`importance of ${id} needs to be toggled`)
-
     const note = notes.find(note => note.id === id);
     const changedNote = {...note, important:!note.important}
 
@@ -59,6 +57,12 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote));
         setNewNote('');
+      })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
   }
 
