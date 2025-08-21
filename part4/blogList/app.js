@@ -6,9 +6,9 @@ const blogRouter = require('./controllers/blogRouters')
 const app = express()
 
 mongoose
-    .connect(config.MONGODB_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((error) => console.log(error.message))
+  .connect(config.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((error) => console.log(error.message))
 
 app.use(express.json())
 app.use('/api/blogs', blogRouter)
