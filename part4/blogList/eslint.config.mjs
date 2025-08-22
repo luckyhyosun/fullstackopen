@@ -11,7 +11,7 @@ export default [
       globals: { ...globals.node },
       ecmaVersion: 'latest',
     },
-     plugins: {
+    plugins: {
       '@stylistic/js': stylisticJs,
     },
     rules: {
