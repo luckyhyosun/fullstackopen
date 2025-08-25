@@ -35,22 +35,18 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  const groupBy = _(blogs)
+  const result = _(blogs)
     .groupBy('author')
     .map((value, key) => ({ author: key, blogs: value.length }))
-    .value()
-
-  const result = _.maxBy(groupBy, 'blogs')
+    .maxBy('blogs')
 
   return result
 }
 
 const mostLikes = (blogs) => {
-  const mapBy = _(blogs)
+  const result = _(blogs)
     .map((value) => ({author: value.author, likes: value.likes}))
-    .value()
-
-  const result = _.maxBy(mapBy, 'likes')
+    .maxBy('likes')
 
   return result
 }
