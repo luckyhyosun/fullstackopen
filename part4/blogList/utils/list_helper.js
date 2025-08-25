@@ -40,7 +40,9 @@ const mostBlogs = (blogs) => {
     .map((value, key) => ({ author: key, blogs: value.length }))
     .value()
 
-  console.log(groupBy)
+  const result = _.maxBy(groupBy, 'blogs')
+
+  return result
 }
 
 module.exports = {
