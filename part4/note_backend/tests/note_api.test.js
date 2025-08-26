@@ -18,6 +18,16 @@ const initialNotes = [
   },
 ]
 
+const main = async() => {
+  const notes = await Note.find({})
+  console.log('operation returned the following notes', notes)
+
+  const response = await notes[0].deleteOne()
+  console.log('the first note is removed')
+}
+
+main()
+
 beforeEach(async () => {
   await Note.deleteMany({})
   let noteObject = new Note(initialNotes[0])
