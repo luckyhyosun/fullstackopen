@@ -24,6 +24,7 @@ const main = async() => {
 
   const response = await notes[0].deleteOne()
   console.log('the first note is removed')
+  console.log('the response is :', response)
 }
 
 main()
