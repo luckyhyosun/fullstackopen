@@ -75,7 +75,7 @@ test('a specific note can be viewed', async () => {
 
   const resultNote = await api
     .get(`/api/notes/${noteToView.id}`)
-    .expect(201)
+    .expect(200)
     .expect('Content-Type', /application\/json/)
 
   assert.deepStrictEqual(resultNote.body, noteToView)
