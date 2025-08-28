@@ -35,12 +35,15 @@ notesRouter.post('/', async (req, res) => {
   res.status(201).json(savedNote)
 })
 
-notesRouter.delete('/:id', (req, res, next) => {
+notesRouter.delete('/:id', async (req, res) => {
   const id = req.params.id
+  const note = await Note.findByIdAndDelete(id)
 
-  Note.findByIdAndDelete(id)
-    .then(() => res.status(204).end())
-    .catch(error => next(error))
+  if(note){
+    res.json(note)
+  }else{
+    res.status(404).end()
+  }
 })
 
 notesRouter.put('/:id', (req, res, next) => {
