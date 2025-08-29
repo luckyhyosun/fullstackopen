@@ -52,4 +52,14 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
 <code>Response</code> is an object provided by Express to send data back to the clien. And <code>.json()</code> is a method that
 + Converts the JavaScript object/array (blogs in this case) into a JSON string.
 + Sets the correct HTTP header: <code>Content-Type: application/json</code>.
-+ Sends the JSON as the HTTP response body
++ Sends the JSON as the HTTP response body.
+
+And <code>resonse.josn()</code> sends the HTTP response immediately and ends the request.
+So, if you want to return all blogs entries, you don’t map them individually.
+```js
+//return all the blogs object into an array
+return response.json(blogs)
+
+//return only one blog object
+return blogs.map(blog => response.json(blog))
+```

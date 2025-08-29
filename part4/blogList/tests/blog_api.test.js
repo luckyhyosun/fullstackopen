@@ -20,6 +20,15 @@ test.only('blog lists are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test.only('verifies that the unique identifier property', async () => {
+  const response = await api.get('/api/blogs')
+  const blogs = response.body
+
+  blogs.forEach(blog => {
+    assert.ok(blog.id, 'id property is missing')
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
