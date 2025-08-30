@@ -50,6 +50,29 @@ test.only('creates a new blog post', async () => {
   assert(checkBlogTitlesInDb.includes('REST Chapter 5'))
 })
 
+test.only('blog with missing likes number', async () => {
+  const newBlog = {
+    title: 'The Beginner Guide to React',
+    author: 'Kent C. Dodds',
+    url: 'https://egghead.io/courses/the-beginner-s-guide-to-react',
+  }
+
+  if(!newBlog.likes){
+    const blog = {...newBlog, likes:0}
+    await api
+      .post('/api/blogs')
+      .send(blog)
+      .expect(201)
+  }
+
+  const blogsInDb = await helper.blogsInDb()
+  assert.strictEqual(blogsInDb.length, helper.initialBlogs.length + 1)
+
+  const checkBlogTitlesInDb = blogsInDb.map(blog => blog.author)
+  assert(checkBlogTitlesInDb.includes('Kent C. Dodds'))
+
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
