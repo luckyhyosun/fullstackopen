@@ -48,6 +48,17 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
 
 **Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
 
+**JSON** (JavaScript Object Notation) is always a string representation of an object.
++ 1. <code>.toJSON()</code> returns a plain JavaScript object.
+``` js
+  { title: "Hello" }
+  ```
++ 2. <code>JSON.stringify(obj)</code> returns the obj a string.
+``` js
+  '{"title":"Hello"}'
+```
++ 3. <code>response.json(...)</code> Express does both steps automatically. <code>.toJSON</code> first, and then <code>JSON.stringify(obj)</code> later. So <code>.toJSON</code> is really a pre-processor for <code>JSON.stringify(obj)</code>.
+
 **Response.json()**
 <code>Response</code> is an object provided by Express to send data back to the clien. And <code>.json()</code> is a method that
 + Converts the JavaScript object/array (blogs in this case) into a JSON string.
@@ -59,7 +70,21 @@ So, if you want to return all blogs entries, you don’t map them individually.
 ```js
 //return all the blogs object into an array
 return response.json(blogs)
+return blogs.map(blog => blog.toJSON())
 
 //return only one blog object
 return blogs.map(blog => response.json(blog))
+```
+
+**Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
+```js
+typeof [1,2,3]   // "object"
+typeof {a:1}     // "object"
+typeof null      // "object"😅 is a historic bug
+```
+
+But if we use <code>Array.isArray()</code>,
+```js
+Array.isArray([1,2,3])   // "true"
+Array.isArray({a:1})     // "false"
 ```

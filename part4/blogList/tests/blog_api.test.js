@@ -29,6 +29,27 @@ test.only('verifies that the unique identifier property', async () => {
   })
 })
 
+test.only('creates a new blog post', async () => {
+  const newBlog = {
+    title: 'REST Chapter 5',
+    author: 'Roy Thomas Fielding',
+    url: 'https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm¡',
+    likes: 100,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsInDb = await helper.blogsInDb()
+  assert.strictEqual(blogsInDb.length, helper.initialBlogs.length + 1)
+
+  const checkBlogTitlesInDb = blogsInDb.map(blog => blog.title)
+  assert(checkBlogTitlesInDb.includes('REST Chapter 5'))
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

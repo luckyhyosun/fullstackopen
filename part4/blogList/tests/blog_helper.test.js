@@ -1,3 +1,5 @@
+const Blog = require('../models/blogModel')
+
 const initialBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -49,7 +51,14 @@ const initialBlogs = [
   },
 ]
 
+const blogsInDb = async () => {
+  //Returns an array of Mongoose documents, not Promise ojbect.
+  const blogs = await Blog.find({})
+  //Returns a plain JavaScript object
+  return blogs.map(blog => blog.toJSON())
+}
 
 module.exports = {
-  initialBlogs
+  initialBlogs,
+  blogsInDb
 }

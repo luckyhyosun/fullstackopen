@@ -2,11 +2,13 @@ const blogRouter = require('express').Router()
 const Blog = require('../models/blogModel')
 
 blogRouter.get('/', async (request, response) => {
+  //Returns an array of Mongoose documents, not Promise ojbect.
   const blogs = await Blog.find({})
+  //Express uses JSON.stringify internally.
   return response.json(blogs)
 })
 
-blogRouter.post('/', (request, response) => {
+blogRouter.post('/', async (request, response) => {
   const body = request.body
 
   const blog = new Blog({
@@ -16,9 +18,8 @@ blogRouter.post('/', (request, response) => {
     likes: body.likes,
   })
 
-  blog.save().then((result) => {
-    response.status(201).json(result)
-  })
+  const savedBlog = await blog.save()
+  response.status(201).json(savedBlog)
 })
 
 module.exports = blogRouter
