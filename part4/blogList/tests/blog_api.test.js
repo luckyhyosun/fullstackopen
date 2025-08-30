@@ -13,14 +13,14 @@ beforeEach(async () => {
   await Blog.insertMany(helper.initialBlogs)
 })
 
-test.only('blog lists are returned as json', async () => {
+test('blog lists are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
 
-test.only('verifies that the unique identifier property', async () => {
+test('verifies that the unique identifier property', async () => {
   const response = await api.get('/api/blogs')
   const blogs = response.body
 
@@ -29,7 +29,7 @@ test.only('verifies that the unique identifier property', async () => {
   })
 })
 
-test.only('creates a new blog post', async () => {
+test('creates a new blog post', async () => {
   const newBlog = {
     title: 'REST Chapter 5',
     author: 'Roy Thomas Fielding',
@@ -50,7 +50,7 @@ test.only('creates a new blog post', async () => {
   assert(checkBlogTitlesInDb.includes('REST Chapter 5'))
 })
 
-test.only('blog with missing likes number', async () => {
+test('blog with missing likes number', async () => {
   const newBlog = {
     title: 'The Beginner Guide to React',
     author: 'Kent C. Dodds',
@@ -72,7 +72,7 @@ test.only('blog with missing likes number', async () => {
   assert(checkBlogTitlesInDb.includes('Kent C. Dodds'))
 })
 
-test.only('blog with missing title or url', async () => {
+test('blog with missing title or url', async () => {
   const newBlog = {
     title: 'Class Components Fundamentals',
     author: 'Joe Maddalone',
