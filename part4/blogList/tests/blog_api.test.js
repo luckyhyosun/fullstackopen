@@ -70,7 +70,23 @@ test.only('blog with missing likes number', async () => {
 
   const checkBlogTitlesInDb = blogsInDb.map(blog => blog.author)
   assert(checkBlogTitlesInDb.includes('Kent C. Dodds'))
+})
 
+test.only('blog with missing title or url', async () => {
+  const newBlog = {
+    title: 'Class Components Fundamentals',
+    author: 'Joe Maddalone',
+    // url: 'https://egghead.io/courses/react-with-class-components-fundamentals-4351f8bb',
+    likes: 8
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const blogsInDb = await helper.blogsInDb()
+  assert.strictEqual(blogsInDb.length, helper.initialBlogs.length)
 })
 
 after(async () => {
