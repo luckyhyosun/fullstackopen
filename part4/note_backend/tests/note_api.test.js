@@ -15,7 +15,6 @@ describe('when there is initially some notes saved', () => {
   })
 
   test('notes are returned as json', async () => {
-    console.log('entered test')
     await api
       .get('/api/notes')
       .expect(200)
@@ -37,7 +36,7 @@ describe('when there is initially some notes saved', () => {
 })
 
 describe('viewing a specific note', () => {
-  test('a specific note can be viewed', async () => {
+  test('succeeds with a valid id', async () => {
     const notesAtStart = await helper.notesInDb()
     const noteToView = notesAtStart[0]
 
@@ -48,10 +47,22 @@ describe('viewing a specific note', () => {
 
     assert.deepStrictEqual(resultNote.body, noteToView)
   })
+
+  test('fails with statuscode 404 if note does not exist', async () => {
+    const validNonexistingId = await helper.nonExistingId()
+
+    await api.get(`/api/notes/${validNonexistingId}`).expect(404)
+  })
+
+  test('fails with statuscode 400 id is invalid', async () => {
+    const invalidId = '1234567890qwerty'
+
+    await api.get(`/api/notes/${invalidId}`).expect(400)
+  })
 })
 
 describe('addition of a new note', () => {
-  test('a valid note can be added', async () => {
+  test('succeeds with valid data', async () => {
     const newNote = {
       content: 'async/await simplifies making async calls',
       important: true,
@@ -70,10 +81,8 @@ describe('addition of a new note', () => {
     assert(contents.includes('async/await simplifies making async calls'))
   })
 
-  test('note without content is not added', async () => {
-    const newNote = {
-      important: true,
-    }
+  test('fails with status code 400 if data invalid', async () => {
+    const newNote = { important: true }
 
     await api.post('/api/notes').send(newNote).expect(400)
 
@@ -83,7 +92,7 @@ describe('addition of a new note', () => {
 })
 
 describe('deletion of a note', () => {
-  test('a note can be deleted', async () => {
+  test('succeeds with status code 204 if id is valid', async () => {
     const notesAtStart = await helper.notesInDb()
     const noteToDelete = notesAtStart[0]
 
