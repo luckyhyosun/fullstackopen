@@ -10,9 +10,9 @@ notesRouter.get('/:id', async (req, res) => {
   const id = req.params.id
   const note = await Note.findById(id)
 
-  if(note){
+  if (note) {
     res.json(note)
-  }else{
+  } else {
     res.status(404).end()
   }
 })
@@ -20,7 +20,7 @@ notesRouter.get('/:id', async (req, res) => {
 notesRouter.post('/', async (req, res) => {
   const body = req.body
 
-  if(!body.content){
+  if (!body.content) {
     return res.status(400).json({ error: 'Bad Request: content missing' })
   }
 
@@ -44,16 +44,16 @@ notesRouter.put('/:id', (req, res, next) => {
   const { content, important } = req.body
 
   Note.findById(id)
-    .then(note => {
-      if(!note){
+    .then((note) => {
+      if (!note) {
         return res.status(404).end()
       }
       note.content = content
       note.important = important
 
-      return note.save().then(updatedNote => res.json(updatedNote))
+      return note.save().then((updatedNote) => res.json(updatedNote))
     })
-    .catch(error => next(error))
+    .catch((error) => next(error))
 })
 
 module.exports = notesRouter

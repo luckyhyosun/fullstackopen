@@ -3,12 +3,12 @@ const Note = require('../models/note')
 const initialNotes = [
   {
     content: 'HTML is easy',
-    important: false
+    important: false,
   },
   {
     content: 'Browser can execute only JavaScript',
-    important: true
-  }
+    important: true,
+  },
 ]
 
 const nonExistingId = async () => {
@@ -21,11 +21,11 @@ const nonExistingId = async () => {
 
 const notesInDb = async () => {
   const notes = await Note.find({})
-  return notes.map(note => note.toJSON())
+  return notes.map((note) => note.toJSON())
 }
 
 module.exports = {
   initialNotes,
   nonExistingId,
-  notesInDb
+  notesInDb,
 }
