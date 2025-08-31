@@ -89,7 +89,6 @@ describe('total likes', () => {
 })
 
 describe('most favorite likes', () => {
-
   test('of the blogs', () => {
     const result = listHelper.favoriteBlog(blogs)
 
@@ -99,18 +98,18 @@ describe('most favorite likes', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
       likes: 12,
-      __v: 0
+      __v: 0,
     })
   })
 })
 
-describe ('most published blogs', () => {
+describe('most published blogs', () => {
   test('is from the author', () => {
     const result = listHelper.mostBlogs(blogs)
 
     assert.deepStrictEqual(result, {
       author: 'Robert C. Martin',
-      blogs: 3
+      blogs: 3,
     })
   })
 })
@@ -121,7 +120,7 @@ describe('most likes recieved blogs', () => {
 
     assert.deepStrictEqual(result, {
       author: 'Edsger W. Dijkstra',
-      likes: 12
+      likes: 12,
     })
   })
 })

@@ -55,10 +55,10 @@ const blogsInDb = async () => {
   //Returns an array of Mongoose documents, not Promise ojbect.
   const blogs = await Blog.find({})
   //Returns a plain JavaScript object
-  return blogs.map(blog => blog.toJSON())
+  return blogs.map((blog) => blog.toJSON())
 }
 
 module.exports = {
   initialBlogs,
-  blogsInDb
+  blogsInDb,
 }

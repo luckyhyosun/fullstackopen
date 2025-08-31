@@ -28,8 +28,8 @@ const totalLikes = (blogs) => {
 const favoriteBlog = (blogs) => {
   // const result = Math.max(...blogs.map(blog => blog.likes))
 
-  const result = blogs.reduce(function(prev, current) {
-    return (prev && prev.likes > current.likes) ? prev : current
+  const result = blogs.reduce(function (prev, current) {
+    return prev && prev.likes > current.likes ? prev : current
   })
   return result
 }
@@ -45,7 +45,7 @@ const mostBlogs = (blogs) => {
 
 const mostLikes = (blogs) => {
   const result = _(blogs)
-    .map((value) => ({author: value.author, likes: value.likes}))
+    .map((value) => ({ author: value.author, likes: value.likes }))
     .maxBy('likes')
 
   return result
@@ -56,5 +56,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
-  mostLikes
+  mostLikes,
 }
