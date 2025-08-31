@@ -102,6 +102,20 @@ test.only('delete the post with id', async () => {
   assert.strictEqual(allBlogs.length, helper.initialBlogs.length -1)
 })
 
+test.only('updating number of likes for a blog post', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+  const updatedProperty = {likes: 100}
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(updatedProperty)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  const updatedBlog = blogsAtEnd[0]
+  assert.strictEqual(updatedBlog.likes, 100)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
