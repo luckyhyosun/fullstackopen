@@ -89,6 +89,19 @@ test('blog with missing title or url', async () => {
   assert.strictEqual(blogsInDb.length, helper.initialBlogs.length)
 })
 
+test.only('delete the post with id', async () => {
+  const blogsInDb = await helper.blogsInDb()
+  const blogToDelete = blogsInDb[0]
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+  const allBlogs = await helper.blogsInDb()
+  const blogs = allBlogs.map(blog => blog.title)
+
+  assert(!blogs.includes(blogToDelete.title))
+  assert.strictEqual(allBlogs.length, helper.initialBlogs.length -1)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
