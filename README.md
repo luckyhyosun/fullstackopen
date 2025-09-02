@@ -3,7 +3,7 @@
 is in progress from April, 2025. Hyosun Kim is a student of Royal Institute of Technology (KTH), in Sweden.
 
 ## Web Programming
-### Dynamic sites
+### Dynamic Website
 ![Alt text](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Introduction/web_application_with_html_and_steps.png)
 
 (image from [MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Introduction))
