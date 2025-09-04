@@ -101,3 +101,96 @@ But if we use <code>Array.isArray()</code>,
 Array.isArray([1,2,3])   // "true"
 Array.isArray({a:1})     // "false"
 ```
+
+**Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
+
+**Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB ():
++ Static methods: <code>.find()</code>, <code>.findById()</code>, <code>.deleteMany()</code>, <code>.insertMany()</code> etc.
++ Instance methods (via documents created from the model):  <code>.save()</code>, <code>.remove()</code>, <code>.deleteOne()</code>, <code>.updateOne()</code>, <code>.populate()</code>
+  - <code>.toJSON()</code>, <code>.toObject()</code>: synchronous methods, don't need to use <code>await</code>.
+  - other Instance methods above: asynchronous methods and return a Promise. You need to <code>await</code> (or use <code>.then()</code>):
+
+What does mean by static or instance methods?
+```js
+const Note = mongoose.model('Note', noteSchema)
+
+// ❌ This is wrong:
+await Note.save()
+
+// ✅ fetches all documents from the collection
+const allNotes = await Note.find({})
+```
+Becasue <code>Note</code> is the model (class/object), not an individual document. The model does not have a <code>.save()</code> method, which only exists on document instances, because it’s about saving a single record. But <code>.find()</code> exists on the model, because it operates on the whole collection, not a single document
+```js
+const Note = mongoose.model('Note', noteSchema)
+
+const doc = new Note({
+  content: "Buy milk",
+  important: true
+})
+
+// ✅ saves this document to the database
+await doc.save()
+```
+And <code>doc</code> is a document instance (created with <code>new Note({...})</code>).
+<code>.save()</code> only works on document instances, not the model.
+
+```js
+const Note = mongoose.model('Hey', noteSchema)
+```
+In the code above,
++ 'Note' is the JS variable, which you use in your code to call methods.
++ 'Hey' is  the model name.
++ 'heys' is the collection name, determined automatically.
+
+**Document** is a JavaScript Object (instance), representing a single instance of data, created using the model, in the collection.
+
+**Collection** is where the documents are actually stored in MongoDB. The model knows which collection to talk (or map) to when you call methods. And the model uses collection to query, insert, update, or delete documents in the database.
+```js
+// both retrieve the same model
+const Note = mongoose.model('Hey', noteSchema)
+const Note = mongoose.model('Hey')
+
+// both get all documents in the "heys" collection
+const allNotes = await Note.find({})
+const allNotes = await mongoose.model('Hey').find({})
+const allNotes = await db.heys.find({})
+
+console.log(allNotes)
+
+//both delete all documents in the "heys" collection
+Note.deleteMany({})
+mongoose.model('Hey').deleteMany({})
+db.heys.deleteMany({})
+```
+
+**Full Warehouse Analogy for MongoDB + Mongoose**
++ MongoDB: The entire city with all warehouses. The database system that stores data (collections) permanently.
++ Mongoose: The company that employs the workers. Provides tools, rules, and training for workers (models) to interact efficiently with warehouses (collections), following blueprints (schemas).
++ Schema: The blueprint / instructions for boxes. Defines how boxes should be built: size, shape, label format, and rules (required fields).
++ Model: A worker (with knowledge of the blueprint). Uses the blueprint (schema) to:
+  - 1. create new boxes (documents),
+  - 2. find, update, or remove boxes in the correct warehouse (collection).
++ Document: A single box inside the warehouse. Represents an individual record of data. For example, a note with 'content' and 'important' fields.
++ Collection: A specific warehouse. Holds many boxes (documents). For example, the notes collection is a warehouse for all note boxes.
+
+so, mapping a model to collection means "to assign a worker to a specific warehouse". So the worker knows which warehouse to operate on (collection).
+
+```js
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean
+})
+
+// Model (worker) and map the model to the collection 'heys'
+const Note = mongoose.model('Hey', noteSchema)
+
+// Document (box)
+const doc = new Note({ content: "Buy milk", important: true })
+
+// Worker puts the box into the correct warehouse (collection)
+await doc.save()
+
+// Worker fetches all boxes from the warehouse
+const allNotes = await Note.find({})
+```
