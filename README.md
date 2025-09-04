@@ -57,10 +57,6 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
 ## Appendix
 **Port** is a communication endpoint and listens for requests.
 
-**Async**  declare a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
-
-**Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
-
 **JSON** (JavaScript Object Notation) is always a string representation of an object.
 + 1. <code>.toJSON()</code> returns a plain JavaScript object.
 ``` js
@@ -72,6 +68,105 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
 ```
 + 3. <code>response.json(...)</code> Express does both steps automatically. <code>.toJSON</code> first, and then <code>JSON.stringify(obj)</code> later. So <code>.toJSON</code> is really a pre-processor for <code>JSON.stringify(obj)</code>.
 
+**Async**  declare a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
+
+**Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
+
+**Promise** is an object, a special kind of JavaScript object, that represents the eventual result of an asynchronous operation. So it's like
+> "I don’t have the value yet(pending), but I promise I’ll either give you the value (resolve) or an error (reject) in the future."
+
++ Case 1: Without <code>await</code>
+  - ✅ Casual / practical way: it returns a Promise.
+  - ⚠️ Strict/ technical way: it returns a Mongoose Query object, which is Promise-like, so <code>await</code> and <code>.then()</code> work.
+  ```js
+  //can say it returns Promise
+  const users = Note.find({})
+  ```
+  ```js
+  //console.log(users)
+  Query {
+    _mongooseOptions: {},
+    _transforms: [],
+    _hooks: Kareem { _pres: Map(0), _posts: Map(0) },
+    _executionStack: null,
+    mongooseCollection: NativeCollection { ... },
+    model: Model { Note },
+    op: 'findOne',
+    options: {},
+    _conditions: {},
+    ...
+  }
+  ```
+
++ Case 2: With <code>await</code>
+  - returns an array of document from MongoDB, not plain JS objects, but Mongoose document instances
+  ```js
+  //resolves to an array of documents
+  const users = await Note.find({})
+  ```
+  ```js
+  //console.log(users)
+  [
+    {
+      _id: new ObjectId("64f2a2b4e9f1d23a4b9b7c8d"),
+      title: 'My first note',
+      content: 'This is a test',
+      __v: 0
+    },
+    {
+      _id: new ObjectId("64f2a2b4e9f1d23a4b9b7c8e"),
+      title: 'Another note',
+      content: 'More text here',
+      __v: 0
+    }
+  ]
+
+  //console.log(users.toJSON())
+  //And our custom .toJSON() method in model
+  [
+    {
+      id: "64f2a2b4e9f1d23a4b9b7c8d",
+      title: 'My first note',
+      content: 'This is a test',
+    },
+    {
+      id: 64f2a2b4e9f1d23a4b9b7c8e,
+      title: 'Another note',
+      content: 'More text here',
+    }
+  ]
+  ```
+
+  Each element is a Mongoose Document object, which looks like a plain JS object but actually has methods (<code>.toJSON()</code>, <code>.save()</code>, etc.) under the hood.
+  But remember: **it’s still a Mongoose Document, not a plain JS object**.
+
+  Every Mongoose document has a <code>.toJSON()</code> method. It converts the Mongoose Document object (which has tons of hidden metadata and methods) into a plain JavaScript object that’s safe to stringify or send over HTTP.
+  ```js
+  const note = await Note.findOne({})
+  console.log(note)          // Mongoose Document
+  console.log(note.toJSON()) // Plain object
+  ```
+  ```js
+  //console.log(note)
+  {
+    _id: new ObjectId("64f2a2b4e9f1d23a4b9b7c8d"),
+    title: 'My first note',
+    content: 'Hello world',
+    __v: 0
+    // (plus hidden symbols and methods, not shown here)
+  }
+
+  //console.log(note.toJSON())
+  {
+    _id: "64f2a2b4e9f1d23a4b9b7c8d",
+    title: "My first note",
+    content: "Hello world",
+    __v: 0
+  }
+
+  ```
+
+
 **Response.json()**
 <code>Response</code> is an object provided by Express to send data back to the clien. And <code>.json()</code> is a method that
 + Converts the JavaScript object/array (blogs in this case) into a JSON string.
@@ -81,14 +176,26 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
 And <code>resonse.josn()</code> sends the HTTP response immediately and ends the request.
 So, if you want to return all blogs entries, you don’t map them individually.
 ```js
-//return all the blogs object into an array
-return response.json(blogs)
-return blogs.map(blog => blog.toJSON())
+//from controller.js
+notesRouter.get('/', async (req, res) => {
+  const notes = await Note.find({})
+  return res.json(notes)
+})
 
-//return only one blog object
-return blogs.map(blog => response.json(blog))
+//from helper.js
+const notesInDb = async () => {
+  const notes = await Note.find({})
+  return notes.map((note) => note.toJSON())
+}
 ```
+```js
+//return all the notes object into an array
+return response.json(notes)
+return notes.map(note => note.toJSON())
 
+//return only one note object
+return notes.map(note => response.json(note))
+```
 **Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
 ```js
 typeof [1,2,3]   // "object"
