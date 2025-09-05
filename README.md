@@ -55,9 +55,9 @@ Development Server(React, Vite, Next,js...etc): Frontend codes lives. Here, back
 To handle requests from different ports (from back/frontend) we can use **CORS / Proxy**.
 
 ## Appendix
-**Port** is a communication endpoint and listens for requests.
+🐬 **Port** is a communication endpoint and listens for requests.
 
-**Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
+🐬 **Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
 ```js
 typeof [1,2,3]   // "object"
 typeof {a:1}     // "object"
@@ -70,7 +70,7 @@ Array.isArray([1,2,3])   // "true"
 Array.isArray({a:1})     // "false"
 ```
 
-**JSON** (JavaScript Object Notation) is always a string representation of an object.
+🐬 **JSON** (JavaScript Object Notation) is always a string representation of an object.
 + 1. <code>.toJSON()</code> returns a plain JavaScript object.
 ``` js
   { title: "Hello" }
@@ -81,11 +81,11 @@ Array.isArray({a:1})     // "false"
 ```
 + 3. <code>response.json(...)</code> Express does both steps automatically. <code>.toJSON</code> first, and then <code>JSON.stringify(obj)</code> later. So <code>.toJSON</code> is really a pre-processor for <code>JSON.stringify(obj)</code>.
 
-**Async**  declare a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
+🐬 **Async**  declare a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
 
-**Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
+🐬 **Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
 
-**Promise** is an object, a special kind of JavaScript object, that represents the eventual result of an asynchronous operation. So it's like
+🐬 **Promise** is an object, a special kind of JavaScript object, that represents the eventual result of an asynchronous operation. So it's like
 > "I don’t have the value yet(pending), but I promise I’ll either give you the value (resolve) or an error (reject) in the future."
 
 + Case 1: Without <code>await</code>
@@ -179,8 +179,7 @@ Array.isArray({a:1})     // "false"
 
   ```
 
-
-**Response.json()**
+🐬 **Response.json()**
 <code>Response</code> is an object provided by Express to send data back to the clien. And <code>.json()</code> is a method that
 + Converts the JavaScript object/array (<code>notes</code> in this case) into a JSON string.
 + Sets the correct HTTP header: <code>Content-Type: application/json</code>.
@@ -210,9 +209,9 @@ return notes.map(note => note.toJSON())
 return notes.map(note => response.json(note))
 ```
 
-**Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
+🐬 **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
-**Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB ():
+🐬 **Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB ():
 + Static methods: <code>.find()</code>, <code>.findById()</code>, <code>.deleteMany()</code>, <code>.insertMany()</code> etc.
 + Instance methods (via documents created from the model):  <code>.save()</code>, <code>.remove()</code>, <code>.deleteOne()</code>, <code>.updateOne()</code>, <code>.populate()</code>
   - <code>.toJSON()</code>, <code>.toObject()</code>: synchronous methods, don't need to use <code>await</code>.
@@ -251,9 +250,9 @@ In the code above,
 + 'Hey' is  the model name.
 + 'heys' is the collection name, determined automatically.
 
-**Document** is a JavaScript Object (instance), representing a single instance of data, created using the model, in the collection.
+🐬 **Document** is a JavaScript Object (instance), representing a single instance of data, created using the model, in the collection.
 
-**Collection** is where the documents are actually stored in MongoDB. The model knows which collection to talk (or map) to when you call methods. And the model uses collection to query, insert, update, or delete documents in the database.
+🐬 **Collection** is where the documents are actually stored in MongoDB. The model knows which collection to talk (or map) to when you call methods. And the model uses collection to query, insert, update, or delete documents in the database.
 ```js
 // both retrieve the same model
 const Note = mongoose.model('Hey', noteSchema)
@@ -272,7 +271,7 @@ mongoose.model('Hey').deleteMany({})
 db.heys.deleteMany({})
 ```
 
-**Full Warehouse Analogy for MongoDB + Mongoose**
+🐬 **Full Warehouse Analogy for MongoDB + Mongoose**
 + MongoDB: The entire city with all warehouses. The database system that stores data (collections) permanently.
 + Mongoose: The company that employs the workers. Provides tools, rules, and training for workers (models) to interact efficiently with warehouses (collections), following blueprints (schemas).
 + Schema: The blueprint / instructions for boxes. Defines how boxes should be built: size, shape, label format, and rules (required fields).
@@ -303,7 +302,7 @@ await doc.save()
 const allNotes = await Note.find({})
 ```
 
-**Index** is a special data structure, in most databases, that improve query performance and enforce constraints. More specifically,
+🐬 **Index** is a special data structure, in most databases, that improve query performance and enforce constraints. More specifically,
 + Speeds up queries – Instead of scanning every document in a collection, MongoDB can quickly find results using the index (like looking up a word in a book’s index instead of reading the whole book).
   - Example: if you often search users by their email, adding an index on email makes lookups much faster.
 + Enforces constraints – In Mongoose, if you define a schema field like this:
@@ -328,3 +327,31 @@ When your app starts, Mongoose tries to ensure that the indexes defined in your 
 Mongoose validations do not detect the index violation, and instead of **ValidationError** they return an error of type **MongoServerError**.
 
 👉 In short: The issue was a timing problem. Data got seeded before MongoDB had finished building indexes, so constraints weren’t applied. **The solution is to explicitly wait for indexes to be in place** using <code>syncIndexes()</code> (all models) or <code>createIndexes()</code> (per model) before inserting data.
+
+
+🐬 **Query** is, in general, a request you send to a database asking it to return or modify data. Such as, "Insert a new user.", "Update this note’s content.", or "Give me all notes where <code>important: true</code>." etc.
++ **In MongoDB & Mongoose**: a query is typically a JavaScript object that specifies conditions or actions.
+  ```js
+  // query for one
+  await User.findOne({ username: 'mluukkai' })
+  // query to delete all notes
+  await Note.deleteMany({})
+
+  // query object
+  await Note.find({ important: true })
+  ```
+  From the code above,<code>{ important: true }</code> is a query object (condition). And <code>.find()</code> is the query method.
+
+
+🐬 **populate()** is a Mongoose method that replaces the ObjectId reference in a document with the actual document(s) from another collection. It’s how Mongoose simulates a join between collections.
+  + **With join queries in Mongoose**, Mongoose runs two queries.
+  ```js
+  // Example: populating note inside a user
+  const users = await User.find({}).populate('notes')
+  ```
+
+1. Mongoose first gets all the users from the users collection.
+2. Then, for each user, it looks at the notes field (which stores ObjectIds).
+3. It uses those ObjectIds to fetch the actual note documents from the notes collection and fills them in.
+
+  Those are two separate queries, the data in <code>users</code> or <code>notes</code> could change in between (inconsistent state).
