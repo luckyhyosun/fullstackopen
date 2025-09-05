@@ -57,6 +57,19 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
 ## Appendix
 **Port** is a communication endpoint and listens for requests.
 
+**Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
+```js
+typeof [1,2,3]   // "object"
+typeof {a:1}     // "object"
+typeof null      // "object"😅 is a historic bug
+```
+
+But if we use <code>Array.isArray()</code>,
+```js
+Array.isArray([1,2,3])   // "true"
+Array.isArray({a:1})     // "false"
+```
+
 **JSON** (JavaScript Object Notation) is always a string representation of an object.
 + 1. <code>.toJSON()</code> returns a plain JavaScript object.
 ``` js
@@ -169,12 +182,12 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
 
 **Response.json()**
 <code>Response</code> is an object provided by Express to send data back to the clien. And <code>.json()</code> is a method that
-+ Converts the JavaScript object/array (blogs in this case) into a JSON string.
++ Converts the JavaScript object/array (<code>notes</code> in this case) into a JSON string.
 + Sets the correct HTTP header: <code>Content-Type: application/json</code>.
 + Sends the JSON as the HTTP response body.
 
 And <code>resonse.josn()</code> sends the HTTP response immediately and ends the request.
-So, if you want to return all blogs entries, you don’t map them individually.
+So, if you want to return all notes entries, you don’t map them individually.
 ```js
 //from controller.js
 notesRouter.get('/', async (req, res) => {
@@ -196,18 +209,6 @@ return notes.map(note => note.toJSON())
 //return only one note object
 return notes.map(note => response.json(note))
 ```
-**Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
-```js
-typeof [1,2,3]   // "object"
-typeof {a:1}     // "object"
-typeof null      // "object"😅 is a historic bug
-```
-
-But if we use <code>Array.isArray()</code>,
-```js
-Array.isArray([1,2,3])   // "true"
-Array.isArray({a:1})     // "false"
-```
 
 **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
@@ -217,7 +218,7 @@ Array.isArray({a:1})     // "false"
   - <code>.toJSON()</code>, <code>.toObject()</code>: synchronous methods, don't need to use <code>await</code>.
   - other Instance methods above: asynchronous methods and return a Promise. You need to <code>await</code> (or use <code>.then()</code>):
 
-What does mean by static or instance methods?
+What is meant by static or instance methods?
 ```js
 const Note = mongoose.model('Note', noteSchema)
 
