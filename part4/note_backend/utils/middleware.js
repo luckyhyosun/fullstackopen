@@ -21,6 +21,10 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json({ error: error.message })
   } else if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
     return response.status(400).json({ error: 'expected `username` to be unique' })
+  } else if (error.name === ''&& error.message.includes('is shorter than the minimum allowed length')){
+    console.log('check minlength validation. Custom error handling')
+    console.log('not necesary to keep this error handler because Validation error above can cover this codes')
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
