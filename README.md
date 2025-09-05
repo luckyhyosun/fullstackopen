@@ -302,3 +302,29 @@ await doc.save()
 // Worker fetches all boxes from the warehouse
 const allNotes = await Note.find({})
 ```
+
+**Index** is a special data structure, in most databases, that improve query performance and enforce constraints. More specifically,
++ Speeds up queries – Instead of scanning every document in a collection, MongoDB can quickly find results using the index (like looking up a word in a book’s index instead of reading the whole book).
+  - Example: if you often search users by their email, adding an index on email makes lookups much faster.
++ Enforces constraints – In Mongoose, if you define a schema field like this:
+  ```js
+  email: { type: String, unique: true }
+  ```
+  Mongoose tells MongoDB: "Create a unique index on <code>email</code>."
+That means MongoDB itself won’t allow two documents with the same email, because the index enforces uniqueness (<code>unique: true</code>).
+
+The "indexes" are those database-level structures that Mongoose creates based on your schema definitions (like <code>unique</code>, <code>sparse</code>, or just performance indexes).
+If you insert data before these indexes exist, you risk duplicates or inconsistent behavior, and MongoDB might refuse to build the index later.
+
++ **What went wrong**:
+When your app starts, Mongoose tries to ensure that the indexes defined in your schema exist in MongoDB. But **index creation in MongoDB happens in the background**, and Mongoose doesn’t wait for that by default.
+
+  If you **insert (seed) data before the indexes are actually created**, two timing problems can occur:
+  - If a constraint index (like <code>unique</code>) was supposed to be enforced, MongoDB won’t catch duplicates because the index wasn’t in place yet. (Which means, if you try to insert a duplicate value into a field with a unique index, MongoDB will reject it with an error.)
+
+  - Worse, if data already violates the would-be index, MongoDB won’t create the index at all.
+
+👉 **Important**:
+Mongoose validations do not detect the index violation, and instead of **ValidationError** they return an error of type **MongoServerError**.
+
+👉 In short: The issue was a timing problem. Data got seeded before MongoDB had finished building indexes, so constraints weren’t applied. **The solution is to explicitly wait for indexes to be in place** using <code>syncIndexes()</code> (all models) or <code>createIndexes()</code> (per model) before inserting data.
