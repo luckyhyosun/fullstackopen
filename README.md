@@ -355,3 +355,31 @@ Mongoose validations do not detect the index violation, and instead of **Validat
 3. It uses those ObjectIds to fetch the actual note documents from the notes collection and fills them in.
 
   Those are two separate queries, the data in <code>users</code> or <code>notes</code> could change in between (inconsistent state).
+
+🐬 **field** is a key–value pair inside a document.
+```js
+{
+  "_id": "64fabcd123...",
+  "content": "Buy milk",
+  "important": true,
+  "user": "64fuser456..."   // ObjectId reference
+}
+```
++ <code>"content"</code> is a field → value <code>"Buy milk"</code>
++ <code>"important"</code> is a field → value <code>true</code>
+
+```js
+const noteSchema = new mongoose.Schema({
+  content: String,    // field: "content"
+  important: Boolean, // field: "important"
+  user: {             // field: "user"
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
+})
+```
+So, when you are using <code>populate()</code>, don't use model name (uppercase 'User'). But **field name (lowercase 'user')**.
+````js
+await Note.find({}).populate('user')
+````
+<code>"user"</code> here is the field name in the document <code>(user: ObjectId(...))</code>.
