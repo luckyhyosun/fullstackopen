@@ -1,7 +1,8 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtpbSIsImlkIjoiNjhiYzFhOTU4YTY2Mjk3MTk5ZDczZDg0IiwiaWF0IjoxNzU3MTcxNjUzfQ.Q0JHg80Vvt6lbqUPnnIeFtCOMc4BBYqK7pEOO-1p9fQ
 
 {
-    "content": "Testing before connect backend to frontend",
+    "content": "jwt: testing Token",
     "important": false
 }
