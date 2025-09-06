@@ -131,7 +131,7 @@ Array.isArray({a:1})     // "false"
   '{"title":"Hello"}'
 ```
 + 3. <code>response.json(...)</code> Express does both steps automatically. Express calls <code>JSON.stringify</code>, which internally checks for <code>.toJSON()</code> and uses it if available.
-```json
+```
   response.json(notes)
     ↓
   JSON.stringify(notes)
@@ -515,7 +515,7 @@ await Note.find({}).populate('user')
 + But **Json Web Token** is **self-contained**, which means token itself contains all the information needed to identify the user and verify its authenticity.
 + What does a **JWT** contain?
   - **Header** tells how the token is built.
-    ```json
+    ```js
       //JWT header (inside the token)
       {
         "alg": "HS256",
@@ -526,7 +526,7 @@ await Note.find({}).populate('user')
       Authorization: Bearer <your.JWT.token>
     ```
   - **Payload** is some information about the user. For example:
-    ```json
+    ```js
     {
       "username": "alice",
       "id": "12345",
