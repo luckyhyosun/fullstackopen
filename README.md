@@ -79,7 +79,17 @@ Array.isArray({a:1})     // "false"
 ``` js
   '{"title":"Hello"}'
 ```
-+ 3. <code>response.json(...)</code> Express does both steps automatically. <code>.toJSON</code> first, and then <code>JSON.stringify(obj)</code> later. So <code>.toJSON</code> is really a pre-processor for <code>JSON.stringify(obj)</code>.
++ 3. <code>response.json(...)</code> Express does both steps automatically. Express calls <code>JSON.stringify</code>, which internally checks for <code>.toJSON()</code> and uses it if available.
+```json
+  response.json(notes)
+    ↓
+  JSON.stringify(notes)
+    ↓
+  for each doc → doc.toJSON()
+    ↓
+  now stringify the plain objects
+```
+  So, that's why some documents said <code>.toJSON()</code> is called first and <code>.stringify()</code> later.
 
 🐬 **Async**  declare a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
 
@@ -185,8 +195,8 @@ Array.isArray({a:1})     // "false"
 + Sets the correct HTTP header: <code>Content-Type: application/json</code>.
 + Sends the JSON as the HTTP response body.
 
-And <code>resonse.josn()</code> sends the HTTP response immediately and ends the request.
-So, if you want to return all notes entries, you don’t map them individually.
+And <code>resonse.json()</code> sends the HTTP response immediately and ends the request.
+So, if you want to return all notes entries, you don’t map them individually. Each Mongoose document in the array is converted into a plain object under the hood using Mongoose’s built-in serialization (stringifying).
 ```js
 //from controller.js
 notesRouter.get('/', async (req, res) => {
@@ -208,14 +218,20 @@ return notes.map(note => note.toJSON())
 //return only one note object
 return notes.map(note => response.json(note))
 ```
++ <code>res.json(notes)</code> → ends with stringified **JSON text** being sent over HTTP.
++ <code>notes.map(note => note.toJSON())</code> → gives you **plain objects**, not stringified, so you can manipulate or assert them in code.
++ <code>notes.map(note => response.json(note))</code> → will only return **one single note**. Because The first <code>res.json(note)</code> wins. It stringifies that one note and sends it to the client as the complete HTTP response. Since **HTTP allows only one response per request**, the client never sees the others.
+
+  The remaining <code>.map()</code> iterations still happen in JS, but any attempt to <code>res.json(...)</code> will be ignored, or throw the classic error.
 
 🐬 **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
-🐬 **Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB ():
+🐬 **Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB:
 + Static methods: <code>.find()</code>, <code>.findById()</code>, <code>.deleteMany()</code>, <code>.insertMany()</code> etc.
 + Instance methods (via documents created from the model):  <code>.save()</code>, <code>.remove()</code>, <code>.deleteOne()</code>, <code>.updateOne()</code>, <code>.populate()</code>
   - <code>.toJSON()</code>, <code>.toObject()</code>: synchronous methods, don't need to use <code>await</code>.
   - other Instance methods above: asynchronous methods and return a Promise. You need to <code>await</code> (or use <code>.then()</code>):
+  - <code>populate()</code>: it depends.
 
 What is meant by static or instance methods?
 ```js
@@ -227,7 +243,7 @@ await Note.save()
 // ✅ fetches all documents from the collection
 const allNotes = await Note.find({})
 ```
-Becasue <code>Note</code> is the model (class/object), not an individual document. The model does not have a <code>.save()</code> method, which only exists on document instances, because it’s about saving a single record. But <code>.find()</code> exists on the model, because it operates on the whole collection, not a single document
+Becasue <code>Note</code> is the model (class/object), not an individual document. The model does not have a <code>.save()</code> method, which only exists on document instances, because it’s about saving a single record. But <code>.find()</code> exists on the model, because it operates on the whole collection, not a single document.
 ```js
 const Note = mongoose.model('Note', noteSchema)
 
@@ -239,7 +255,7 @@ const doc = new Note({
 // ✅ saves this document to the database
 await doc.save()
 ```
-And <code>doc</code> is a document instance (created with <code>new Note({...})</code>).
+And <code>doc</code> is a document instance (created with <code>new Note({...})</code>). And
 <code>.save()</code> only works on document instances, not the model.
 
 ```js
@@ -289,7 +305,8 @@ const noteSchema = new mongoose.Schema({
   important: Boolean
 })
 
-// Model (worker) and map the model to the collection 'heys'
+// Model (worker)
+// Maping the model to the collection 'heys'
 const Note = mongoose.model('Hey', noteSchema)
 
 // Document (box)
@@ -302,7 +319,7 @@ await doc.save()
 const allNotes = await Note.find({})
 ```
 
-🐬 **Index** is a special data structure, in most databases, that improve query performance and enforce constraints. More specifically,
+🐬 **Index** is, in most databases, a special data structure that improve query performance and enforce constraints (unique value). More specifically,
 + Speeds up queries – Instead of scanning every document in a collection, MongoDB can quickly find results using the index (like looking up a word in a book’s index instead of reading the whole book).
   - Example: if you often search users by their email, adding an index on email makes lookups much faster.
 + Enforces constraints – In Mongoose, if you define a schema field like this:
@@ -346,15 +363,54 @@ Mongoose validations do not detect the index violation, and instead of **Validat
 🐬 **populate()** is a Mongoose method that replaces the ObjectId reference in a document with the actual document(s) from another collection. It’s how Mongoose simulates a join between collections.
   + **With join queries in Mongoose**, Mongoose runs two queries.
   ```js
+  //note schema
+  const noteSchema = new mongoose.Schema({
+    content: {
+      type: String,
+      required: true,
+      minlength: 5,
+    },
+    important: Boolean,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  })
+
+  //user schema
+  const userSchema = new mongoose.Schema({
+    username: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    name: {
+      type: String,
+      minLength: 2
+    },
+    passwordHash: String,
+    notes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Note'
+      }
+    ],
+  })
+
+  const Note = mongoose.model('Note', noteSchema)
+  const User = mongoose.model('User', userSchema)
+  ```
+  ```js
   // Example: populating note inside a user
   const users = await User.find({}).populate('notes')
   ```
 
 1. Mongoose first gets all the users from the users collection.
-2. Then, for each user, it looks at the notes field (which stores ObjectIds).
-3. It uses those ObjectIds to fetch the actual note documents from the notes collection and fills them in.
+2. Then, for each user, it looks at the notes field (which stores ObjectIds). <code>type: mongoose.Schema.Types.ObjectId</code> means that each item in the notes array is an <code>ObjectId</code> that refers to another document. And <code>ref: 'Note'</code> refers to the **Mongoose model name**, not the collection name.
+3. Mongoose uses the model name (<code>'Note'</code>) to figure out which collection to look in. By default, it converts the model name to a collection name by pluralizing and lowercasing it (<code>'notes</code>).
+4. It uses those ObjectIds to fetch the actual note documents from the notes collection and fills them in.
 
-  Those are two separate queries, the data in <code>users</code> or <code>notes</code> could change in between (inconsistent state).
+  Those are two separate queries, so the data in <code>users</code> or <code>notes</code> could change in between (inconsistent state).
 
 🐬 **field** is a key–value pair inside a document.
 ```js
