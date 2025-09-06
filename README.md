@@ -27,6 +27,7 @@ Most of the code to support a dynamic website must run on the server. Creating t
 + [What Is Node.js](https://kinsta.com/knowledgebase/what-is-node-js/)
 + [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
 + [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
++ [Token-based authentication](https://www.digitalocean.com/community/tutorials/the-ins-and-outs-of-token-based-authentication#how-token-based-works)
 
 ## Someone/things to know
 + [John Mccarthy](https://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist))
@@ -247,11 +248,27 @@ return notes.map(note => note.toJSON())
 //return only one note object
 return notes.map(note => response.json(note))
 ```
+```js
+//the return value will look the same as response.json(notes)
+return response.send(notes)
+```
 + <code>res.json(notes)</code> → ends with stringified **JSON text** being sent over HTTP.
 + <code>notes.map(note => note.toJSON())</code> → gives you **plain objects**, not stringified, so you can manipulate or assert them in code.
 + <code>notes.map(note => response.json(note))</code> → will only return **one single note**. Because The first <code>res.json(note)</code> wins. It stringifies that one note and sends it to the client as the complete HTTP response. Since **HTTP allows only one response per request**, the client never sees the others.
 
   The remaining <code>.map()</code> iterations still happen in JS, but any attempt to <code>res.json(...)</code> will be ignored, or throw the classic error.
++ <code>.send(notes)</code> is more general; it can send strings, Buffers, numbers, or objects. So if you pass an **object or array**, Express automatically converts it to JSON, just like <code>.json()</code>. But, **best practice is to use <code>.json()</code>**.
+
+    ```js
+    res.json([{ content: 'note 1' }, { content: 'note 2' }])
+    // Sends:
+    // Content-Type: application/json
+    // Body: [{"content":"note 1"},{"content":"note 2"}]
+
+    res.send([{ content: 'note 1' }, { content: 'note 2' }])
+    // Express sees the array/object and sends JSON with the same result
+
+    ```
 
 🐬 **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
