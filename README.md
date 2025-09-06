@@ -14,6 +14,35 @@ A dynamic site can return different data for a URL based on information provided
 
 Most of the code to support a dynamic website must run on the server. Creating this code is known as "**server-side programming**" (or sometimes "**back-end scripting**").
 
+## Reading Materials
++ [Linear algebra](https://www.csc.kth.se/~weinkauf/teaching/visualization/index.html)
++ [immersive math](https://immersivemath.com/ila/learnmore.html)
++ [Computer Vision](https://www.spiceworks.com/tech/artificial-intelligence/articles/what-is-computer-vision/)
++ [You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS?tab=readme-ov-file)
++ [How to Manage JavaScript Fatigue](https://auth0.com/blog/how-to-manage-javascript-fatigue/)
++ [Eloquent JavaScript](https://eloquentjavascript.net/)
++ [Guide to React](https://egghead.io/courses/the-beginner-s-guide-to-react)
++ [React with Class Components Fundamentals](https://egghead.io/courses/react-with-class-components-fundamentals-4351f8bb)
++ [Representational State Transfer: REST](https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm)
++ [What Is Node.js](https://kinsta.com/knowledgebase/what-is-node-js/)
++ [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
++ [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
+
+## Someone/things to know
++ [John Mccarthy](https://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist))
++ [Arvind Sanjeev](https://arvindsanjeev.com/projects.html)
++ [Emma Frid](https://sites.google.com/view/emmafrid/home)
++ [mschf](https://mschf.com/)
++ [Data Driven Graphics](https://dribbble.com/tags/data-driven)
++ [The Psychophysics of Human Sound Localization](https://direct.mit.edu/books/oa-monograph/4885/Spatial-HearingThe-Psychophysics-of-Human-Sound)
++ [Designing Sound](https://mitpress.mit.edu/9780262014410/designing-sound/)
+
+## Future Plan
++ Typescript
++ Next.js
++ Vue.js
++ Redux.js
++ [WebGL](https://thespatialstudio.de/en/xr-glossary/webgl)
 
 ## my Q&A
 
