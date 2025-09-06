@@ -43,6 +43,7 @@ Most of the code to support a dynamic website must run on the server. Creating t
 + Next.js
 + Vue.js
 + Redux.js
++ Axio
 + [WebGL](https://thespatialstudio.de/en/xr-glossary/webgl)
 
 ## my Q&A
@@ -83,6 +84,26 @@ Production Server(Express, Djanog...etc): Backend logic lives. And backend and f
 
 Development Server(React, Vite, Next,js...etc): Frontend codes lives. Here, backend and frontend are different two processes. So running them separately makes development faster and easier.
 To handle requests from different ports (from back/frontend) we can use **CORS / Proxy**.
+
+**🐥 What is the difference between Session-Based Authentication and Token-Based Authentication (JWT)?**
+
+🐓 The core difference lies in how authentication is managed.
++ **Session-Based Authentication** relies on server memory or database.
+  - The server keeps session data for each logged-in user (user ID, login status, etc.).
+  - Client stores only a session ID (usually in a cookie).
+  - Every request sends the session ID → server looks up session ID in memory/database → Retrieves session data → verifies the user → processes request.
+    + For a few users, this is trivial. But thousands or millions of requests → lots of DB/memory access → more CPU, RAM, and potential latency.
+    + If multiple servers are used, a shared session store may introduce network calls → even more load.
+  - Stateful: The server must remember every active session.
++ **Token-Based Authentication (JWT)** relies on verifying the token itself, not looking up server-side session data.
+  - The token itself contains all necessary user info (payload) and a signature.
+  - Client stores the token (LocalStorage, cookie, or memory).
+  - Every request sends the token (usually in Authorization: Bearer token header) → server verifies the signature → decodes payload → identifies the user.
+    + Verification = cryptographic check using the secret key (HMAC or RSA) → computationally light compared to DB lookup.
+    + Decoding payload = just Base64 decoding → extremely fast.
+    + No database access needed → no memory lookups, no network calls
+    + Even for thousands of requests, this is much less load than querying a session store for each request
+  - Stateless: The server does not store session data.
 
 ## Appendix
 🐬 **Port** is a communication endpoint and listens for requests.
@@ -485,3 +506,92 @@ So, when you are using <code>populate()</code>, don't use model name (uppercase 
 await Note.find({}).populate('user')
 ````
 <code>"user"</code> here is the field name in the document <code>(user: ObjectId(...))</code>.
+
+🐬 **Token** is a small piece of digital data that proves who you are.
++ It’s like a digital ticket or ID card.
++ Usually, it’s created by the server when you log in.
++ Then, you send it back to the server on future requests to show.
++ **Opaque (normal) Token** is just a random **string**.
++ But **Json Web Token** is **self-contained**, which means token itself contains all the information needed to identify the user and verify its authenticity.
++ What does a **JWT** contain?
+  - **Header** tells how the token is built.
+    ```json
+      //JWT header (inside the token)
+      {
+        "alg": "HS256",
+        "typ": "JWT"
+      }
+
+      //the HTTP header where the JWT is carried
+      Authorization: Bearer <your.JWT.token>
+    ```
+  - **Payload** is some information about the user. For example:
+    ```json
+    {
+      "username": "alice",
+      "id": "12345",
+      "iat": 1693632261
+    }
+    ```
+  - **signature** is a cryptographic “stamp” made with the secret key, that makes sure nobody has changed the token. (Declared in <code>.env</code> file, in the notes project)
++ How does it work?
+  - 1. Client logs in → gets token → stores it locally.
+  - 2. Client wants to do a protected action → adds token to Authorization header.
+  - 3. Server reads the header, verifies the token, and allows or denies access.
+
+🐬 **Authorization header** [(link)]((https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Authorization)) is a special HTTP header through which the token is sent.
+```js
+Authorization: <scheme> <credentials>
+```
++ <code>&lt;scheme&gt;</code> = the authentication scheme (method).
++ <code>&lt;credentials&gt;</code> = the actual proof (like a token, password, etc.).
+
+🐬 **Authentication scheme** [(link)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication#Authentication_schemes) is a _name_ that defines how the credentials are encoded. It comes before the credentials in the <code>Authorization</code> header.
+
++ Basic: base64-encoded credentials
++ Bearer: bearer tokens to access
++ Digest: Firefox 93 and later support the SHA-256 algorithm
+
+```js
+Bearer <Token_Credential>
+```
+
+🐬 **Session + Cookie**
++ Server stores full guestbook with all user info (who borrowed which books, permissions, etc.).
++ Guest receives a small memo with just a guest ID
++ Every time the guest visits the library:
+  - They show the memo (cookie).
+  - The librarian looks up the ID in the guestbook to find all info → allows borrowing, etc.
++ Pros:
+  - Minimal info on guest → safer.
++ Cons:
+  - Server must remember all guests → more memory and harder to scale.
+  - Multiple libraries (servers) need a shared guestbook.
+
+🐬 **Opaque Token**
++ Guest receives a random key with no info.
++ The server still keeps a master list of all tokens and associated guest info.
++ Every visit:
+  - Guest shows the key (token).
+  - Server looks it up in the master list → identifies guest → checks permissions.
++ Pros:
+  - Server can easily revoke tokens by removing from the master list.
++ Cons:
+  - Lookup needed every time → server load.
+  - Multiple servers require shared token _store*_ → harder to scale.
+  _*Store is the place where the server keeps all active tokens or sessions, like database table(MySQL) or in-memory store(Redis)_
+  - Which means, the server asks its database or in-memory storage to find a record that matches the token for every request → adds server work.
+
+
+🐬 **JWT (Self-contained token)**
++Guest receives a signed ID card (like, Mecena) with all info written on it (name, birthday, permissions, expiration).
++ Every visit:
+  - Guest shows the ID card (JWT).
+  - Any librarian can verify the signature (Mecena) → immediately trust the info → allow actions.
++ Pros:
+  - Self-contained → no server lookup → minimal load.
+  - Works across multiple libraries (servers) → easy scaling.
+  - No query (Not asking DB or in-memory to do some tasks) is needed because all the info is on the card (token) itself.
++ Cons:
+  - Harder to revoke → valid until expiration.
+  - Sensitive info on card is visible → must be careful.
