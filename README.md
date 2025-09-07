@@ -598,3 +598,16 @@ Bearer <Token_Credential>
 + Cons:
   - Harder to revoke → valid until expiration.
   - Sensitive info on card is visible → must be careful.
+
+🐬 **Revocation problem** can be happened in Token-based authentication. Because the API is basically blindly trusting the token until it expires. For example:
+  1. When your React app logs in, it gets a token (e.g., JWT).
+  2. That token says: “This is Alice, role: user, valid for 1 hour.”
+  3. Now, whenever the React app makes API requests, it attaches the token.
+  4. The API sees the token, verifies its signature, and says: “Okay, token is valid → let’s trust Alice.”
+
+  But, what if What if something changes before the token expires? For example:
+  - Alice logs out.
+  - An admin blocks Alice’s account.
+  - Alice’s token gets stolen by a hacker.
+
+  → The token is still valid until it expires. The API has no way to know it should stop trusting Alice immediately.
