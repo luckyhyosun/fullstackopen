@@ -154,6 +154,21 @@ describe('when there is initially one user in db', () => {
       const userAtEnd = await helper.usersInDb()
       assert.strictEqual(userAtEnd.length, usersAtStart.length)
     })
+
+    test.only('fails with status 400 if password is less than 3 characters', async () => {
+      const usersAtStart = await helper.usersInDb()
+
+      const newUser = {
+        username: 'testUser',
+        name: 'newUser',
+        password: 'de'
+      }
+
+      await api.post('/api/users').send(newUser).expect(400)
+
+      const usersAtEnd = await helper.usersInDb()
+      assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
   })
 })
 
