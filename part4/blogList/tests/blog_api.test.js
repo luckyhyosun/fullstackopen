@@ -2,9 +2,12 @@ const assert = require('node:assert')
 const { test, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
+
 const app = require('../app')
 const helper = require('../tests/blog_helper.test')
 const Blog = require('../models/blogModel')
+const User = require('../models/userModel')
 
 const api = supertest(app)
 
@@ -113,6 +116,30 @@ describe('when there is initially some blogs saved', () => {
       assert(!blogs.includes(blogToDelete.title))
       assert.strictEqual(allBlogs.length, helper.initialBlogs.length - 1)
     })
+  })
+})
+
+describe('when there is initially one user in db', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('testpw', 10)
+    const user = new User({
+      username: 'testName',
+      name: 'newuser',
+      passwordHash })
+
+    await user.save()
+  })
+
+  test.only('user lists are returned as json', async () => {
+    const res = await api.get('/api/users')
+    console.log(res, res.body)
+
+    await api
+      .get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
   })
 })
 

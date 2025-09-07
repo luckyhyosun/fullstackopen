@@ -5,6 +5,7 @@ const User = require('../models/userModel')
 userRouter.get('/', async (req, res) => {
   const allUsers = await User.find({}).select('-passwordHash')
   res.status(200).json(allUsers)
+  return res.body
 })
 
 userRouter.post('/', async (req, res) => {

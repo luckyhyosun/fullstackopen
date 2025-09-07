@@ -240,10 +240,10 @@ Array.isArray({a:1})     // "false"
   - ⚠️ Strict/ technical way: it returns a Mongoose Query object, which is Promise-like, so <code>await</code> and <code>.then()</code> work.
   ```js
   // can say it returns Promise
-  const users = Note.find({})
+  const notes = Note.find({})
   ```
   ```js
-  // console.log(users)
+  // console.log(notes)
   Query {
     _mongooseOptions: {},
     _transforms: [],
@@ -262,10 +262,10 @@ Array.isArray({a:1})     // "false"
   - returns an array of document from MongoDB, not plain JS objects, but Mongoose document instances
   ```js
   // resolves to an array of documents
-  const users = await Note.find({})
+  const notes = await Note.find({})
   ```
   ```js
-  // console.log(users)
+  // console.log(notes)
   [
     {
       _id: new ObjectId("64f2a2b4e9f1d23a4b9b7c8d"),
@@ -281,7 +281,7 @@ Array.isArray({a:1})     // "false"
     }
   ]
 
-  // console.log(users.toJSON())
+  // console.log(notes.toJSON())
   // And our custom .toJSON() method in model
   [
     {
@@ -330,7 +330,7 @@ Array.isArray({a:1})     // "false"
 <code>Response</code> is an object provided by Express to send data back to the clien. And <code>.json()</code> is a method that
 + Converts the JavaScript object/array (<code>notes</code> in this case) into a JSON string.
 + Sets the correct HTTP header: <code>Content-Type: application/json</code>.
-+ Sends the JSON as the HTTP response body.
++ Sends the JSON as the **HTTP response body**.
 
 And <code>resonse.json()</code> sends the HTTP response immediately and ends the request.
 So, if you want to return all notes entries, you don’t map them individually. Each Mongoose document in the array is converted into a plain object under the hood using Mongoose’s built-in serialization (stringifying).
@@ -376,6 +376,39 @@ return response.send(notes)
     // Express sees the array/object and sends JSON with the same result
 
     ```
+
+**Note**
+From the code below, controller.js is handling HTTP request and return response after <code>res.json(data)</code>. But helper.js is not handling HTTP request, instead it just quering MongoDB directly and returns an a plain array of JS objects.
+```js
+// Handling HTTP by Express (via 'Router')
+notesRouter.get('/', async (req, res) => {
+  // Get an array of note documents
+  const notes = await Note.find({})
+  // Convert the arrat into JSON
+  // Express send the array as an HTTP response to the client (as response object).
+  return res.json(notes)
+})
+
+// Handeling HTTP by Supertest (via 'api')
+test('all notes are returned', async () => {
+  // Supertest makes an HTTP request to your Express app.
+  // Get an array of note documents
+  // const response = Supertest Response object (wrapper)
+  const response = await api.get('/api/notes')
+  // response.body = the actual JSON data sent by Express
+  console.log(response.body)
+
+  assert.strictEqual(response.body.length, helper.initialNotes.length)
+})
+
+// Querying MongoDB directly through Mongoose
+const notesInDb = async () => {
+  // Get an array of note documents
+  const notes = await Note.find({})
+  // Gives a plain array of JS objects
+  return notes.map((note) => note.toJSON())
+}
+```
 
 🐬 **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
