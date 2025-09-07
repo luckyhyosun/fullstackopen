@@ -139,6 +139,61 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
 ## Appendix
 🐬 **Port** is a communication endpoint and listens for requests.
 
+🐬 **Object literal** is a way to create an object using curly braces {} with key-value pairs directly in the code. Unlike creating it with a _constructor_ like <code>new Object()</code>.
+```js
+// using a constructor
+const obj = new Object();
+// object literal
+const objLiteral = { key: "value" };
+```
+
+With **an array function**, the parentheses <code>()</code> around <code>{}</code> are needed to **return the object literal implicitly** in an arrow function.
+```js
+const user = { username: "kim", id: 1 };
+const getUser = () => ({ username: user.username, id: user.id });
+
+const callUser = getUser();
+console.log(callUser) // { username: "kim", id: 1 }
+```
+
+🐬 **Arrow function** is a compact alternative expression to a traditional function expression. And it has two **“styles” of body**.
++ Concise body (no braces) → implicit return
+  ```js
+  const add = (a, b) => a + b; // returns a + b automatically
+  ```
+  - Here, <code>a + b</code> is an **expression**, not a statement.
+  - Arrow functions automatically return the result of the expression.
+  - You cannot write multiple statements here; it’s only a single expression.
++ Block body (with braces <code>{}</code>) → explicit return
+  ```js
+  const add = (a, b) => {
+    const sum = a + b;
+    return sum; // must use return
+  };
+  ```
+  - The <code>{}</code> defines a **function block**.
+  - Inside a block, you can have multiple statements.
+  - You must use return to send a value back.
+
+Then what about **object literal** with an arrow function?
+```js
+const getUser = () => ({ username: "kim" }); // ✅ works
+```
++ The <code>()</code> around <code>{}</code> tells JS: “This is an object literal, not a function block.” → work.
++ Without <code>()</code>, JS would think <code>{ username: "kim" }</code> is a block, not an object → error.
+
+And <code>map()</code> is an array method that creates a new array by applying a callback function to each element of the original array. In the code below, map callback is an arrow function.
+
+So, if I want to get an array of oject literal, I should use <code>()</code> around <code>{}</code>. Since object literal is not a function block.
+```js
+const allUsers = await User.find({})
+const users = allUsers.map(user => ({
+  name: user.name,
+  id: user.id
+}));
+
+console.log(users) // [{ name: 'Alice', id: 1 }, { name: 'Bob', id: 2 }]
+```
 🐬 **Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
 ```js
 typeof [1,2,3]   // "object"
@@ -184,11 +239,11 @@ Array.isArray({a:1})     // "false"
   - ✅ Casual / practical way: it returns a Promise.
   - ⚠️ Strict/ technical way: it returns a Mongoose Query object, which is Promise-like, so <code>await</code> and <code>.then()</code> work.
   ```js
-  //can say it returns Promise
+  // can say it returns Promise
   const users = Note.find({})
   ```
   ```js
-  //console.log(users)
+  // console.log(users)
   Query {
     _mongooseOptions: {},
     _transforms: [],
@@ -206,11 +261,11 @@ Array.isArray({a:1})     // "false"
 + Case 2: With <code>await</code>
   - returns an array of document from MongoDB, not plain JS objects, but Mongoose document instances
   ```js
-  //resolves to an array of documents
+  // resolves to an array of documents
   const users = await Note.find({})
   ```
   ```js
-  //console.log(users)
+  // console.log(users)
   [
     {
       _id: new ObjectId("64f2a2b4e9f1d23a4b9b7c8d"),
@@ -226,8 +281,8 @@ Array.isArray({a:1})     // "false"
     }
   ]
 
-  //console.log(users.toJSON())
-  //And our custom .toJSON() method in model
+  // console.log(users.toJSON())
+  // And our custom .toJSON() method in model
   [
     {
       id: "64f2a2b4e9f1d23a4b9b7c8d",
@@ -252,7 +307,7 @@ Array.isArray({a:1})     // "false"
   console.log(note.toJSON()) // Plain object
   ```
   ```js
-  //console.log(note)
+  // console.log(note)
   {
     _id: new ObjectId("64f2a2b4e9f1d23a4b9b7c8d"),
     title: 'My first note',
@@ -261,7 +316,7 @@ Array.isArray({a:1})     // "false"
     // (plus hidden symbols and methods, not shown here)
   }
 
-  //console.log(note.toJSON())
+  // console.log(note.toJSON())
   {
     _id: "64f2a2b4e9f1d23a4b9b7c8d",
     title: "My first note",
@@ -280,28 +335,28 @@ Array.isArray({a:1})     // "false"
 And <code>resonse.json()</code> sends the HTTP response immediately and ends the request.
 So, if you want to return all notes entries, you don’t map them individually. Each Mongoose document in the array is converted into a plain object under the hood using Mongoose’s built-in serialization (stringifying).
 ```js
-//from controller.js
+// from controller.js
 notesRouter.get('/', async (req, res) => {
   const notes = await Note.find({})
   return res.json(notes)
 })
 
-//from helper.js
+// from helper.js
 const notesInDb = async () => {
   const notes = await Note.find({})
   return notes.map((note) => note.toJSON())
 }
 ```
 ```js
-//return all the notes object into an array
+// return all the notes object into an array
 return response.json(notes)
 return notes.map(note => note.toJSON())
 
-//return only one note object
+// return only one note object
 return notes.map(note => response.json(note))
 ```
 ```js
-//the return value will look the same as response.json(notes)
+// the return value will look the same as response.json(notes)
 return response.send(notes)
 ```
 + <code>res.json(notes)</code> → ends with stringified **JSON text** being sent over HTTP.
@@ -379,7 +434,7 @@ const allNotes = await db.heys.find({})
 
 console.log(allNotes)
 
-//both delete all documents in the "heys" collection
+// both delete all documents in the "heys" collection
 Note.deleteMany({})
 mongoose.model('Hey').deleteMany({})
 db.heys.deleteMany({})
@@ -461,7 +516,7 @@ Mongoose validations do not detect the index violation, and instead of **Validat
 🐬 **populate()** is a Mongoose method that replaces the ObjectId reference in a document with the actual document(s) from another collection. It’s how Mongoose simulates a join between collections.
   + **With join queries in Mongoose**, Mongoose runs two queries.
   ```js
-  //note schema
+  // note schema
   const noteSchema = new mongoose.Schema({
     content: {
       type: String,
@@ -475,7 +530,7 @@ Mongoose validations do not detect the index violation, and instead of **Validat
     }
   })
 
-  //user schema
+  // user schema
   const userSchema = new mongoose.Schema({
     username: {
       type: String,
@@ -547,13 +602,13 @@ await Note.find({}).populate('user')
 + What does a **JWT** contain?
   - **Header** tells how the token is built.
     ```js
-      //JWT header (inside the token)
+      // JWT header (inside the token)
       {
         "alg": "HS256",
         "typ": "JWT"
       }
 
-      //the HTTP header where the JWT is carried
+      // the HTTP header where the JWT is carried
       Authorization: Bearer <your.JWT.token>
     ```
   - **Payload** is some information about the user. For example:
