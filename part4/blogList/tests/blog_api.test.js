@@ -17,7 +17,7 @@ describe('when there is initially some blogs saved', () => {
     await Blog.insertMany(helper.initialBlogs)
   })
 
-  test.only('blog lists are returned as json', async () => {
+  test('blog lists are returned as json', async () => {
     await api
       .get('/api/blogs')
       .expect(200)
@@ -25,7 +25,7 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('viewing a specific blog', () => {
-    test.only('succeeds with verifying that the unique identifier property', async () => {
+    test('succeeds with verifying that the unique identifier property', async () => {
       const response = await api.get('/api/blogs')
       const blogs = response.body
 
@@ -34,7 +34,7 @@ describe('when there is initially some blogs saved', () => {
       })
     })
 
-    test.only('fails with statuscode 400 if title or url does not exist', async () => {
+    test('fails with statuscode 400 if title or url does not exist', async () => {
       const newBlog = {
         title: 'Class Components Fundamentals',
         author: 'Joe Maddalone',
@@ -48,7 +48,7 @@ describe('when there is initially some blogs saved', () => {
       assert.strictEqual(blogsInDb.length, helper.initialBlogs.length)
     })
 
-    test.only('fails with statuscode 400 if likes property does not exist', async () => {
+    test('fails with statuscode 400 if likes property does not exist', async () => {
       const newBlog = {
         title: 'The Beginner Guide to React',
         author: 'Kent C. Dodds',
@@ -67,7 +67,7 @@ describe('when there is initially some blogs saved', () => {
       assert(checkBlogTitlesInDb.includes('Kent C. Dodds'))
     })
 
-    test.only('succeeds with updating number of likes for a blog post with id', async () => {
+    test('succeeds with updating number of likes for a blog post with id', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToUpdate = blogsAtStart[0]
       const updatedProperty = { likes: 100 }
@@ -81,7 +81,7 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('addition of a new blog', () => {
-    test.only('succeeds with valid data', async () => {
+    test('succeeds with valid data', async () => {
       const newBlog = {
         title: 'REST Chapter 5',
         author: 'Roy Thomas Fielding',
@@ -104,7 +104,7 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('deletion of a blog', () => {
-    test.only('succeeds with status code 204 if id is valid', async () => {
+    test('succeeds with status code 204 if id is valid', async () => {
       const blogsInDb = await helper.blogsInDb()
       const blogToDelete = blogsInDb[0]
 
@@ -125,7 +125,7 @@ describe('when there is initially one user in db', () => {
 
     const passwordHash = await bcrypt.hash('testpw', 10)
     const user = new User({
-      username: 'testName',
+      username: 'firstUser',
       name: 'newuser',
       passwordHash })
 
@@ -149,7 +149,10 @@ describe('when there is initially one user in db', () => {
         passwordHash
       }
 
-      await api.post('/api/users').send(newUser).expect(400)
+      await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
 
       const userAtEnd = await helper.usersInDb()
       assert.strictEqual(userAtEnd.length, usersAtStart.length)
@@ -164,7 +167,10 @@ describe('when there is initially one user in db', () => {
         password: 'de'
       }
 
-      await api.post('/api/users').send(newUser).expect(400)
+      await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
 
       const usersAtEnd = await helper.usersInDb()
       assert.strictEqual(usersAtEnd.length, usersAtStart.length)

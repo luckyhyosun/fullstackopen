@@ -14,7 +14,7 @@ userRouter.post('/', async (req, res) => {
     return res.status(400).end()
   }
 
-  if(password.length < 4){
+  if(!password || password.length < 4){
     return res.status(400).end()
   }
 
