@@ -14,6 +14,35 @@ A dynamic site can return different data for a URL based on information provided
 
 Most of the code to support a dynamic website must run on the server. Creating this code is known as "**server-side programming**" (or sometimes "**back-end scripting**").
 
+## Libraries
+### Frontend
++ [React](https://react.dev/) is a free and open-source front-end JavaScript library that aims to make **building user interfaces (UI)** based on components more "seamless".
++ [Redux]() is mostly used with React, but can work elsewhere and is **managing application state**.
+
+### Backend
++ [Supertest](https://www.npmjs.com/package/supertest) is a Node.js library that helps developers test backend APIs. It calls your Node app directly in memory, without going over HTTP or HTTPS. Which means the code path is exactly the same as real HTTP routes, but it’s all inside Node’s memory.
+
+  It's how Supertest simulates an HTTP request internally:
+  1. Creates a fake request object.
+  2. Passes it to your Express app handlers.
+  3. Gets the response object.
+
+### Both
++ [Axios](https://axios-http.com/)
+
+## Frameworks
+### Frontend
++ Angular
++ Vue.js
++ Svelte
+
+### Backend
++ Express.js
++ Nest.js
+
+### Both
++ Next.js
+
 ## Reading Materials
 + [Linear algebra](https://www.csc.kth.se/~weinkauf/teaching/visualization/index.html)
 + [immersive math](https://immersivemath.com/ila/learnmore.html)
