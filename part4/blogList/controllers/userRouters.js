@@ -3,15 +3,16 @@ const userRouter = require('express').Router()
 const User = require('../models/userModel')
 
 userRouter.get('/', async (req, res) => {
-  //const allUsers = await User.find({}).select('username name id')
-
-  //or
   const allUsers = await User.find({}).select('-passwordHash')
   res.status(200).json(allUsers)
 })
 
 userRouter.post('/', async (req, res) => {
   const { username, name, password } = req.body
+
+  if(password.length < 4){
+    return res.status(400).end()
+  }
 
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
