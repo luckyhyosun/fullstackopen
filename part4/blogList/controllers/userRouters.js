@@ -3,13 +3,11 @@ const userRouter = require('express').Router()
 const User = require('../models/userModel')
 
 userRouter.get('/', async (req, res) => {
-  const allUsers = await User.find({})
-  const users = allUsers.map(user => ({
-    username: user.username,
-    name: user.name,
-    id: user._id
-  }))
-  res.status(200).json(users)
+  //const allUsers = await User.find({}).select('username name id')
+
+  //or
+  const allUsers = await User.find({}).select('-passwordHash')
+  res.status(200).json(allUsers)
 })
 
 userRouter.post('/', async (req, res) => {
