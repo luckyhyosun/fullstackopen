@@ -27,6 +27,8 @@ Most of the code to support a dynamic website must run on the server. Creating t
   2. Passes it to your Express app handlers.
   3. Gets the response object.
 
++ [bcrypt](https://www.npmjs.com/package/bcrypt) is Node.js library that secure hash passwords and compare hashes for authentication.
+
 ### Both
 + [Axios](https://axios-http.com/)
 
