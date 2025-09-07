@@ -48,7 +48,7 @@ describe('when there is initially some blogs saved', () => {
       assert.strictEqual(blogsInDb.length, helper.initialBlogs.length)
     })
 
-    test.only('fails with statuscode 400 if liks property does not exist', async () => {
+    test.only('fails with statuscode 400 if likes property does not exist', async () => {
       const newBlog = {
         title: 'The Beginner Guide to React',
         author: 'Kent C. Dodds',
@@ -133,13 +133,27 @@ describe('when there is initially one user in db', () => {
   })
 
   test.only('user lists are returned as json', async () => {
-    const res = await api.get('/api/users')
-    console.log(res, res.body)
-
     await api
       .get('/api/users')
       .expect(200)
       .expect('Content-Type', /application\/json/)
+  })
+
+  describe('viewing a specific user', () => {
+    test.only('fails with statuscode 400 if username does not exist', async () => {
+      const usersAtStart = await helper.usersInDb()
+
+      const passwordHash = await bcrypt.hash('testpw2', 10)
+      const newUser = {
+        name: 'newuser',
+        passwordHash
+      }
+
+      await api.post('/api/users').send(newUser).expect(400)
+
+      const userAtEnd = await helper.usersInDb()
+      assert.strictEqual(userAtEnd.length, usersAtStart.length)
+    })
   })
 })
 

@@ -5,11 +5,14 @@ const User = require('../models/userModel')
 userRouter.get('/', async (req, res) => {
   const allUsers = await User.find({}).select('-passwordHash')
   res.status(200).json(allUsers)
-  return res.body
 })
 
 userRouter.post('/', async (req, res) => {
   const { username, name, password } = req.body
+
+  if(!username){
+    return res.status(400).end()
+  }
 
   if(password.length < 4){
     return res.status(400).end()
