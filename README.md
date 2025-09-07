@@ -539,7 +539,7 @@ await Note.find({}).populate('user')
   - 2. Client wants to do a protected action → adds token to Authorization header.
   - 3. Server reads the header, verifies the token, and allows or denies access.
 
-🐬 **Authorization header** [(link)]((https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Authorization)) is a special HTTP header through which the token is sent.
+🐬 **Authorization header** [(link)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Authorization) is a special HTTP header through which the token is sent.
 ```js
 Authorization: <scheme> <credentials>
 ```
@@ -557,8 +557,8 @@ Bearer <Token_Credential>
 ```
 
 🐬 **Session + Cookie**
-+ Server stores full guestbook with all user info (who borrowed which books, permissions, etc.).
-+ Guest receives a small memo with just a guest ID
++ The server creates guestbook (a session store*) that holds information _only about users who are currently logged in_, with all user info (who borrowed which books, permissions, etc.).
++ Guest receives a small memo📝 with just a guest ID.
 + Every time the guest visits the library:
   - They show the memo (cookie).
   - The librarian looks up the ID in the guestbook to find all info → allows borrowing, etc.
@@ -568,23 +568,26 @@ Bearer <Token_Credential>
   - Server must remember all guests → more memory and harder to scale.
   - Multiple libraries (servers) need a shared guestbook.
 
+  _*Store is the place where the server keeps all active tokens or sessions, like database table(MySQL) or in-memory store(Redis)._
+
 🐬 **Opaque Token**
-+ Guest receives a random key with no info.
-+ The server still keeps a master list of all tokens and associated guest info.
++ Guest receives a random key🔑 with no info.
++ The server still keeps a cabinet (a central storage, like database table) of all tokens and associated guest info.
 + Every visit:
   - Guest shows the key (token).
-  - Server looks it up in the master list → identifies guest → checks permissions.
+  - Server looks for the matching key shape/number in the cabinet → identifies guest → checks permissions.
 + Pros:
-  - Server can easily revoke tokens by removing from the master list.
+  - Server can easily revoke* tokens by removing from the cabinet.
 + Cons:
   - Lookup needed every time → server load.
-  - Multiple servers require shared token _store*_ → harder to scale.
-  _*Store is the place where the server keeps all active tokens or sessions, like database table(MySQL) or in-memory store(Redis)_
+  - Multiple servers require shared token store → harder to scale.
   - Which means, the server asks its database or in-memory storage to find a record that matches the token for every request → adds server work.
+
+  _Revoke* means making a token/session invalid before expiry._
 
 
 🐬 **JWT (Self-contained token)**
-+Guest receives a signed ID card (like, Mecena) with all info written on it (name, birthday, permissions, expiration).
++ Guest receives a signed ID card (like, Mecena) with all info written on it (name, birthday, permissions, expiration).
 + Every visit:
   - Guest shows the ID card (JWT).
   - Any librarian can verify the signature (Mecena) → immediately trust the info → allow actions.
