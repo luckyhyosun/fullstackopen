@@ -15,6 +15,8 @@ mongoose
   .catch((error) => logger.error('error connection to MongoDB:', error.message))
 
 app.use(express.json())
+app.use(middleware.tokenExtractor)
+
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
