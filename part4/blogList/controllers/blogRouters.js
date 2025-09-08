@@ -3,9 +3,8 @@ const Blog = require('../models/blogModel')
 const User = require('../models/userModel')
 
 blogRouter.get('/', async (request, response) => {
-  //Returns an array of Mongoose documents, not Promise ojbect.
-  const blogs = await Blog.find({})
-  //Express uses JSON.stringify internally.
+  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1, id: 1})
+
   return response.json(blogs)
 })
 
