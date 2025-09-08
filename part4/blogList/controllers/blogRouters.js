@@ -23,6 +23,12 @@ blogRouter.post('/', userExtractor, async (request, response) => {
       .json({ error: 'Bad Request: Property is missing' })
   }
 
+  if (!request.token){
+    return response
+      .status(401)
+      .json({ error: 'Unauthorized: Token is missing'})
+  }
+
   const blog = new Blog({
     title: body.title,
     author: body.author,

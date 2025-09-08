@@ -117,6 +117,21 @@ describe('when there is initially some blogs saved', () => {
       const checkBlogTitlesInDb = blogsInDb.map((blog) => blog.title)
       assert(checkBlogTitlesInDb.includes('REST Chapter 5'))
     })
+
+    test.only('fails with statuscode 401 if token is missing', async () => {
+      const newBlog = {
+        title: 'REST Chapter 5',
+        author: 'Roy Thomas Fielding',
+        url: 'https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm¡',
+        likes: 100,
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+    })
   })
 
   describe('deletion of a blog', () => {
