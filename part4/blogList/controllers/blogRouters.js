@@ -17,7 +17,7 @@ blogRouter.post('/', userExtractor, async (request, response) => {
     return response.status(400).json({ error: 'userId missing or not valid'})
   }
 
-  if (!body.title || !body.url) {
+  if (!(body.title || body.url)) {
     return response
       .status(400)
       .json({ error: 'Bad Request: Property is missing' })

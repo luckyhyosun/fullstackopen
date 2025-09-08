@@ -83,7 +83,7 @@ describe('when there is initially some blogs saved', () => {
   describe('addition of a new blog', () => {
     const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpcnN0VXNlciIsImlkIjoiNjhiZjRhMTVlNWIyNmFjZjBkNThhZDJkIiwiaWF0IjoxNzU3MzY3MDYxfQ.yyWjwv7ccjlJjAJ7LG2IJv6f1qMjZbPRfvzgbgfS-RY'
 
-    test.only('find the right token', async () => {
+    test('find the right token', async () => {
       const loginUser = {
         username: 'firstUser',
         password: 'testpw'
@@ -96,7 +96,7 @@ describe('when there is initially some blogs saved', () => {
         .expect('Content-Type', /application\/json/)
     })
 
-    test.only('succeeds with valid data', async () => {
+    test('succeeds with valid data', async () => {
       const newBlog = {
         title: 'REST Chapter 5',
         author: 'Roy Thomas Fielding',
@@ -118,7 +118,7 @@ describe('when there is initially some blogs saved', () => {
       assert(checkBlogTitlesInDb.includes('REST Chapter 5'))
     })
 
-    test.only('fails with statuscode 401 if token is missing', async () => {
+    test('fails with statuscode 401 if token is missing', async () => {
       const newBlog = {
         title: 'REST Chapter 5',
         author: 'Roy Thomas Fielding',
