@@ -81,7 +81,22 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('addition of a new blog', () => {
-    test('succeeds with valid data', async () => {
+    const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpcnN0VXNlciIsImlkIjoiNjhiZjRhMTVlNWIyNmFjZjBkNThhZDJkIiwiaWF0IjoxNzU3MzY3MDYxfQ.yyWjwv7ccjlJjAJ7LG2IJv6f1qMjZbPRfvzgbgfS-RY'
+
+    test.only('find the right token', async () => {
+      const loginUser = {
+        username: 'firstUser',
+        password: 'testpw'
+      }
+
+      await api
+        .post('/api/login')
+        .send(loginUser)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    })
+
+    test.only('succeeds with valid data', async () => {
       const newBlog = {
         title: 'REST Chapter 5',
         author: 'Roy Thomas Fielding',
@@ -91,6 +106,7 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -132,7 +148,7 @@ describe('when there is initially one user in db', () => {
     await user.save()
   })
 
-  test.only('user lists are returned as json', async () => {
+  test('user lists are returned as json', async () => {
     await api
       .get('/api/users')
       .expect(200)
@@ -140,7 +156,7 @@ describe('when there is initially one user in db', () => {
   })
 
   describe('viewing a specific user', () => {
-    test.only('fails with statuscode 400 if username does not exist', async () => {
+    test('fails with statuscode 400 if username does not exist', async () => {
       const usersAtStart = await helper.usersInDb()
 
       const passwordHash = await bcrypt.hash('testpw2', 10)
@@ -158,7 +174,7 @@ describe('when there is initially one user in db', () => {
       assert.strictEqual(userAtEnd.length, usersAtStart.length)
     })
 
-    test.only('fails with status 400 if password is less than 3 characters', async () => {
+    test('fails with status 400 if password is less than 3 characters', async () => {
       const usersAtStart = await helper.usersInDb()
 
       const newUser = {
