@@ -6,7 +6,7 @@ Content-Type: application/json
   "author": "Michael Chan",
   "url": "https://reactpatterns.com/",
   "likes": 7,
-  "userId": "68bd7320ebdee706a18328a8"
+  "userId": "68bec3f3589860efd9290e0f"
 }
 
 ###
@@ -19,7 +19,7 @@ Content-Type: application/json
   "author": "Edsger W. Dijkstra",
   "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
   "likes": 5,
-  "userId": "68bd7320ebdee706a18328a8"
+  "userId": "68bec3f3589860efd9290e0f"
 }
 
 ###
@@ -32,5 +32,5 @@ Content-Type: application/json
   "author": "Edsger W. Dijkstra",
   "url": "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
   "likes": 12,
-  "userId": "68beb7a14c495c8516147e88"
+  "userId": "68bec3f6589860efd9290e11"
 }
