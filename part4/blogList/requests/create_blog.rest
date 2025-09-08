@@ -34,3 +34,16 @@ Content-Type: application/json
   "likes": 12,
   "userId": "68bec3f6589860efd9290e11"
 }
+
+### Only authorized user can add a new blog
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtpbSIsImlkIjoiNjhiZWMzZjM1ODk4NjBlZmQ5MjkwZTBmIiwiaWF0IjoxNzU3MzM2Njc1fQ.iq2vZjD7PEKrFavsJBbOx9F_m8X7W5ALrYlUBeome_I
+
+{
+  "title": "4. First class tests",
+  "author": "Robert C. Martin",
+  "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html",
+  "likes": 0
+}
