@@ -744,3 +744,85 @@ Bearer <Token_Credential>
 + **Server-side session**, which is to save info about each token to the backend database and to check for each API request if the access rights corresponding to the tokens are still valid. is to save info about each token to the backend database and to check for each API request if the access rights corresponding to the tokens are still valid. Database access is considerably slower compared to checking the validity of the token itself. That is why it is quite common to save the session corresponding to a token to a key-value database such as [Redis](https://redis.io/), that is limited in functionality compared to eg. MongoDB or a relational database, but extremely fast in some usage scenarios.
 + When server-side sessions are used, the **_token_** is quite often just **a random string**, that does not include any information about the user as it is quite often the case when jwt-tokens are used. For each API request, the server fetches the relevant information about the identity of the user from the database.
 + It is also quite usual that instead of using Authorization-header, **_cookies_** are used as the mechanism for transferring the token between the client and the server.
+
+🐬 **middleware** are functions that can be used for handling request and response objects. It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches your route**.
+
+Then, **Why do we need middleware?**
+
+Becasue middleware allows you to reuse logic across multiple routes instead of repeating code. Such as, <code>app.use(express.json())</code>
+
+Without middleware, you’d have to write things like token extraction, logging, body parsing inside every route. So it is **reusable** code which you can write once and use in multiple places without rewriting it.
+
+  For example, [json-parser](https://expressjs.com/en/api.html) we used earlier takes the raw data from the requests that are stored in the request object, parses it into a JavaScript object and assigns it to the request object as a new property body.
+1. Raw request data :
+    ```js
+    // client sends a request with a JSON body
+
+    POST /api/blogs
+    Content-Type: application/json
+
+    {
+      "title": "My Blog",
+      "author": "Alice"
+    }
+    ```
+  - Before parsing, Express sees this as raw data — basically a stream of bytes inside <code>request</code>.
+  - You cannot access it directly as <code>request.body</code> yet; it’s just a chunk of text.
+2. JSON parser (<code>express.json()</code>)
+    ```js
+    app.use(express.json())
+    ```
+  - This middleware intercepts incoming requests.
+  - It reads the raw data from the request stream.
+  - **It parses the JSON string into a JavaScript object**.
+    ```js
+    { title: "My Blog", author: "Alice" }
+    ```
+3. Assigning to <code>request.body</code>
+    ```js
+    request.body = { title: "My Blog", author: "Alice" }
+    ```
+    So, we can use the object.
+    ```js
+    const body = request.body
+    console.log(body.title) // "My Blog"
+    ```
+
+Then, what is **basic structure** of middleware?
+1. Normal middleware has **three parameters**.
+  ```js
+  const tokenExtractor = (req, res, next) => {
+    const auth = req.get('authorization')
+    req.token = auth ? auth.replace('Bearer ', '') : null
+    next() // passes control
+  }
+  ```
+  - This middleware always runs for every matching request.
+  - If an error occurs inside it (like a thrown exception), Express will skip the rest of the normal middleware and route handlers and go straight to error-handling middleware.
+
+2. Error-handling middleware has **four parameteres**.
+  ```js
+  // triggers CastError
+  const blog = await Blog.findById(invalidId)
+
+  //calls errorHandler middleware
+  app.use(middleware.errorHandler)
+  ```
+  - Express sees the error → automatically calls your <code>errorHandler</code> middleware.
+  ```js
+  const errorHandler = (error, request, response, next) => {
+  logger.error(error.message)
+
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+      return response.status(400).json({ error: error.message })
+    } else if (error.name ===  'JsonWebTokenError') {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+    next(error)
+  }
+  ```
+  - Your middleware checks <code>error.name</code> → sends a 400 response with “malformatted id”.
+  - **No route handler or other middleware runs after the response is sent**.
+    - Because once a response is sent in Express, the request/response cycle is considered finished, so no further middleware or route handlers run for that request.
