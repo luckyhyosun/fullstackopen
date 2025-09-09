@@ -13,32 +13,23 @@ blogRouter.post('/', userExtractor, async (request, response) => {
   const body = request.body
   const user = request.user
 
+  const blog = new Blog(body)
+  blog.likes = blog.likes | 0
+  blog.user = user._id
+
   if(!user){
     return response.status(400).json({ error: 'userId missing or not valid'})
   }
 
-  if (!(body.title || body.url)) {
+  if (!blog.title || !blog.url) {
     return response
       .status(400)
       .json({ error: 'Bad Request: Property is missing' })
   }
 
-  if (!request.token){
-    return response
-      .status(401)
-      .json({ error: 'Unauthorized: Token is missing'})
-  }
-
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes,
-    user: user._id
-  })
-
   const savedBlog = await blog.save()
-  user.blogs = user.blogs.concat(savedBlog._id)
+
+  user.blogs = user.blogs.concat(blog._id)
   await user.save()
 
   response.status(201).json(savedBlog)
@@ -66,8 +57,19 @@ blogRouter.put('/:id', async (req, res) => {
   const id = req.params.id
   const body = req.body
 
-  await Blog.findByIdAndUpdate(id, body)
-  res.status(204).end()
+  const blog = await Blog.findById(id)
+  if(!blog){
+    return res.status(404).end()
+  }
+
+  blog.title = body.title
+  blog.author = body.author
+  blog.url = body.url
+  blog.likes = body.likes
+
+  const updatedBlog = await blog.save()
+
+  res.status(200).json(updatedBlog)
 })
 
 module.exports = blogRouter

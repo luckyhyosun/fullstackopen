@@ -1,5 +1,5 @@
 const assert = require('node:assert')
-const { test, after, beforeEach, describe } = require('node:test')
+const { test, before, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const bcrypt = require('bcrypt')
@@ -11,92 +11,52 @@ const User = require('../models/userModel')
 
 const api = supertest(app)
 
+const testUser = {
+  name: 'hello',
+  username: 'hellotest',
+  password: 'hellopassword'
+}
+
+let TOKEN
+let userId
+
 describe('when there is initially some blogs saved', () => {
+  before(async () => {
+    await User.deleteMany({})
+    let response = await api.post('/api/users').send(testUser)
+    userId = response.body.id
+
+    response = await api.post('/api/login').send(testUser)
+    TOKEN = response.body.token
+  })
+
   beforeEach(async () => {
     await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
+    await Blog.insertMany(
+      helper.initialBlogs.map(blog => ({ ...blog, user: userId }))
+    )
   })
 
-  test('blog lists are returned as json', async () => {
-    await api
+  test.only('blog lists are returned as json', async () => {
+    const result = await api
       .get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+      .set({ Authorization: `Bearer ${TOKEN}` })
+    assert.strictEqual(result.body.length, helper.initialBlogs.length)
   })
 
-  describe('viewing a specific blog', () => {
-    test('succeeds with verifying that the unique identifier property', async () => {
-      const response = await api.get('/api/blogs')
-      const blogs = response.body
+  test.only('succeeds with verifying that the unique identifier property', async () => {
+    const response = await api
+      .get('/api/blogs')
+      .set({ Authorization: `Bearer ${TOKEN}` })
+    const blogs = response.body
 
-      blogs.forEach((blog) => {
-        assert.ok(blog.id, 'id property is missing')
-      })
-    })
-
-    test('fails with statuscode 400 if title or url does not exist', async () => {
-      const newBlog = {
-        title: 'Class Components Fundamentals',
-        author: 'Joe Maddalone',
-        // url: 'https://egghead.io/courses/react-with-class-components-fundamentals-4351f8bb',
-        likes: 8,
-      }
-
-      await api.post('/api/blogs').send(newBlog).expect(400)
-
-      const blogsInDb = await helper.blogsInDb()
-      assert.strictEqual(blogsInDb.length, helper.initialBlogs.length)
-    })
-
-    test('fails with statuscode 400 if likes property does not exist', async () => {
-      const newBlog = {
-        title: 'The Beginner Guide to React',
-        author: 'Kent C. Dodds',
-        url: 'https://egghead.io/courses/the-beginner-s-guide-to-react',
-      }
-
-      if (!newBlog.likes) {
-        const blog = { ...newBlog, likes: 0 }
-        await api.post('/api/blogs').send(blog).expect(201)
-      }
-
-      const blogsInDb = await helper.blogsInDb()
-      assert.strictEqual(blogsInDb.length, helper.initialBlogs.length + 1)
-
-      const checkBlogTitlesInDb = blogsInDb.map((blog) => blog.author)
-      assert(checkBlogTitlesInDb.includes('Kent C. Dodds'))
-    })
-
-    test('succeeds with updating number of likes for a blog post with id', async () => {
-      const blogsAtStart = await helper.blogsInDb()
-      const blogToUpdate = blogsAtStart[0]
-      const updatedProperty = { likes: 100 }
-
-      await api.put(`/api/blogs/${blogToUpdate.id}`).send(updatedProperty)
-
-      const blogsAtEnd = await helper.blogsInDb()
-      const updatedBlog = blogsAtEnd[0]
-      assert.strictEqual(updatedBlog.likes, 100)
+    blogs.forEach((blog) => {
+      assert.ok(blog.id, 'id property is missing')
     })
   })
 
   describe('addition of a new blog', () => {
-    const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpcnN0VXNlciIsImlkIjoiNjhiZjRhMTVlNWIyNmFjZjBkNThhZDJkIiwiaWF0IjoxNzU3MzY3MDYxfQ.yyWjwv7ccjlJjAJ7LG2IJv6f1qMjZbPRfvzgbgfS-RY'
-
-    test('find the right token', async () => {
-      const loginUser = {
-        username: 'firstUser',
-        password: 'testpw'
-      }
-
-      await api
-        .post('/api/login')
-        .send(loginUser)
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-    })
-
-    test('succeeds with valid data', async () => {
+    test.only('succeeds with valid data', async () => {
       const newBlog = {
         title: 'REST Chapter 5',
         author: 'Roy Thomas Fielding',
@@ -118,7 +78,28 @@ describe('when there is initially some blogs saved', () => {
       assert(checkBlogTitlesInDb.includes('REST Chapter 5'))
     })
 
-    test('fails with statuscode 401 if token is missing', async () => {
+    test.only('likes attribute get default value 0 if not passed with request', async () => {
+      const newBlog = {
+        title: 'The Beginner Guide to React',
+        author: 'Kent C. Dodds',
+        url: 'https://egghead.io/courses/the-beginner-s-guide-to-react',
+      }
+
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsInDb = await helper.blogsInDb()
+      assert.strictEqual(blogsInDb.length, helper.initialBlogs.length + 1)
+
+      const checkBlogTitlesInDb = blogsInDb.map((blog) => blog.author)
+      assert(checkBlogTitlesInDb.includes('Kent C. Dodds'))
+    })
+
+    test.only('fails with statuscode 401 if token is missing', async () => {
       const newBlog = {
         title: 'REST Chapter 5',
         author: 'Roy Thomas Fielding',
@@ -134,12 +115,57 @@ describe('when there is initially some blogs saved', () => {
     })
   })
 
+  describe('viewing a specific blog', () => {
+    test.only('fails with statuscode 400 if title or url does not exist', async () => {
+      const newBlog = {
+        title: 'Class Components Fundamentals',
+        author: 'Joe Maddalone',
+        // url: 'https://egghead.io/courses/react-with-class-components-fundamentals-4351f8bb',
+        likes: 8,
+      }
+
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .send(newBlog)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsInDb = await helper.blogsInDb()
+      assert.strictEqual(blogsInDb.length, helper.initialBlogs.length)
+    })
+
+    test.only('succeeds with updating number of likes for a blog post with id', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToUpdate = blogsAtStart[0]
+
+      const editedBlog = {
+        title: 'Updated Title',
+        author: 'Updated Author',
+        url: 'Updated url',
+        likes: 77
+      }
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .send(editedBlog)
+        .expect(200)
+
+      const updatedBlog = await Blog.findById(blogToUpdate.id)
+
+      assert.strictEqual(updatedBlog.likes, editedBlog.likes)
+    })
+  })
+
   describe('deletion of a blog', () => {
-    test('succeeds with status code 204 if id is valid', async () => {
+    test.only('succeeds with status code 204 if id is valid', async () => {
       const blogsInDb = await helper.blogsInDb()
       const blogToDelete = blogsInDb[0]
 
-      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${TOKEN}`).expect(204)
 
       const allBlogs = await helper.blogsInDb()
       const blogs = allBlogs.map((blog) => blog.title)
