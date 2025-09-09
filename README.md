@@ -20,6 +20,7 @@ Most of the code to support a dynamic website must run on the server. Creating t
 + [Redux]() is mostly used with React, but can work elsewhere and is **managing application state**.
 
 ### Backend
++ [mongoose](https://mongoosejs.com/) is Object Data Modeling (ODM) library for Node.js
 + [Supertest](https://www.npmjs.com/package/supertest) is a Node.js library that helps developers test backend APIs. It calls your Node app directly in memory, without going over HTTP or HTTPS. Which means the code path is exactly the same as real HTTP routes, but it’s all inside Node’s memory.
 
   It's how Supertest simulates an HTTP request internally:
@@ -228,7 +229,7 @@ Array.isArray({a:1})     // "false"
 ```
   So, that's why some documents said <code>.toJSON()</code> is called first and <code>.stringify()</code> later.
 
-🐬 **Async**  declare a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
+🐬 **Async**  is a keyword (a modifier) which declares a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
 
 🐬 **Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
 
@@ -259,7 +260,7 @@ Array.isArray({a:1})     // "false"
   ```
 
 + Case 2: With <code>await</code>
-  - returns an array of document from MongoDB, not plain JS objects, but Mongoose document instances
+  - returns an array of document from MongoDB, not plain JS objects, but **Mongoose document instances**.
   ```js
   // resolves to an array of documents
   const notes = await Note.find({})
@@ -297,7 +298,7 @@ Array.isArray({a:1})     // "false"
   ]
   ```
 
-  Each element is a Mongoose Document object, which looks like a plain JS object but actually has methods (<code>.toJSON()</code>, <code>.save()</code>, etc.) under the hood.
+  Each element is a Mongoose Document object (an instance of a Model), which looks like a plain JS object, and actually it has methods (<code>.toJSON()</code>, <code>.save()</code>, etc.) under the hood.
   But remember: **it’s still a Mongoose Document, not a plain JS object**.
 
   Every Mongoose document has a <code>.toJSON()</code> method. It converts the Mongoose Document object (which has tons of hidden metadata and methods) into a plain JavaScript object that’s safe to stringify or send over HTTP.
@@ -413,11 +414,25 @@ const notesInDb = async () => {
 🐬 **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
 🐬 **Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB:
-+ Static methods: <code>.find()</code>, <code>.findById()</code>, <code>.deleteMany()</code>, <code>.insertMany()</code> etc.
-+ Instance methods (via documents created from the model):  <code>.save()</code>, <code>.remove()</code>, <code>.deleteOne()</code>, <code>.updateOne()</code>, <code>.populate()</code>
-  - <code>.toJSON()</code>, <code>.toObject()</code>: synchronous methods, don't need to use <code>await</code>.
-  - other Instance methods above: asynchronous methods and return a Promise. You need to <code>await</code> (or use <code>.then()</code>):
-  - <code>populate()</code>: it depends.
++ Static methods (Model-level):
+  - You call them on the model class itself, not on an individual document.
+  - <code>.find()</code>, <code>.findById()</code>, <code>.deleteMany()</code>, <code>.insertMany()</code> etc.
+    ```js
+    const users = await User.find();     // static
+    const one = await User.findById(id); // static
+    ```
++ Instance methods (Document-level):
+  - Belong to the Document object (available on individual documents).
+  - They operate on that specific record.
+  - <code>.save()</code>, <code>.remove()</code>, <code>.deleteOne()</code>, <code>.updateOne()</code>, <code>.populate()</code>
+    - <code>.toJSON()</code>, <code>.toObject()</code>: synchronous methods, don't need to use <code>await</code>.
+    - other Instance methods above: asynchronous methods and return a Promise. You need to <code>await</code> (or use <code>.then()</code>):
+    - <code>populate()</code>: it depends.
+    ```js
+    const user = await User.findById(id);
+    await user.save();       // instance
+    console.log(user.toJSON()); // instance
+    ```
 
 What is meant by static or instance methods?
 ```js
@@ -453,6 +468,7 @@ In the code above,
 + 'heys' is the collection name, determined automatically.
 
 🐬 **Document** is a JavaScript Object (instance), representing a single instance of data, created using the model, in the collection.
++ instance methods: <code>.save()</code>, <code>.remove()</code>, <code>.deleteOne()</code>, <code>.updateOne()</code>, <code>.populate()</code>
 
 🐬 **Collection** is where the documents are actually stored in MongoDB. The model knows which collection to talk (or map) to when you call methods. And the model uses collection to query, insert, update, or delete documents in the database.
 ```js
@@ -508,7 +524,7 @@ const allNotes = await Note.find({})
 🐬 **Index** is, in most databases, a special data structure that improve query performance and enforce constraints (unique value). More specifically,
 + Speeds up queries – Instead of scanning every document in a collection, MongoDB can quickly find results using the index (like looking up a word in a book’s index instead of reading the whole book).
   - Example: if you often search users by their email, adding an index on email makes lookups much faster.
-+ Enforces constraints – In Mongoose, if you define a schema field like this:
++ Enforces constraints – In Mongoose, if you define **a schema field** like this:
   ```js
   email: { type: String, unique: true }
   ```
@@ -545,6 +561,18 @@ Mongoose validations do not detect the index violation, and instead of **Validat
   ```
   From the code above,<code>{ important: true }</code> is a query object (condition). And <code>.find()</code> is the query method.
 
+
+🐬 **Mongosh** is the MongoDB Shell — an official tool from MongoDB. It lets you connect directly to a MongoDB server and run commands interactively. It is written in JavaScript/TypeScript, but it’s just a **CLI (command-line interface)**.
+```js
+db.users.findOne({ name: "Alice" })
+```
+
+🐬 **Mongoose** is ODM (Object Data Modeling) library for Node.js. It lets you **define schemas and models** in your Node.js application, so you interact with MongoDB using JavaScript objects instead of raw database commands. It is Node.js package (installed via npm install mongoose).
+```js
+await mongoose.connect("mongodb://localhost:27017/mydb");
+const User = mongoose.model("User", UserSchema);
+const alice = await User.findOne({ name: "Alice" });
+```
 
 🐬 **populate()** is a Mongoose method that replaces the ObjectId reference in a document with the actual document(s) from another collection. It’s how Mongoose simulates a join between collections.
   + **With join queries in Mongoose**, Mongoose runs two queries.
@@ -674,10 +702,13 @@ Authorization: <scheme> <credentials>
 ```js
 Bearer <Token_Credential>
 ```
-
 🐬 **Session + Cookie**
++ Definition
+  - A server-side authentication method.
+  - **Session** = data stored on the server to track a logged-in user.
+  - **Cookie** = small piece of data stored in the browser that holds the session ID so the server can identify the user.
 + The server creates guestbook (a session store*) that holds information _only about users who are currently logged in_, with all user info (who borrowed which books, permissions, etc.).
-+ Guest receives a small memo📝 with just a guest ID.
++ Guest receives a small memo📝 with just a guest ID💬.
 + Every time the guest visits the library:
   - They show the memo (cookie).
   - The librarian looks up the ID in the guestbook to find all info → allows borrowing, etc.
@@ -690,6 +721,9 @@ Bearer <Token_Credential>
   _*Store is the place where the server keeps all active tokens or sessions, like database table(MySQL) or in-memory store(Redis)._
 
 🐬 **Opaque Token**
++ Definition
+  - A random, meaningless string used as an access token
+  - “Opaque” because clients cannot read or interpret it — only the server knows what it represents.
 + Guest receives a random key🔑 with no info.
 + The server still keeps a cabinet (a central storage, like database table) of all tokens and associated guest info.
 + Every visit:
@@ -704,8 +738,11 @@ Bearer <Token_Credential>
 
   _Revoke* means making a token/session invalid before expiry._
 
-
 🐬 **JWT (Self-contained token)**
++ Definition
+  - A self-contained, signed token in JSON format.
+  - It encodes user claims (like <code>id</code>, <code>premission</code>, <code>exp</code>) along with a cryptographic signature.
+  - Verifiable without a database lookup.
 + Guest receives a signed ID card (like, Mecena) with all info written on it (name, birthday, permissions, expiration).
 + Every visit:
   - Guest shows the ID card (JWT).
@@ -717,6 +754,10 @@ Bearer <Token_Credential>
 + Cons:
   - Harder to revoke → valid until expiration.
   - Sensitive info on card is visible → must be careful.
+
+  **So, when is the token generated?**
+    - ✅ **Always** at **sign-in (login)** — This is when a user provides credentials (username/password, OAuth, etc.) to prove their identity.
+    - ☑️ Optionally at **sign-up (create account)** — some systems automatically sign the user in immediately after account creation, so they generate a token right then as well.
 
 🐬 **Revocation problem** can be happened in Token-based authentication. Because the API is basically blindly trusting the token until it expires. For example:
   1. When your React app logs in, it gets a token (e.g., JWT).
@@ -745,13 +786,21 @@ Bearer <Token_Credential>
 + When server-side sessions are used, the **_token_** is quite often just **a random string**, that does not include any information about the user as it is quite often the case when jwt-tokens are used. For each API request, the server fetches the relevant information about the identity of the user from the database.
 + It is also quite usual that instead of using Authorization-header, **_cookies_** are used as the mechanism for transferring the token between the client and the server.
 
-🐬 **middleware** are functions that can be used for handling request and response objects. It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches your route**.
+🐬 **middleware** are functions that can be used for handling request and response objects. It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches the route**. Middleware in frameworks like Express is a function that **runs for every incoming request**. Or for routes you attach it to, so it **runs every time that specific route is called**.
+
+How to attach middleware **globally**?
+
+- Use <code>app.use()</code> to run middleware for all requests.
+  ```js
+  import express from "express";
+  const app = express();
+
+  app.use(express.json());
+  ```
 
 Then, **Why do we need middleware?**
 
-Becasue middleware allows you to reuse logic across multiple routes instead of repeating code. Such as, <code>app.use(express.json())</code>
-
-Without middleware, you’d have to write things like token extraction, logging, body parsing inside every route. So it is **reusable** code which you can write once and use in multiple places without rewriting it.
+Becasue middleware allows you to reuse logic across multiple routes instead of repeating code. Such as, <code>app.use(express.json())</code>.
 
   For example, [json-parser](https://expressjs.com/en/api.html) we used earlier takes the raw data from the requests that are stored in the request object, parses it into a JavaScript object and assigns it to the request object as a new property body.
 1. Raw request data :
@@ -788,41 +837,46 @@ Without middleware, you’d have to write things like token extraction, logging,
     console.log(body.title) // "My Blog"
     ```
 
-Then, what is **basic structure** of middleware?
+Without middleware, you’d have to write things like token extraction, logging, body parsing inside every route. So it is **reusable** code which you can write once and use in multiple places without rewriting it.
+
+Then, what is **basic structure** of custom middleware?
 1. Normal middleware has **three parameters**.
-  ```js
-  const tokenExtractor = (req, res, next) => {
-    const auth = req.get('authorization')
-    req.token = auth ? auth.replace('Bearer ', '') : null
-    next() // passes control
-  }
-  ```
-  - This middleware always runs for every matching request.
-  - If an error occurs inside it (like a thrown exception), Express will skip the rest of the normal middleware and route handlers and go straight to error-handling middleware.
+    ```js
+    const tokenExtractor = (req, res, next) => {
+      const auth = req.get('authorization')
+      req.token = auth ? auth.replace('Bearer ', '') : null
+      next() // passes control
+    }
+    ```
+  - This middleware always runs for every request.
+  - If an error occurs inside it (like a thrown exception), Express will skip the rest of the normal middleware & route handlers, and go straight to error-handling middleware.
+
 
 2. Error-handling middleware has **four parameteres**.
-  ```js
-  // triggers CastError
-  const blog = await Blog.findById(invalidId)
 
-  //calls errorHandler middleware
-  app.use(middleware.errorHandler)
-  ```
   - Express sees the error → automatically calls your <code>errorHandler</code> middleware.
-  ```js
-  const errorHandler = (error, request, response, next) => {
-  logger.error(error.message)
+    ```js
+    // triggers CastError
+    const blog = await Blog.findById(invalidId)
 
-    if (error.name === 'CastError') {
-      return response.status(400).send({ error: 'malformatted id' })
-    } else if (error.name === 'ValidationError') {
-      return response.status(400).json({ error: error.message })
-    } else if (error.name ===  'JsonWebTokenError') {
-      return response.status(401).json({ error: 'token invalid' })
+    //calls errorHandler middleware
+    app.use(middleware.errorHandler)
+    ```
+
+    ```js
+    const errorHandler = (error, request, response, next) => {
+    logger.error(error.message)
+
+      if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+      } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
+      } else if (error.name ===  'JsonWebTokenError') {
+        return response.status(401).json({ error: 'token invalid' })
+      }
+      next(error)
     }
-    next(error)
-  }
-  ```
+    ```
   - Your middleware checks <code>error.name</code> → sends a 400 response with “malformatted id”.
   - **No route handler or other middleware runs after the response is sent**.
     - Because once a response is sent in Express, the request/response cycle is considered finished, so no further middleware or route handlers run for that request.
