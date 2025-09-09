@@ -11,11 +11,22 @@ userRouter.post('/', async (req, res) => {
   const { username, name, password } = req.body
 
   if(!username){
-    return res.status(400).end()
+    return res.status(400).json({
+      error: 'Username is missing'
+    })
+  }
+
+  const checkUser = await User.findOne({username: username})
+  if(checkUser){
+    return res.status(400).json({
+      error: 'Same username can not be added'
+    })
   }
 
   if(!password || password.length < 4){
-    return res.status(400).end()
+    return res.status(400).json({
+      error: 'Password is required and its minimum length is 3 characters'
+    })
   }
 
   const saltRounds = 10

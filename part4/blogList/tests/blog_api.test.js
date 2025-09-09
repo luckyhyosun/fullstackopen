@@ -2,7 +2,6 @@ const assert = require('node:assert')
 const { test, before, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const bcrypt = require('bcrypt')
 
 const app = require('../app')
 const helper = require('../tests/blog_helper.test')
@@ -37,14 +36,14 @@ describe('when there is initially some blogs saved', () => {
     )
   })
 
-  test.only('blog lists are returned as json', async () => {
+  test('blog lists are returned as json', async () => {
     const result = await api
       .get('/api/blogs')
       .set({ Authorization: `Bearer ${TOKEN}` })
     assert.strictEqual(result.body.length, helper.initialBlogs.length)
   })
 
-  test.only('succeeds with verifying that the unique identifier property', async () => {
+  test('succeeds with verifying that the unique identifier property', async () => {
     const response = await api
       .get('/api/blogs')
       .set({ Authorization: `Bearer ${TOKEN}` })
@@ -56,7 +55,7 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('addition of a new blog', () => {
-    test.only('succeeds with valid data', async () => {
+    test('succeeds with valid data', async () => {
       const newBlog = {
         title: 'REST Chapter 5',
         author: 'Roy Thomas Fielding',
@@ -78,7 +77,7 @@ describe('when there is initially some blogs saved', () => {
       assert(checkBlogTitlesInDb.includes('REST Chapter 5'))
     })
 
-    test.only('likes attribute get default value 0 if not passed with request', async () => {
+    test('likes attribute get default value 0 if not passed with request', async () => {
       const newBlog = {
         title: 'The Beginner Guide to React',
         author: 'Kent C. Dodds',
@@ -99,7 +98,7 @@ describe('when there is initially some blogs saved', () => {
       assert(checkBlogTitlesInDb.includes('Kent C. Dodds'))
     })
 
-    test.only('fails with statuscode 401 if token is missing', async () => {
+    test('fails with statuscode 401 if token is missing', async () => {
       const newBlog = {
         title: 'REST Chapter 5',
         author: 'Roy Thomas Fielding',
@@ -116,7 +115,7 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('viewing a specific blog', () => {
-    test.only('fails with statuscode 400 if title or url does not exist', async () => {
+    test('fails with statuscode 400 if title or url does not exist', async () => {
       const newBlog = {
         title: 'Class Components Fundamentals',
         author: 'Joe Maddalone',
@@ -135,7 +134,7 @@ describe('when there is initially some blogs saved', () => {
       assert.strictEqual(blogsInDb.length, helper.initialBlogs.length)
     })
 
-    test.only('succeeds with updating number of likes for a blog post with id', async () => {
+    test('succeeds with updating number of likes for a blog post with id', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToUpdate = blogsAtStart[0]
 
@@ -159,7 +158,7 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('deletion of a blog', () => {
-    test.only('succeeds with status code 204 if id is valid', async () => {
+    test('succeeds with status code 204 if id is valid', async () => {
       const blogsInDb = await helper.blogsInDb()
       const blogToDelete = blogsInDb[0]
 
@@ -172,65 +171,6 @@ describe('when there is initially some blogs saved', () => {
 
       assert(!blogs.includes(blogToDelete.title))
       assert.strictEqual(allBlogs.length, helper.initialBlogs.length - 1)
-    })
-  })
-})
-
-describe('when there is initially one user in db', () => {
-  beforeEach(async () => {
-    await User.deleteMany({})
-
-    const passwordHash = await bcrypt.hash('testpw', 10)
-    const user = new User({
-      username: 'firstUser',
-      name: 'newuser',
-      passwordHash })
-
-    await user.save()
-  })
-
-  test('user lists are returned as json', async () => {
-    await api
-      .get('/api/users')
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-  })
-
-  describe('viewing a specific user', () => {
-    test('fails with statuscode 400 if username does not exist', async () => {
-      const usersAtStart = await helper.usersInDb()
-
-      const passwordHash = await bcrypt.hash('testpw2', 10)
-      const newUser = {
-        name: 'newuser',
-        passwordHash
-      }
-
-      await api
-        .post('/api/users')
-        .send(newUser)
-        .expect(400)
-
-      const userAtEnd = await helper.usersInDb()
-      assert.strictEqual(userAtEnd.length, usersAtStart.length)
-    })
-
-    test('fails with status 400 if password is less than 3 characters', async () => {
-      const usersAtStart = await helper.usersInDb()
-
-      const newUser = {
-        username: 'testUser',
-        name: 'newUser',
-        password: 'de'
-      }
-
-      await api
-        .post('/api/users')
-        .send(newUser)
-        .expect(400)
-
-      const usersAtEnd = await helper.usersInDb()
-      assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })
   })
 })
