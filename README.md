@@ -46,6 +46,19 @@ Most of the code to support a dynamic website must run on the server. Creating t
 ### Both
 + Next.js
 
+## Tools
++ [Vite](https://vite.dev/) is a modern frontend build tool and become very popular in the React, Vue, Svelte, and other JS/TS ecosystems. In this fullstack project, this command line is used to setup.
+  ```
+  npm create vite@latest projectname -- --template react
+
+  cd projectname
+  npm install
+
+  npm run dev
+  ```
+
++ [Babel](https://babeljs.io/) is a JavaScript tool — more specifically, it’s a JavaScript compiler (or transpiler). Babel takes modern JavaScript (or JSX, TypeScript, etc.) and transforms it into plain JavaScript that all browsers can understand. Projects created with **Vite** are configured to compile automatically.
+
 ## Reading Materials
 + [Linear algebra](https://www.csc.kth.se/~weinkauf/teaching/visualization/index.html)
 + [immersive math](https://immersivemath.com/ila/learnmore.html)
@@ -53,8 +66,11 @@ Most of the code to support a dynamic website must run on the server. Creating t
 + [You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS?tab=readme-ov-file)
 + [How to Manage JavaScript Fatigue](https://auth0.com/blog/how-to-manage-javascript-fatigue/)
 + [Eloquent JavaScript](https://eloquentjavascript.net/)
++ [Egghead](https://egghead.io/)
 + [Guide to React](https://egghead.io/courses/the-beginner-s-guide-to-react)
 + [React with Class Components Fundamentals](https://egghead.io/courses/react-with-class-components-fundamentals-4351f8bb)
++ [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)
++ [Rules of Hooks](https://react.dev/warnings/invalid-hook-call-warning#breaking-rules-of-hooks)
 + [Representational State Transfer: REST](https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm)
 + [What Is Node.js](https://kinsta.com/knowledgebase/what-is-node-js/)
 + [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
@@ -138,7 +154,238 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
   - Stateless: The server does not store session data.
 
 ## Appendix
-🐬 **Port** is a communication endpoint and listens for requests.
+🐬 **JSX** is JavaScript XML, which is a syntax extension for JavaScript that looks like HTML but runs inside JavaScript code. It’s most commonly used with **React**.
+```jsx
+// jsx
+const element = <h1>Hello, world!</h1>
+```
+```js
+// js
+const element = React.createElement("h1", null, "Hello, world!");
+```
+With JSX, you can easily embed dynamic content by writing appropriate JavaScript within curly braces.
+```jsx
+/// JSX
+function Greeting(props) {
+  const name = props.name;
+
+  return (
+    <div>
+      <h1>Hello, {name}!</h1>
+    </div>
+  );
+}
+
+// Component
+<Greeting name="Alice" />
+```
+**Important details**
++ JSX is not valid JavaScript by itself. You **need a build tool** (like **Vite**, Babel, or Webpack with the right loader) to transform it into JS before the browser can run it. Which means, with the tool, JSX returned by React components is compiled into JavaScript.
++ JSX elements **must be wrapped in a single parent element** (that’s why you often see <code>&lt;div&gt;</code> or <code><>…</></code> fragments).
++ You can use **JS expressions** inside <code>{ ... }</code> in JSX, but not statements (e.g. <code>if</code>, <code>for</code> can’t be written directly, you use ternaries or map).
+  ```jsx
+  // ✅ Expression (something that produces a value) works
+  <h1>{ 2 + 2 }</h1>
+
+  // ❌ Statement (performs an action, returns no value) not works
+  <h1>{ if (true) { "Yes" } }</h1>
+
+  // ✅ Ternary operator works
+  <h1>{isLoggedIn ? "Welcome" : "Please log in"}</h1>
+
+  // ✅ Logical AND (&&) (quick conditional rendering) works
+  {isAdmin && <button>Delete</button>}
+
+  // ✅ Array .map() (instead of for) works
+  <ul>
+    {items.map(item => <li key={item}>{item}</li>)}
+  </ul>
+  ```
+
+🐬 **Component** is a UI building block in React. React lets you combine your markup, CSS, and JavaScript into custom “components”, reusable UI elements for your app.
+```jsx
+// App component
+const App = () => {
+  return (
+    <div>
+      <h1>Greetings</h1>
+
+      // nested Hello component
+      <Hello />
+      <Hello />
+
+    </div>
+  )
+}
+```
+
+🐬 **State** is a component's memory. Components often need to change what’s on the screen as a result of an interaction, such as, clicking “buy” should put a product in the shopping cart. So, components need to **remember** things: the current input value, the current image, the shopping cart. In React, this kind of component-specific memory is called state.
+
+Every time the setCounter modifies the state it causes **the component to re-render**.
+```js
+import { useState } from 'react'
+
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
+  return (
+    <div>{counter}</div>
+  )
+}
+
+export default App
+```
+**Importannt!!**
++ It is forbidden in React to mutate state directly, since it can result in [unexpected side effects](https://stackoverflow.com/questions/37755997/why-cant-i-directly-modify-a-components-state-really/40309023#40309023). Changing state has to always be done by setting the state to **a new object**. If properties from the previous state object are not changed, they need to simply be copied, which is done by copying those properties into a new object and setting that as the new state. Using such as, <code>spread syntax(...)</code>, <code>.map()</code>, <code>.filter()</code>, etc.
++ Storing all of the state in a single state object is a bad choice for this particular application.
+  ```js
+  // not recommanded
+  const [clicks, setClicks] = useState({
+    left: 0, right: 0
+  })
+
+  // recommanded
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
+  ```
++ A state update in React happens [**asynchronously**](https://react.dev/learn/queueing-a-series-of-state-updates), i.e. not immediately but "at some point" before the component is rendered again. Because rendering takes a snapshot in time, which means React doesn’t let the current <code>count</code> variable change mid-render (=current render). Current render means the whole execution of your component function (e.g. <code>Counter()</code>) with one fixed snapshot of state and props.
+  ```js
+  function Counter() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+    setCount(count + 1);
+  };
+
+  return <button onClick={handleClick}>{count}</button>;
+  }
+  ```
+  - Both <code>setCount</code> calls happen during the same render (inside one click handler).
+  - In that render, <code>count</code> is the snapshot value (say <code>0</code>).
+  - Each call computes a new value from that snapshot and queues it. They don’t apply immediately.
+    ```js
+    setCount(count + 1); // uses count = 0 → queues “set to 1”
+    setCount(count + 1); // still uses the same count = 0 → queues “set to 1” again
+    ```
+
+  Think of rendering like taking a photo 📸 of your app’s state at a moment in time. Even if things change right after, the photo won’t magically update — you need to take another photo (another render) to see the new state. (image from [here](https://react.dev/learn/state-as-a-snapshot#rendering-takes-a-snapshot-in-time))
+
+  <image src="https://react.dev/images/docs/illustrations/i_render1.png" width="100" />
+  <image src="https://react.dev/images/docs/illustrations/i_render2.png" width="150" />
+  <image src="https://react.dev/images/docs/illustrations/i_render3.png" width="200" />
+
+🐬 **Lifting state up** is a concept in React. Sometimes, you want the state of two components to always change together. To do it, remove state from both of them, **lift** the state up to their closest common parent, and then pass it down to them via props. This is known as [lifting state up](https://react.dev/learn/sharing-state-between-components), and it’s one of the most common things you will do writing React code.
+```jsx
+// Suppose you have two components that need to know the same “count”:
+
+function CounterDisplay({ count }) {
+  return <p>Count: {count}</p>;
+}
+
+function CounterButton({ onIncrement }) {
+  return <button onClick={onIncrement}>Increment</button>;
+}
+```
+```jsx
+function CounterApp() {
+  // Lift the state to  their closest common ancestor:
+  const [count, setCount] = useState(0);
+
+  const increment = () => setCount(count + 1);
+
+  return (
+    <div>
+      <CounterDisplay count={count} />
+      <CounterButton onIncrement={increment} />
+    </div>
+  );
+}
+```
+In this code above:
++ <code>count</code> is lifted to CounterApp.
++ <code>CounterDisplay</code> reads it via props.
++ <code>CounterButton</code> update the parent state via a callback prop.
+
+🐬 **Hook** is a special function that lets you “hook into” React features like state and lifecycle methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
+
+**⚡ Most common hooks**
++ **useState** – manage state in a function component
++ **useEffect** – run side effects (like data fetching, subscriptions, or DOM updates)
+
+**⚡ Rules of Hooks**
+
+The useState function (as well as the useEffect function introduced later on in the course) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
+
+To recap, hooks may only be called from the inside of a function body that defines a React component.
+
+🐬 **Event Handling** is how your code responds to user interactions or other events, like click (<code>onClick</code>), typing(<code>change</code>), mouse movements (<code>mousemove</code>), form submissions (<code>submit</code>), and more.
+
+```js
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const handleClick = () => {
+    console.log('clicked')
+  }
+
+  return (
+    <div>
+      <div>{counter}</div>
+      <button onClick={handleClick}>
+        plus
+      </button>
+    </div>
+  )
+}
+```
+We set the value of the button's _onClick_ attribute to be a reference to the _handleClick_ function defined in the code above. So _handleClick_ is the **event handler function**.
+
+So, we can say "the event handler is passed to the Button component through the onClick prop*."
+
+**Note**
++ In JSX/React terminology: _onClick_ is a **property*** (what’s in the DOM object) on the virtual DOM element in React.
++ In raw HTML/JS sense: _onClick_ is an **attribute** (what’s in the HTML).
+
+**Event Handler** is defined as **a function call** which means that the event handler is assigned the **returned value from the function**.
+```js
+// ❌  Resulting in infinite recursion.
+<button onClick={setValue(0)}>button</button>
+
+// ✅ The event handler is a function defined with the arrow function syntax
+<button onClick={() => setValue(0)}>button</button>
+
+// ✅ Define a function that then gets assigned to the handleClick variable
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const handleClick = () =>
+    console.log('clicked the button')
+
+  return (
+    <div>
+      {value}
+      <button onClick={handleClick}>button</button>
+    </div>
+  )
+}
+```
+So, from the code above, when the component gets rendered, no function gets called and only the reference to the arrow function is set to the event handler. Calling the function happens only once the button is clicked.
+
+**To pass Event Handlers to Child Components**, we have to make sure that we use the correct attribute names when passing props to the component. (image from [here](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#passing-event-handlers-to-child-components))
+![eventHandler](https://fullstackopen.com/static/065d96e37774cb6ccb206a39ba9c6cef/5a190/12f.png)
+
+🐬 **Spread syntax** <code>(...)</code> is a JavaScript operator. It **expands** (=spreads) elements of an array, object, or iterable into another place.
+```js
+const nums = [1, 2, 3];
+const more = [0, ...nums, 4];
+console.log(more); // [0, 1, 2, 3, 4]
+```
 
 🐬 **Object literal** is a way to create an object using curly braces {} with key-value pairs directly in the code. Unlike creating it with a _constructor_ like <code>new Object()</code>.
 ```js
@@ -207,6 +454,8 @@ But if we use <code>Array.isArray()</code>,
 Array.isArray([1,2,3])   // "true"
 Array.isArray({a:1})     // "false"
 ```
+
+🐬 **Port** is a communication endpoint and listens for requests.
 
 🐬 **JSON** (JavaScript Object Notation) is always a string representation of an object.
 + 1. <code>.toJSON()</code> returns a plain JavaScript object.
