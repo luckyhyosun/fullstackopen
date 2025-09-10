@@ -14,6 +14,33 @@ A dynamic site can return different data for a URL based on information provided
 
 Most of the code to support a dynamic website must run on the server. Creating this code is known as "**server-side programming**" (or sometimes "**back-end scripting**").
 
+### Functional Programming
+[Functional programming](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84) is a programming paradigm in which we try to bind everything in pure mathematical functions. It is a declarative style. Its main focus is on “what to solve,” in contrast to an imperative style, where the main focus is on “how to solve.” It uses expressions instead of statements. An expression is evaluated to produce a value, whereas a statement is executed to assign variables.
+
++ Core Idea of FP
+  - **Pure functions**: A function always produces the same output for the same input and doesn’t modify external state (**no side effects**).
+  - **Immutability**: Data is not changed once created; instead, new data structures are returned.
+  - **First-class functions**: Functions are treated as **values** — they can be assigned to variables, passed as arguments, and returned from other functions.
+  - **Higher-order functions**: Functions that take other functions as inputs or return them as outputs (e.g., <code>map</code>, <code>filter</code>, <code>reduce</code>).
+  - **Declarative style**: Focus on **what to do** rather than _how to do_ it. You describe transformations of data, and the language/runtime handles the control flow.
+  - **Recursion over loops**: Since **mutability and iteration are often avoided**, recursion is commonly used to express repetition (= loops: <code>for</code>, <code>while</code>). Which means, in functional programming, we don’t usually use loops (<code>for</code>, <code>while</code>) because they depend on changing variables (mutability).
+    ```js
+    // ❌ express repetition (loop)
+    for (let i = 3; i > 0; i--) {
+      console.log(i);
+    }
+    ```
+    ```js
+    // ✅ recursion which is a function that calls itself until it reaches a stopping point.
+    function countdown(n) {
+      if (n === 0) return;
+      console.log(n);
+      countdown(n - 1); // calls itself
+    }
+    countdown(3);
+    // prints 3, 2, 1
+    ```
+
 ## Libraries
 ### Frontend
 + [React](https://react.dev/) is a free and open-source front-end JavaScript library that aims to make **building user interfaces (UI)** based on components more "seamless".
@@ -66,10 +93,14 @@ Most of the code to support a dynamic website must run on the server. Creating t
 + [You Don't Know JS Yet](https://github.com/getify/You-Dont-Know-JS?tab=readme-ov-file)
 + [How to Manage JavaScript Fatigue](https://auth0.com/blog/how-to-manage-javascript-fatigue/)
 + [Eloquent JavaScript](https://eloquentjavascript.net/)
++ [The browser as runtime environment](https://fullstackopen.com/en/part2/getting_data_from_server#the-browser-as-a-runtime-environment)
++ [Single thread](https://medium.com/techtrument/multithreading-javascript-46156179cf9a)
++ [What the heck is the event loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
 + [Egghead](https://egghead.io/)
 + [Guide to React](https://egghead.io/courses/the-beginner-s-guide-to-react)
 + [React with Class Components Fundamentals](https://egghead.io/courses/react-with-class-components-fundamentals-4351f8bb)
 + [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)
++ [Anti-pattern](https://robinpokorny.com/blog/index-as-a-key-is-an-anti-pattern/)
 + [Rules of Hooks](https://react.dev/warnings/invalid-hook-call-warning#breaking-rules-of-hooks)
 + [Representational State Transfer: REST](https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm)
 + [What Is Node.js](https://kinsta.com/knowledgebase/what-is-node-js/)
@@ -93,6 +124,38 @@ Most of the code to support a dynamic website must run on the server. Creating t
 + Redux.js
 + Axio
 + [WebGL](https://thespatialstudio.de/en/xr-glossary/webgl)
+
+## Extensions
++ [JSONView](https://chromewebstore.google.com/detail/jsonview/gmegofmjomhknnokphhckolhcffdaihd?pli=1)
++ [React Developr Tool](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
+
+## Script
++ npx json-server --port 3001 db.json
+  - Serve the notes we wrote to the file in JSON format (db.json)
+  - start the JSON Server on port 3001
+  - **json-server** is a handy tool that enables the use of server-side functionality in the development phase without the need to program any of it
+  - http://localhost:3001/notes
++ npm install json-server --save-dev
+   - Install json-server as a development dependency
+   - only used during development
+   - add one script <code>"server": "json-server -p 3001 db.json"</code> into package.json
+      ```js
+      {
+        // ...
+        "scripts": {
+          "dev": "vite",
+          "build": "vite build",
+          "lint": "eslint .",
+          "preview": "vite preview",
+
+          "server": "json-server -p 3001 db.json"
+        },
+      }
+      ```
+    - run the command below to start the json-server, without parameter definitions
+      ```
+      npm run server
+      ```
 
 ## my Q&A
 
@@ -154,7 +217,30 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
   - Stateless: The server does not store session data.
 
 ## Appendix
-🐬 **JSX** is JavaScript XML, which is a syntax extension for JavaScript that looks like HTML but runs inside JavaScript code. It’s most commonly used with **React**.
+✴️ **DOM** is Document Object Model, **a tree of objects** that represents all the HTML elements on the page. Each element is an object you can read or change with JavaScript.
+```html
+<div id="app">
+  <h1>Hello</h1>
+</div>
+```
+```arduino
+//The browser creates a DOM tree
+div#app
+ └─ h1
+      └─ "Hello"
+```
+If you want to update the page, JavaScript modifies the DOM.
+```js
+document.querySelector('h1').textContent = 'Hi';
+```
+✴️ **Virtual DOM** is React’s in-memory representation of the DOM. It’s not the real DOM — it’s like a lightweight “blueprint” of **what the UI should look like**. React uses the virtual DOM to figure out the **minimum changes needed to update** the real DOM.
++ How it works:
+  1. React creates a virtual DOM tree from your components.
+  2. When state or props change, React creates a new virtual DOM tree.
+  3. React diffs the old VDOM vs new VDOM to see what changed.
+  4. React updates only the changed parts of the real DOM.
+
+✴️ **JSX** is JavaScript XML, which is a syntax extension for JavaScript that looks like HTML but runs inside JavaScript code. It’s most commonly used with **React**.
 ```jsx
 // jsx
 const element = <h1>Hello, world!</h1>
@@ -202,13 +288,127 @@ function Greeting(props) {
   </ul>
   ```
 
-🐬 **Component** is a UI building block in React. React lets you combine your markup, CSS, and JavaScript into custom “components”, reusable UI elements for your app.
+**🐬 Pro Tips**
++ **JSX elements**, in React project, directly inside a <code>map()</code> call always need [key value](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key) : an attribute called _key_!
+  ```jsx
+  const App = (props) => {
+    const { notes } = props
+    return (
+      <div>
+        <h1>Notes</h1>
+        <ul>
+          {notes.map(note =>
+            <li key={note.id}>
+              {note.content}
+            </li>)
+          }
+        </ul>
+      </div>
+    )
+  }
+
+  export default App
+  ```
+  Here, the li element itself is the repeated element, so you put the key on <code>&lt;li&gt;</code>. React uses the key to track each <code>&lt;li&gt;</code> in the list.
++ **Component**, as a repeated element in React, inside a <code>map()</code>, key must be on the <code>&lt;Note&gt;</code> component.
+  ```jsx
+  const App = (props) => {
+    const { notes } = props
+    return (
+      <div>
+        <h1>Notes</h1>
+        <ul>
+          {notes.map(note =>
+            <Note key={note.id} note={note}/>)
+          }
+        </ul>
+      </div>
+    )
+  }
+
+  export default App
+  ```
+  Because keys tell React which components in the array correspond to which previous ones. In other words, when you render a list with <code>.map()</code>, React keeps a “**[Virtual DOM](https://legacy.reactjs.org/docs/faq-internals.html)**” of the previous render.
+
+  On the next render, it compares the new list (element or, in this example, Component) to the old list. React needs to know which elements are the same, which are new, and which were removed. Like,
+  1. First render: React creates instances for keys `1` and `2`. (Creating instances)
+      ```jsx
+      const notes = [
+        { id: 1, text: 'Buy milk' },
+        { id: 2, text: 'Call Alice' }
+      ];
+
+      <ul>
+        {notes.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+      ```
+  2. Second render: if <code>notes</code> changes order or has a new note.
+      ```
+      [{ id: 2, text: 'Call Alice' }, { id: 3, text: 'Pay bills' }]
+      ```
+  3. React uses the keys to **compares** the keys of new elements to the keys of old elements from the previous render.
+      - Key `2` → Key matches → **reuse the existing Note instance** for Alice
+      - Key `3` → Key missing or new → **create a new Note instance** for Pay bills
+      - Key `1` → Key gone → **unmount the old Note instance** for Buy milk
+
+  ✅ **Summary**
+  + If the repeated element is **a component**, put the key on the component itself.
+  + If the repeated element is a **DOM element**, put the key on that DOM element.
+
+✴️  **Key**, React uses the key attributes of objects in an array to determine [how to update the view generated by a component](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key) when the component is re-rendered. Which means, <code>key</code> helps React tell **components apart** when rendering lists (or multiple children).
+  - If the <code>key</code> is the same between renders → React reuses the same component instance → Re-render.
+  - If the <code>key</code> is different → React throws away the old one (unmounts it) and makes a new one (mounts it).
+
+**🐬 Pro Tips**
++ **Render vs Remount**
+  - **Render**: React calls the function component again with new props. The same component instance is used, so state (useState) is preserved.
+  - **Remount**: React destroys the old component and creates a new instance, so state is reset.
+
+    So, from the [Chat code](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key), this below process is happening under the hood.
+    ```jsx
+    <Chat key={contactTo.id} contact={contactTo} />
+    ```
+    When <code>contactTo.id</code> changes (because you clicked a different contact), React sees:
+    + Old Chat had key 0 (say, Taylor).
+    + New Chat has key 1 (Alice).
+    + And think: “Oh, this is **a different component**, not the same one. I should **unmount** the old Chat and **mount a fresh Chat**.”
+
+    Without <code>key</code>, React would **reuse the same Chat component instance** no matter which contact you switch to.
+      ```jsx
+      <Chat contact={contactTo} />
+      ```
++ **Component instance** is an React internal object that keeps:
+  - State (<code>useState</code>)
+  - Effects (<code>useEffect</code>) and cleanup functions
+  - Internal bookkeeping so React knows when and how to update or remove this component
+
+  And component instance is needed because React needs to remember state between renders.
+
++ **Analogy**
+  - **Component**: Blueprint or instruction manual for building a robot
+  - **Component instance**: The actual robot built from the blueprint and holds state & effects.
+  - **State**: Internal memory or registers inside the robot (like, <code>useState</code> values).
+  - **Effects**: Tools or side processes the robot uses (like, <code>useEffect</code> values).
+  - **Props**: Commands or instructions you give the robot. Props passed from parent. So function called again with same instance, state preserved.
+    1. Props change
+    2. Same instance & same state.
+    3. Re-rendered output (JSX/DOM) updates based on the new props (UI update)
+  - **Re-render**: Robot receives new commands (props) but keeps its memory.
+  - **Remount** (key change): Robot is destroyed and a new robot is built from the blueprint.
+    1. Key change
+    2. Old instance destroyed
+    3. Create new instance & Reset state
+    4. Render (component function runs, JSX returned, UI updated)
+
+✴️  **Component** is a UI building block in React, and so called "functional component". React lets you combine your markup, CSS, and JavaScript into custom “components”, reusable UI elements for your app. So basically, this functional component **takes** <code>props</code> **as input** and **returns JSX** (what UI should look like).
 ```jsx
 // App component
-const App = () => {
+const App = ({ props }) => {
   return (
     <div>
-      <h1>Greetings</h1>
+      <h1>Greetings, { props.name }</h1>
 
       // nested Hello component
       <Hello />
@@ -219,7 +419,7 @@ const App = () => {
 }
 ```
 
-🐬 **State** is a component's memory. Components often need to change what’s on the screen as a result of an interaction, such as, clicking “buy” should put a product in the shopping cart. So, components need to **remember** things: the current input value, the current image, the shopping cart. In React, this kind of component-specific memory is called state.
+✴️  **State** is a component's memory. Components often need to change what’s on the screen as a result of an interaction, such as, clicking “buy” should put a product in the shopping cart. So, components need to **remember** things: the current input value, the current image, the shopping cart. In React, this kind of component-specific memory is called state.
 
 Every time the setCounter modifies the state it causes **the component to re-render**.
 ```js
@@ -240,7 +440,7 @@ const App = () => {
 
 export default App
 ```
-**Importannt!!**
+**🐬 Pro Tips**
 + It is forbidden in React to mutate state directly, since it can result in [unexpected side effects](https://stackoverflow.com/questions/37755997/why-cant-i-directly-modify-a-components-state-really/40309023#40309023). Changing state has to always be done by setting the state to **a new object**. If properties from the previous state object are not changed, they need to simply be copied, which is done by copying those properties into a new object and setting that as the new state. Using such as, <code>spread syntax(...)</code>, <code>.map()</code>, <code>.filter()</code>, etc.
 + Storing all of the state in a single state object is a bad choice for this particular application.
   ```js
@@ -280,7 +480,7 @@ export default App
   <image src="https://react.dev/images/docs/illustrations/i_render2.png" width="150" />
   <image src="https://react.dev/images/docs/illustrations/i_render3.png" width="200" />
 
-🐬 **Lifting state up** is a concept in React. Sometimes, you want the state of two components to always change together. To do it, remove state from both of them, **lift** the state up to their closest common parent, and then pass it down to them via props. This is known as [lifting state up](https://react.dev/learn/sharing-state-between-components), and it’s one of the most common things you will do writing React code.
+✴️  **Lifting state up** is a concept in React. Sometimes, you want the state of two components to always change together. To do it, remove state from both of them, **lift** the state up to their closest common parent, and then pass it down to them via props. This is known as [lifting state up](https://react.dev/learn/sharing-state-between-components), and it’s one of the most common things you will do writing React code.
 ```jsx
 // Suppose you have two components that need to know the same “count”:
 
@@ -312,7 +512,7 @@ In this code above:
 + <code>CounterDisplay</code> reads it via props.
 + <code>CounterButton</code> update the parent state via a callback prop.
 
-🐬 **Hook** is a special function that lets you “hook into” React features like state and lifecycle methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
+✴️  **Hook** is a special function that lets you “hook into” React features like state and lifecycle methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
 
 **⚡ Most common hooks**
 + **useState** – manage state in a function component
@@ -324,7 +524,7 @@ The useState function (as well as the useEffect function introduced later on in 
 
 To recap, hooks may only be called from the inside of a function body that defines a React component.
 
-🐬 **Event Handling** is how your code responds to user interactions or other events, like click (<code>onClick</code>), typing(<code>change</code>), mouse movements (<code>mousemove</code>), form submissions (<code>submit</code>), and more.
+✴️  **Event Handling** is how your code responds to user interactions or other events, like click (<code>onClick</code>), typing(<code>change</code>), mouse movements (<code>mousemove</code>), form submissions (<code>submit</code>), and more.
 
 ```js
 const App = () => {
@@ -380,14 +580,14 @@ So, from the code above, when the component gets rendered, no function gets call
 **To pass Event Handlers to Child Components**, we have to make sure that we use the correct attribute names when passing props to the component. (image from [here](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#passing-event-handlers-to-child-components))
 ![eventHandler](https://fullstackopen.com/static/065d96e37774cb6ccb206a39ba9c6cef/5a190/12f.png)
 
-🐬 **Spread syntax** <code>(...)</code> is a JavaScript operator. It **expands** (=spreads) elements of an array, object, or iterable into another place.
+✴️  **Spread syntax** <code>(...)</code> is a JavaScript operator. It **expands** (=spreads) elements of an array, object, or iterable into another place.
 ```js
 const nums = [1, 2, 3];
 const more = [0, ...nums, 4];
 console.log(more); // [0, 1, 2, 3, 4]
 ```
 
-🐬 **Object literal** is a way to create an object using curly braces {} with key-value pairs directly in the code. Unlike creating it with a _constructor_ like <code>new Object()</code>.
+✴️  **Object literal** is a way to create an object using curly braces {} with key-value pairs directly in the code. Unlike creating it with a _constructor_ like <code>new Object()</code>.
 ```js
 // using a constructor
 const obj = new Object();
@@ -404,7 +604,7 @@ const callUser = getUser();
 console.log(callUser) // { username: "kim", id: 1 }
 ```
 
-🐬 **Arrow function** is a compact alternative expression to a traditional function expression. And it has two **“styles” of body**.
+✴️  **Arrow function** is a compact alternative expression to a traditional function expression. And it has two **“styles” of body**.
 + Concise body (no braces) → implicit return
   ```js
   const add = (a, b) => a + b; // returns a + b automatically
@@ -442,7 +642,23 @@ const users = allUsers.map(user => ({
 
 console.log(users) // [{ name: 'Alice', id: 1 }, { name: 'Bob', id: 2 }]
 ```
-🐬 **Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
+✴️  **Array** is functional programming operators. Such as <code>find</code>, <code>filter</code>, <code>reduce</code>, and <code>map</code>.
+
+✴️  **Higher Order Function** is any function that:
++ Takes another function as an argument, OR
++ Returns a function.
+
+For example:
+```js
+let numbers = [1, 2, 3, 4];
+
+// reduce takes a function (accumulator, currentValue) => newValue
+let sum = numbers.reduce((acc, n) => acc + n, 0);
+
+console.log(sum); // 10
+```
+
+✴️  **Array.isArray()** checks if the passed value is an Array. Instead of using <code>typeof()</code> which is a very old operator. Because <code>typeof</code> will return Array as an Object. Because arrays are a special kind of object under the hood.
 ```js
 typeof [1,2,3]   // "object"
 typeof {a:1}     // "object"
@@ -455,9 +671,9 @@ Array.isArray([1,2,3])   // "true"
 Array.isArray({a:1})     // "false"
 ```
 
-🐬 **Port** is a communication endpoint and listens for requests.
+✴️  **Port** is a communication endpoint and listens for requests.
 
-🐬 **JSON** (JavaScript Object Notation) is always a string representation of an object.
+✴️  **JSON** (JavaScript Object Notation) is always a string representation of an object.
 + 1. <code>.toJSON()</code> returns a plain JavaScript object.
 ``` js
   { title: "Hello" }
@@ -478,11 +694,11 @@ Array.isArray({a:1})     // "false"
 ```
   So, that's why some documents said <code>.toJSON()</code> is called first and <code>.stringify()</code> later.
 
-🐬 **Async**  is a keyword (a modifier) which declares a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
+✴️  **Async**  is a keyword (a modifier) which declares a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
 
-🐬 **Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
+✴️  **Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
 
-🐬 **Promise** is an object, a special kind of JavaScript object, that represents the eventual result of an asynchronous operation. So it's like
+✴️  **Promise** is an object, a special kind of JavaScript object, that represents the eventual result of an asynchronous operation. So it's like
 > "I don’t have the value yet(pending), but I promise I’ll either give you the value (resolve) or an error (reject) in the future."
 
 + Case 1: Without <code>await</code>
@@ -576,7 +792,7 @@ Array.isArray({a:1})     // "false"
 
   ```
 
-🐬 **Response.json()**
+✴️  **Response.json()**
 <code>Response</code> is an object provided by Express to send data back to the clien. And <code>.json()</code> is a method that
 + Converts the JavaScript object/array (<code>notes</code> in this case) into a JSON string.
 + Sets the correct HTTP header: <code>Content-Type: application/json</code>.
@@ -660,9 +876,9 @@ const notesInDb = async () => {
 }
 ```
 
-🐬 **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
+✴️  **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
-🐬 **Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB:
+✴️  **Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB:
 + Static methods (Model-level):
   - You call them on the model class itself, not on an individual document.
   - <code>.find()</code>, <code>.findById()</code>, <code>.deleteMany()</code>, <code>.insertMany()</code> etc.
@@ -716,10 +932,10 @@ In the code above,
 + 'Hey' is  the model name.
 + 'heys' is the collection name, determined automatically.
 
-🐬 **Document** is a JavaScript Object (instance), representing a single instance of data, created using the model, in the collection.
+✴️  **Document** is a JavaScript Object (instance), representing a single instance of data, created using the model, in the collection.
 + instance methods: <code>.save()</code>, <code>.remove()</code>, <code>.deleteOne()</code>, <code>.updateOne()</code>, <code>.populate()</code>
 
-🐬 **Collection** is where the documents are actually stored in MongoDB. The model knows which collection to talk (or map) to when you call methods. And the model uses collection to query, insert, update, or delete documents in the database.
+✴️  **Collection** is where the documents are actually stored in MongoDB. The model knows which collection to talk (or map) to when you call methods. And the model uses collection to query, insert, update, or delete documents in the database.
 ```js
 // both retrieve the same model
 const Note = mongoose.model('Hey', noteSchema)
@@ -738,7 +954,7 @@ mongoose.model('Hey').deleteMany({})
 db.heys.deleteMany({})
 ```
 
-🐬 **Full Warehouse Analogy for MongoDB + Mongoose**
+✴️  **Full Warehouse Analogy for MongoDB + Mongoose**
 + MongoDB: The entire city with all warehouses. The database system that stores data (collections) permanently.
 + Mongoose: The company that employs the workers. Provides tools, rules, and training for workers (models) to interact efficiently with warehouses (collections), following blueprints (schemas).
 + Schema: The blueprint / instructions for boxes. Defines how boxes should be built: size, shape, label format, and rules (required fields).
@@ -770,7 +986,7 @@ await doc.save()
 const allNotes = await Note.find({})
 ```
 
-🐬 **Index** is, in most databases, a special data structure that improve query performance and enforce constraints (unique value). More specifically,
+✴️  **Index** is, in most databases, a special data structure that improve query performance and enforce constraints (unique value). More specifically,
 + Speeds up queries – Instead of scanning every document in a collection, MongoDB can quickly find results using the index (like looking up a word in a book’s index instead of reading the whole book).
   - Example: if you often search users by their email, adding an index on email makes lookups much faster.
 + Enforces constraints – In Mongoose, if you define **a schema field** like this:
@@ -797,7 +1013,7 @@ Mongoose validations do not detect the index violation, and instead of **Validat
 👉 In short: The issue was a timing problem. Data got seeded before MongoDB had finished building indexes, so constraints weren’t applied. **The solution is to explicitly wait for indexes to be in place** using <code>syncIndexes()</code> (all models) or <code>createIndexes()</code> (per model) before inserting data.
 
 
-🐬 **Query** is, in general, a request you send to a database asking it to return or modify data. Such as, "Insert a new user.", "Update this note’s content.", or "Give me all notes where <code>important: true</code>." etc.
+✴️  **Query** is, in general, a request you send to a database asking it to return or modify data. Such as, "Insert a new user.", "Update this note’s content.", or "Give me all notes where <code>important: true</code>." etc.
 + **In MongoDB & Mongoose**: a query is typically a JavaScript object that specifies conditions or actions.
   ```js
   // query for one
@@ -811,19 +1027,19 @@ Mongoose validations do not detect the index violation, and instead of **Validat
   From the code above,<code>{ important: true }</code> is a query object (condition). And <code>.find()</code> is the query method.
 
 
-🐬 **Mongosh** is the MongoDB Shell — an official tool from MongoDB. It lets you connect directly to a MongoDB server and run commands interactively. It is written in JavaScript/TypeScript, but it’s just a **CLI (command-line interface)**.
+✴️  **Mongosh** is the MongoDB Shell — an official tool from MongoDB. It lets you connect directly to a MongoDB server and run commands interactively. It is written in JavaScript/TypeScript, but it’s just a **CLI (command-line interface)**.
 ```js
 db.users.findOne({ name: "Alice" })
 ```
 
-🐬 **Mongoose** is ODM (Object Data Modeling) library for Node.js. It lets you **define schemas and models** in your Node.js application, so you interact with MongoDB using JavaScript objects instead of raw database commands. It is Node.js package (installed via npm install mongoose).
+✴️  **Mongoose** is ODM (Object Data Modeling) library for Node.js. It lets you **define schemas and models** in your Node.js application, so you interact with MongoDB using JavaScript objects instead of raw database commands. It is Node.js package (installed via npm install mongoose).
 ```js
 await mongoose.connect("mongodb://localhost:27017/mydb");
 const User = mongoose.model("User", UserSchema);
 const alice = await User.findOne({ name: "Alice" });
 ```
 
-🐬 **populate()** is a Mongoose method that replaces the ObjectId reference in a document with the actual document(s) from another collection. It’s how Mongoose simulates a join between collections.
+✴️  **populate()** is a Mongoose method that replaces the ObjectId reference in a document with the actual document(s) from another collection. It’s how Mongoose simulates a join between collections.
   + **With join queries in Mongoose**, Mongoose runs two queries.
   ```js
   // note schema
@@ -875,7 +1091,7 @@ const alice = await User.findOne({ name: "Alice" });
 
   Those are two separate queries, so the data in <code>users</code> or <code>notes</code> could change in between (inconsistent state).
 
-🐬 **field** is a key–value pair inside a document.
+✴️  **field** is a key–value pair inside a document.
 ```js
 {
   "_id": "64fabcd123...",
@@ -903,7 +1119,7 @@ await Note.find({}).populate('user')
 ````
 <code>"user"</code> here is the field name in the document <code>(user: ObjectId(...))</code>.
 
-🐬 **Token** is a small piece of digital data that proves who you are.
+✴️  **Token** is a small piece of digital data that proves who you are.
 + It’s like a digital ticket or ID card.
 + Usually, it’s created by the server when you log in.
 + Then, you send it back to the server on future requests to show.
@@ -935,14 +1151,14 @@ await Note.find({}).populate('user')
   - 2. Client wants to do a protected action → adds token to Authorization header.
   - 3. Server reads the header, verifies the token, and allows or denies access.
 
-🐬 **Authorization header** [(link)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Authorization) is a special HTTP header through which the token is sent.
+✴️  **Authorization header** [(link)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Authorization) is a special HTTP header through which the token is sent.
 ```js
 Authorization: <scheme> <credentials>
 ```
 + <code>&lt;scheme&gt;</code> = the authentication scheme (method).
 + <code>&lt;credentials&gt;</code> = the actual proof (like a token, password, etc.).
 
-🐬 **Authentication scheme** [(link)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication#Authentication_schemes) is a _name_ that defines how the credentials are encoded. It comes before the credentials in the <code>Authorization</code> header.
+✴️  **Authentication scheme** [(link)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication#Authentication_schemes) is a _name_ that defines how the credentials are encoded. It comes before the credentials in the <code>Authorization</code> header.
 
 + Basic: base64-encoded credentials
 + Bearer: bearer tokens to access
@@ -951,7 +1167,7 @@ Authorization: <scheme> <credentials>
 ```js
 Bearer <Token_Credential>
 ```
-🐬 **Session + Cookie**
+✴️  **Session + Cookie**
 + Definition
   - A server-side authentication method.
   - **Session** = data stored on the server to track a logged-in user.
@@ -969,7 +1185,7 @@ Bearer <Token_Credential>
 
   _*Store is the place where the server keeps all active tokens or sessions, like database table(MySQL) or in-memory store(Redis)._
 
-🐬 **Opaque Token**
+✴️  **Opaque Token**
 + Definition
   - A random, meaningless string used as an access token
   - “Opaque” because clients cannot read or interpret it — only the server knows what it represents.
@@ -987,7 +1203,7 @@ Bearer <Token_Credential>
 
   _Revoke* means making a token/session invalid before expiry._
 
-🐬 **JWT (Self-contained token)**
+✴️  **JWT (Self-contained token)**
 + Definition
   - A self-contained, signed token in JSON format.
   - It encodes user claims (like <code>id</code>, <code>premission</code>, <code>exp</code>) along with a cryptographic signature.
@@ -1008,7 +1224,7 @@ Bearer <Token_Credential>
     - ✅ **Always** at **sign-in (login)** — This is when a user provides credentials (username/password, OAuth, etc.) to prove their identity.
     - ☑️ Optionally at **sign-up (create account)** — some systems automatically sign the user in immediately after account creation, so they generate a token right then as well.
 
-🐬 **Revocation problem** can be happened in Token-based authentication. Because the API is basically blindly trusting the token until it expires. For example:
+✴️  **Revocation problem** can be happened in Token-based authentication. Because the API is basically blindly trusting the token until it expires. For example:
   1. When your React app logs in, it gets a token (e.g., JWT).
   2. That token says: “This is Alice, role: user, valid for 1 hour.”
   3. Now, whenever the React app makes API requests, it attaches the token.
@@ -1035,7 +1251,7 @@ Bearer <Token_Credential>
 + When server-side sessions are used, the **_token_** is quite often just **a random string**, that does not include any information about the user as it is quite often the case when jwt-tokens are used. For each API request, the server fetches the relevant information about the identity of the user from the database.
 + It is also quite usual that instead of using Authorization-header, **_cookies_** are used as the mechanism for transferring the token between the client and the server.
 
-🐬 **middleware** are functions that can be used for handling request and response objects. It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches the route**. Middleware in frameworks like Express is a function that **runs for every incoming request**. Or for routes you attach it to, so it **runs every time that specific route is called**.
+✴️  **middleware** are functions that can be used for handling request and response objects. It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches the route**. Middleware in frameworks like Express is a function that **runs for every incoming request**. Or for routes you attach it to, so it **runs every time that specific route is called**.
 
 How to attach middleware **globally**?
 
