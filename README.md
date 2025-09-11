@@ -8,11 +8,25 @@ is in progress from April, 2025. Hyosun Kim is a student of Royal Institute of T
 
 (image from [MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Introduction))
 
+A dynamic web app is one where the **UI changes based on user actions, data, or backend responses**.
+
 Requests for dynamic resources are instead forwarded (2) to server-side code (shown in the diagram as a Web Application). For "dynamic requests" the server interprets the request, reads required information from the database (3), combines the retrieved data with HTML templates (4), and sends back a response containing the generated HTML (5,6).
 
 A dynamic site can return different data for a URL based on information provided by the user or stored preferences and can perform other operations as part of returning a response (e.g., sending notifications).
 
 Most of the code to support a dynamic website must run on the server. Creating this code is known as "**server-side programming**" (or sometimes "**back-end scripting**").
+
+In a modern dynamic web app **State + Templates + Routing** is the core concepts. But it usually relies on other several **essential concepts**:
++ **State**
++ **Templates / Rendering**
++ **Routing**
++ Event Handling
++ Error Handling
++ API / Backend Communication
++ State Persistence / Storage
++ Conditional Rendering / Logic
++ Componentization (Breaking UI into reusable pieces)
++ Performance Optimization (Efficient updates and minimizing resource usage)
 
 ### Functional Programming
 [Functional programming](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84) is a programming paradigm in which we try to bind everything in pure mathematical functions. It is a declarative style. Its main focus is on “what to solve,” in contrast to an imperative style, where the main focus is on “how to solve.” It uses expressions instead of statements. An expression is evaluated to produce a value, whereas a statement is executed to assign variables.
@@ -39,14 +53,131 @@ Most of the code to support a dynamic website must run on the server. Creating t
     }
     countdown(3);
     // prints 3, 2, 1
+
     ```
 
+## Classification
+### Frontend Technologies for Web Apps
+#### Frameworks:
++ Angular
++ Vue
++ Svelte / SvelteKit
+#### Libraries:
++ state management → **frontend only**
+  - **React**
+  - **Redux**
+  - MobX
+  - Pinia (state management)
++ HTTP / API calls
+  - **Axios**
+  - React Query
+  - svelte-query
++ UI / styling
+  - Material-UI
+  - Vuetify
+  - Angular Material
+  - Tailwind CSS
+#### APIs:
++ Browser APIs: <code>fetch()</code>, <code>localStorage</code>, <code>IndexedDB</code>, <code>WebSocket</code>
++ Third-party APIs: Google Maps API, Stripe API, OpenWeatherMap API
+
+### Backend Technologies for Web Apps
+#### Frameworks:
++ **Node.js: Express, NestJS**, Koa, Fastify
++ Python: Flask, Django REST Framework, FastAPI
++ Java: Spring Boot, JAX-RS
++ C#/.NET: ASP.NET Core Web API
++ Ruby: Ruby on Rails, Sinatra
++ Go: Gin, Echo, Fiber
+#### Libraries:
++ HTTP / Routing
+  - **Axios** (server-to-server)
+  - Requests (Python)
+  - OkHttp (Java)
+  - HttpClient (.NET)
++ Database → **backend only**
+  - **Mongoose** (Node.js)
+  - Sequelize
+  - SQLAlchemy (Python)
+  - Hibernate (Java)
++ Authentication / Security → **backend only**
+  - **JWT**
+  - Passport.js
+#### APIs:
++ **REST / GraphQL** APIs exposed to clients
++ Third-party APIs: Google Maps API, Stripe API, OpenWeatherMap API
+
+## Workflow
+```
+Frontend request →
+API →
+Framework uses Libraries →
+Backend processes →
+API response →
+Frontend
+```
+**Frameworks**: Provide structure and core functionality for building the application.
++ Frontend: Build the user interface (UI) and handle interaction with users.
++ Backend: Build the server-side logic that handles requests, stores/retrieves data, and communicates with other services
+
+**Libraries**: Add functionality to make development easier, faster, or more organized.
++ Frontend: state, UI, and API calls
++ Backend: database access, HTTP clients, authentication, and messaging.
+
+**APIs**: Defines how frontend and backend talk. Frontend doesn’t access the backend directly is because of security, structure, and separation of concerns.
++ Frontend: allow communicate with database, external services, and the browser
++ Backend: allow to expose endpoints to clients, communicate with microservices, or connect to external services.
+
+| Component               | Bank Analogy                                     | Explanation                                                                                                                                          |
+| ----------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Client (Frontend)**   | Customer                                         | The person interacting with the bank — uses the UI (ATM, website, app) to request actions.                                                           |
+| **Framework (Backend)** | Bank                        | The bank runs the system and provides structure & rules for processing requests — organizes workflow, decides how requests are handled.                                         |
+| **Library**             | Specialized tools / forms                        | Pre-made tools, like helper, that staff can use to make tasks easier (e.g., automated form generator for account applications, calculators, checklists). Not required, but speeds things up.                   |
+| **API**                 | Teller / Menu / Bank interface                   | The banker or interface the customer uses to request services — defines what actions are allowed (withdraw, deposit, check balance) and how requests are sent. |
+| **Database (DB)**       | Vault / Safe                                     | Stores the actual money (data). Backend accesses this securely; clients never access it directly.                                                    |
+| **Mongoose**       | Ledger + Forms + Clerk                                     | Helps the bank staff (Node.js) interact with the vault (MongoDB) safely and efficiently — pre-defines formats (schemas), validates entries, makes querying simpler.                                                    |
+| **Node.js**       | The Bank building                                     | Provides the environment where everything runs. Without it, nothing can operate: the tellers (Express) can’t interact with customers, and the clerks/ledger (Mongoose) can’t access the vault (MongoDB)                                                   |
+| **Request**             | Customer request (withdraw money, check balance) | The message sent from client to API describing what the customer wants.                                                                              |
+| **Response**            | Teller response (money, account info)            | The result sent back to the client after backend processes the request.                                                                              |
+
+### Workflow Scenario
+1. **Customer (frontend)** wants $100 → sends a **request** to the **teller (API)**.
+2. **Teller (API)** passes the request to bank staff / branch system (framework).
+3. Staff (framework) uses tools/forms (libraries) to validate and process the request.
+4. Staff accesses the vault (database) to withdraw $100.
+5. Teller (API) sends the response back to the customer: “Here’s your $100.”
+
+## Frameworks
+### Frontend Only
++ Angular
++ Vue.js
++ Svelte
+
+### Backend Only
++ Express.js
++ Nest.js
++ WHY?
+  - They require a **Node.js runtime**, which runs on a server, not in the browser.
+  - Frontend frameworks/libraries like React, Vue, or Angular run in the browser, which cannot execute server-side Node.js code.
+
+### Both
++ [Next.js](https://nextjs.org/) is a React framewor, which means Next.js is built on top of React, so you still write React components for your UI. And it provides extra features React alone doesn’t have, like:
+  + Server-side rendering (SSR)
+  + Static site generation (SSG)
+  + API routes (backend endpoints)
+  + File-based routing
+
 ## Libraries
-### Frontend
-+ [React](https://react.dev/) is a free and open-source front-end JavaScript library that aims to make **building user interfaces (UI)** based on components more "seamless".
+### Frontend Only
++ [React](https://react.dev/) is a free and open-source front-end JavaScript **library** that aims to make **building user interfaces (UI)** based on components more "seamless".
+  - Because it does **not** include built-in routing, state management **across the whole app**, or full project **structure** — you add those via other libraries like Redux, React Router, or Next.js.
+
+  But one of the main reasons React is often called a “**frontend framework**” is that :
+  - React’s efficient UI rendering and state management.
+  - It provides the structure for how the UI updates in response to user interactions.
 + [Redux]() is mostly used with React, but can work elsewhere and is **managing application state**.
 
-### Backend
+### Backend Only
 + [mongoose](https://mongoosejs.com/) is Object Data Modeling (ODM) library for Node.js
 + [Supertest](https://www.npmjs.com/package/supertest) is a Node.js library that helps developers test backend APIs. It calls your Node app directly in memory, without going over HTTP or HTTPS. Which means the code path is exactly the same as real HTTP routes, but it’s all inside Node’s memory.
 
@@ -56,22 +187,14 @@ Most of the code to support a dynamic website must run on the server. Creating t
   3. Gets the response object.
 
 + [bcrypt](https://www.npmjs.com/package/bcrypt) is Node.js library that secure hash passwords and compare hashes for authentication.
-
+1
 ### Both
 + [Axios](https://axios-http.com/)
 
-## Frameworks
-### Frontend
-+ Angular
-+ Vue.js
-+ Svelte
-
-### Backend
-+ Express.js
-+ Nest.js
-
-### Both
-+ Next.js
+## API
++ [REST](https://en.wikipedia.org/wiki/REST#Applied_to_web_services)
++ [GraphQL](https://graphql.org/)
++ [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
 
 ## Tools
 + [Vite](https://vite.dev/) is a modern frontend build tool and become very popular in the React, Vue, Svelte, and other JS/TS ecosystems. In this fullstack project, this command line is used to setup.
@@ -85,6 +208,10 @@ Most of the code to support a dynamic website must run on the server. Creating t
   ```
 
 + [Babel](https://babeljs.io/) is a JavaScript tool — more specifically, it’s a JavaScript compiler (or transpiler). Babel takes modern JavaScript (or JSX, TypeScript, etc.) and transforms it into plain JavaScript that all browsers can understand. Projects created with **Vite** are configured to compile automatically.
+
+## Extensions
++ [JSONView](https://chromewebstore.google.com/detail/jsonview/gmegofmjomhknnokphhckolhcffdaihd?pli=1)
++ [React Developr Tool](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
 
 ## Reading Materials
 + [Linear algebra](https://www.csc.kth.se/~weinkauf/teaching/visualization/index.html)
@@ -103,7 +230,7 @@ Most of the code to support a dynamic website must run on the server. Creating t
 + [Anti-pattern](https://robinpokorny.com/blog/index-as-a-key-is-an-anti-pattern/)
 + [Rules of Hooks](https://react.dev/warnings/invalid-hook-call-warning#breaking-rules-of-hooks)
 + [Representational State Transfer: REST](https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm)
-+ [What Is Node.js](https://kinsta.com/knowledgebase/what-is-node-js/)
++ [Node.js - Worker thread pool](https://kinsta.com/knowledgebase/what-is-node-js/)
 + [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
 + [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
 + [Token-based authentication](https://www.digitalocean.com/community/tutorials/the-ins-and-outs-of-token-based-authentication#how-token-based-works)
@@ -124,10 +251,9 @@ Most of the code to support a dynamic website must run on the server. Creating t
 + Redux.js
 + Axio
 + [WebGL](https://thespatialstudio.de/en/xr-glossary/webgl)
-
-## Extensions
-+ [JSONView](https://chromewebstore.google.com/detail/jsonview/gmegofmjomhknnokphhckolhcffdaihd?pli=1)
-+ [React Developr Tool](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
++ [Three.js](https://threejs.org/)
++ Event-driven / Data-driven
++ Algorithm
 
 ## Script
 + npx json-server --port 3001 db.json
@@ -164,8 +290,37 @@ Most of the code to support a dynamic website must run on the server. Creating t
   - Witout runtime dependency, the program can’t execute.
   - **Analogy**
     + **Runtime dependency**: the ingredients you need to actually cook the meal (rice, vegetables).
-    + **Dev dependency** = the tools you use in the kitchen but don’t serve with the meal (knife, chopping board).
+    + **Dev dependency**: the tools you use in the kitchen but don’t serve with the meal (knife, chopping board).
 
+## Classification
+
+###  API
+An application programming interface, which bridge application and database (or other service). **Application ↔ API ↔ Database (or other service)**
+1. **Applications (or code)** → the client that wants to use some service or data (e.g., a **frontend app**, a mobile app, or another backend service).
+2. **Data or services** → this can be a database, another application, or any system that provides functionality or information.
+
+So the API interface defines _how the application can ask for data or actions_, and the API implementation handles the connection to the database or other systems.
+
+In APIs, the interface **defines how other programs can interact** with the system. It usually includes:
++ **Endpoints** (URLs or routes) → **where** to send requests → **server address + endpoint**. Not all APIs use URL-based resources; some (like GraphQL) use a single endpoint.
++ **Methods** (or operations) → **what** kind of action you’re performing. In REST APIs, this is typically **HTTP methods (GET, POST, PUT, DELETE)**, but other APIs may use different conventions or protocols.
++ **Input** (parameters, request body, or query) → **How** you must format the _request_ → the data or instructions you must provide (**query, JSON, headers**).
++ **Output** (_response_) → **What** you’ll get back, often structured as **JSON, XML, status** or binary depending on the API type.
+
+So, in REST API, REST defines:
++ How **requests** should act
+  - Which HTTP methods to use (GET, POST, PUT, DELETE).
+  - What kind of data the client should send (JSON body, query parameters, etc.).
+  - What status codes to expect in response (200, 201, 404, 500).
++ How the **server** should organize endpoints
+  - Each resource (like users, products) gets its own URL path (<code>/api/users</code>).
+  - Endpoints are predictable and consistent, making it easier for clients (like Axios) to know how to interact.
++ How **responses** should look
+  - Usually JSON format.
+  - Often includes a consistent structure, e.g., <code>{ success: true, data: ... }</code>.
+
+### Node.js
+A runtime environment (an environment that can run JavaScript) for executing JavaScript code, outside of the browsers.
 
 ## my Q&A
 
@@ -433,7 +588,7 @@ const App = ({ props }) => {
 
 ✴️ **State** is a component's memory. Components often need to change what’s on the screen as a result of an interaction, such as, clicking “buy” should put a product in the shopping cart. So, components need to **remember** things: the current input value, the current image, the shopping cart. In React, this kind of component-specific memory is called state.
 
-Every time the setCounter modifies the state it causes **the component to re-render**.
+Every time the setCounter modifies the state and it causes **the component to re-render**.
 ```js
 import { useState } from 'react'
 
@@ -453,7 +608,7 @@ const App = () => {
 export default App
 ```
 **🐬 Pro Tips**
-+ It is forbidden in React to mutate state directly, since it can result in [unexpected side effects](https://stackoverflow.com/questions/37755997/why-cant-i-directly-modify-a-components-state-really/40309023#40309023). Changing state has to always be done by setting the state to **a new object**. If properties from the previous state object are not changed, they need to simply be copied, which is done by copying those properties into a new object and setting that as the new state. Using such as, <code>spread syntax(...)</code>, <code>.map()</code>, <code>.filter()</code>, etc.
++ It is **forbidden** in React to **mutate state directly**, since it can result in [unexpected side effects](https://stackoverflow.com/questions/37755997/why-cant-i-directly-modify-a-components-state-really/40309023#40309023). Changing state has to always be done by setting the state to **a new object**. If properties from the previous state object are not changed, they need to simply be copied, which is done by copying those properties into a new object and setting that as the new state. Using such as, <code>spread syntax(...)</code>, <code>.map()</code>, <code>.filter()</code>, etc.
 + Storing all of the state in a single state object is a bad choice for this particular application.
   ```js
   // not recommanded
@@ -531,7 +686,7 @@ In this code above:
 + **[useEffect](https://fullstackopen.com/en/part2/getting_data_from_server#effect-hooks)** – run side effects (like data fetching, subscriptions, or DOM updates). And it takes two parameters - a function, the effect itself.
 
 **⚡ Rules of Hooks**
-The useState function (as well as the useEffect function introduced later on in the course) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
+The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
 
 To recap, hooks may only be called from the inside of a function body that defines a React component.
 
@@ -598,7 +753,7 @@ const more = [0, ...nums, 4];
 console.log(more); // [0, 1, 2, 3, 4]
 ```
 
-✴️ **Object literal** is a way to create an object using curly braces {} with key-value pairs directly in the code. Unlike creating it with a _constructor_ like <code>new Object()</code>.
+✴️ **Object literal** is a way to create an object using curly braces <code>{}</code> with key-value pairs directly in the code. Unlike creating it with a _constructor_ like <code>new Object()</code>.
 ```js
 // using a constructor
 const obj = new Object();
@@ -606,7 +761,7 @@ const obj = new Object();
 const objLiteral = { key: "value" };
 ```
 
-With **an array function**, the parentheses <code>()</code> around <code>{}</code> are needed to **return the object literal implicitly** in an arrow function.
+With **an array function**, the parentheses <code>()</code> around <code>{}</code> are needed to **return the object literal implicitly**.
 ```js
 const user = { username: "kim", id: 1 };
 const getUser = () => ({ username: user.username, id: user.id });
@@ -632,7 +787,7 @@ console.log(callUser) // { username: "kim", id: 1 }
   ```
   - The <code>{}</code> defines a **function block**.
   - Inside a block, you can have multiple statements.
-  - You must use return to send a value back.
+  - You must use <code>return</code> to send a value back.
 
 Then what about **object literal** with an arrow function?
 ```js
@@ -682,7 +837,7 @@ Array.isArray([1,2,3])   // "true"
 Array.isArray({a:1})     // "false"
 ```
 
-✴️ **axio** is JavaScript library for **making HTTP requests**. It’s like a helper that makes fetching data easier and cleaner in React, Node.js, or plain JS to talk to APIs.
+✴️ **axios** is JavaScript library for **making HTTP requests** (GET, POST, PUT, DELETE). It’s like a helper that makes fetching data easier and cleaner in React, Node.js, or plain JS to talk to APIs.
 
 Without axio, we can use **fetch**, which is JavaScript the built-in API. But it has more benefits:
 + Automatic JSON parsing (no need for <code>res.json()</code>)
@@ -705,6 +860,9 @@ Without axio, we can use **fetch**, which is JavaScript the built-in API. But it
   .then(res => console.log(res.data))
   .catch(err => console.error(err));
   ```
++ Compare to **REST API**,
+  - **Axios** is just a **HTTP client**. It allows your frontend (or any JavaScript code) to make HTTP requests.
+  - **REST API** is the server-side interface that defines how clients can interact with your backend data and logic. It’s what actually responds to the requests Axios makes.
 
 ✴️ **Port** is a communication endpoint and listens for requests.
 
