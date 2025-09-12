@@ -234,6 +234,8 @@ Frontend
 + [Representational State Transfer: REST](https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm)
 + [RESTful Maturnity](https://martinfowler.com/articles/richardsonMaturityModel.html)
 + [Transitive dependencies](https://lexi-lambda.github.io/blog/2016/08/24/understanding-the-npm-dependency-model/)
++ [Debugging](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer/)
++ [Beyond debugging](https://swizec.com/blog/javascript-debugging-slightly-beyond-consolelog/)
 + [Node.js - Worker thread pool](https://kinsta.com/knowledgebase/what-is-node-js/)
 + [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
 + [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
@@ -299,7 +301,11 @@ Frontend
 
 + --watch
   - Automatic Change Tracking
-  - So it can be used like this "node --watch index.js"
+  - Use this command: "node --watch index.js"
+
++ --inspect
+  - Debugging with the Chrome developer console
+  - Use this command: "node --inspect index.js"
 
 ## Classification
 
