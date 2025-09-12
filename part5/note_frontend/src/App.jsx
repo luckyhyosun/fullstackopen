@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
-import Note from './components/Note'
 import noteService from './services/notes'
+
+import Note from './components/Note'
+import Notification from './components/Notification'
+import Footer from './components/Footer'
 
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('Add a new note here')
   const [showAll, setShowAll] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('Error console')
 
   useEffect(() => {
     noteService
@@ -50,18 +54,19 @@ const App = () => {
       .update(id, updatedNote)
       .then(result => setNotes(notes.map(note => note.id === id ? result : note)))
       .catch(error => {
-        console.log(error)
-
-        alert(
-        `the note '${note.content}' was already deleted from server`
-      )
-      setNotes(notes.filter(n => n.id !== id))
+        setErrorMsg(`Note '${note.content}' was already deleted from server`)
+        setTimeout(() => {
+          setErrorMsg('Error console')
+        }, 5000)
+        setNotes(notes.filter(n => n.id !== id))
     })
   }
 
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMsg}/>
+
       <button onClick={handleShowAllBtn} className='functionalBtn'>
         Show {showAll ? 'All Note' : 'Important Note'}
       </button>
@@ -79,6 +84,8 @@ const App = () => {
         <input value={newNote} onChange={handleNoteChange}/>
         <button className='functionalBtn'>save</button>
       </form>
+
+      <Footer />
     </div>
   )
 }

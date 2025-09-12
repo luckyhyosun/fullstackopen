@@ -12,12 +12,28 @@ button {
     padding: 5px;
     margin-left: 10px;
     background-color: #dddddd;
-    border: none;
+    border: 1px solid #a3a2a2;
     border-radius: 5px;
 }
 
+button:hover {
+  padding: 5px;
+  background-color: #a3a2a2;
+  border: 1px solid #a3a2a2;
+  border-radius: 5px;
+}
+
 .functionalBtn {
-    padding: 10px;
     background-color: #717171;
     color: #fff
+}
+
+.error {
+  color: red;
+  background: #dddddd;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
 }
