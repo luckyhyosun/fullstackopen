@@ -107,6 +107,14 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 + **REST / GraphQL** APIs exposed to clients
 + Third-party APIs: Google Maps API, Stripe API, OpenWeatherMap API
 
+#### Cloud Service
++ **mongoDB Atlas**
+
+  - Let's say...
+  - **MongoDB** (locally): buying books and keeping them on your own bookshelf at home.
+  - **MongoDB Atlas** (in the cloud/ internet): renting the e-books in a cloud library that handles storage, backups, and access.
+  - **Mongoose**: the app or tool that helps you find, read, and organize the e-books efficiently.
+
 ## Workflow
 ```
 Frontend request →
@@ -306,6 +314,10 @@ Frontend
 + --inspect
   - Debugging with the Chrome developer console
   - Use this command: "node --inspect index.js"
+
++ node mongo.js myPassword
+  - Connects to Atlas and run all the code of mongo.js
+  - Such as, _Connects to MongoDB Atlas/ Defines a schema and model/ Creates and saves a new note_
 
 ## Classification
 
@@ -1287,6 +1299,7 @@ await doc.save()
 // Worker fetches all boxes from the warehouse
 const allNotes = await Note.find({})
 ```
+✴️ **Cluster** is a group of servers (computers) working together to store your data, in Mongo Atlas.
 
 ✴️ **Index** is, in most databases, a special data structure that improve query performance and enforce constraints (unique value). More specifically,
 + Speeds up queries – Instead of scanning every document in a collection, MongoDB can quickly find results using the index (like looking up a word in a book’s index instead of reading the whole book).
