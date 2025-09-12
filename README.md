@@ -227,6 +227,8 @@ Frontend
 + [Guide to React](https://egghead.io/courses/the-beginner-s-guide-to-react)
 + [React with Class Components Fundamentals](https://egghead.io/courses/react-with-class-components-fundamentals-4351f8bb)
 + [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)
++ [Shallow Copy](https://en.wikipedia.org/wiki/Object_copying#Shallow_copy)
++ [Single-responsibility principle](https://en.wikipedia.org/wiki/Single-responsibility_principle)
 + [Anti-pattern](https://robinpokorny.com/blog/index-as-a-key-is-an-anti-pattern/)
 + [Rules of Hooks](https://react.dev/warnings/invalid-hook-call-warning#breaking-rules-of-hooks)
 + [Representational State Transfer: REST](https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm)
@@ -382,6 +384,12 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
   - Stateless: The server does not store session data.
 
 ## Appendix
+✴️ **Module** is basically a **self-contained piece of code** that has its own variables, functions, or classes.
++ Each file is a module → can export anything (<code>export default</code>, <code>export const</code>, etc.).
++ Modules have their own scope → variables inside one file don’t automatically exist in another.
++ Modules communicate via import/export → that’s how components share code.
++ A component itself is not a module, but in React, each file that defines a component is a module.
+
 ✴️ **DOM** is Document Object Model, **a tree of objects** that represents all the HTML elements on the page. Each element is an object you can read or change with JavaScript.
 ```html
 <div id="app">
