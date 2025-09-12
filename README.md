@@ -319,6 +319,10 @@ Frontend
   - Connects to Atlas and run all the code of mongo.js
   - Such as, _Connects to MongoDB Atlas/ Defines a schema and model/ Creates and saves a new note_
 
++ node --watch index.js myPassword
+  - Connects to Atlas and run all the code of index.js
+  - Automatic Change Tracking of index.js
+
 ## Classification
 
 ###  API
