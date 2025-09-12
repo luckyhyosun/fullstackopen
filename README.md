@@ -24,7 +24,7 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 + Error Handling
 + API / Backend Communication
 + State Persistence / Storage
-+ Conditional Rendering / Logic
++ [Conditional Rendering](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#conditional-rendering) / Logic
 + Componentization (Breaking UI into reusable pieces)
 + Performance Optimization (Efficient updates and minimizing resource usage)
 
@@ -595,6 +595,39 @@ const App = ({ props }) => {
 }
 ```
 
+**Pro Tips**
++ [Conditional Rendering](https://fullstackopen.com/en/part2/adding_styles_to_react_app#couple-of-important-remarks) of Component
+  ```jsx
+  const App = () => {
+  const [notes, setNotes] = useState([])
+
+  // ...
+  }
+  ```
+  We set the state notes to have initial value of an empty array, like the code above:
+  - If the state were only saving "one thing", a more appropriate initial value would be <code>null</code> denoting that there is **nothing in the state at the start**.
+  ```jsx
+  const App = () => {
+  const [notes, setNotes] = useState(null)
+
+  useEffect(() => {
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
+      })
+  }, [])
+
+  // do not render anything if notes is still null
+  if (!notes) {return null}
+  }
+  ```
+  1. The effect hook uses the function <code>setNotes</code> to set notes to have the notes that **the backend is returning**.
+  2. So on the first render, nothing is rendered.
+  3. But if you return <code>null</code> from a component, React interprets it as:
+  “**Render nothing in the DOM here**.”
+  4. So, when the **notes arrive from the backend**, the effect used function <code>setNotes</code> to set the value of the state notes.
+
 ✴️ **State** is a component's memory. Components often need to change what’s on the screen as a result of an interaction, such as, clicking “buy” should put a product in the shopping cart. So, components need to **remember** things: the current input value, the current image, the shopping cart. In React, this kind of component-specific memory is called state.
 
 Every time the setCounter modifies the state and it causes **the component to re-render**.
@@ -692,7 +725,9 @@ In this code above:
 
 **⚡ Most common hooks**
 + **useState** – manage state in a function component
-+ **[useEffect](https://fullstackopen.com/en/part2/getting_data_from_server#effect-hooks)** – run side effects (like data fetching, subscriptions, or DOM updates). And it takes two parameters - a function, the effect itself.
++ **[useEffect](https://fullstackopen.com/en/part2/getting_data_from_server#effect-hooks)** – run side effects (like data fetching, subscriptions, or DOM updates). And it takes two parameters - a function, the effect itself. The principle is that the effect is:
+  1. always executed **after the first render** of the component
+  2. and when **the value of the [second parameter changes](https://react.dev/reference/react/useEffect#parameters)**.
 
 **⚡ Rules of Hooks**
 The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.

@@ -6,7 +6,7 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 
 const App = () => {
-  const [notes, setNotes] = useState([])
+  const [notes, setNotes] = useState(null)
   const [newNote, setNewNote] = useState('Add a new note here')
   const [showAll, setShowAll] = useState(false)
   const [errorMsg, setErrorMsg] = useState('Error console')
@@ -18,6 +18,8 @@ const App = () => {
         setNotes(result)
       })
   }, [])
+
+  if(!notes){return null}
 
   const addNote = (e) => {
     e.preventDefault()
