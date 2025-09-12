@@ -19,7 +19,7 @@ Most of the code to support a dynamic website must run on the server. Creating t
 In a modern dynamic web app **State + Templates + Routing** is the core concepts. But it usually relies on other several **essential concepts**:
 + **State**
 + **Templates / Rendering**
-+ **Routing**
++ **[Routing](https://expressjs.com/en/starter/basic-routing.html)**
 + Event Handling
 + Error Handling
 + API / Backend Communication
@@ -232,6 +232,8 @@ Frontend
 + [Anti-pattern](https://robinpokorny.com/blog/index-as-a-key-is-an-anti-pattern/)
 + [Rules of Hooks](https://react.dev/warnings/invalid-hook-call-warning#breaking-rules-of-hooks)
 + [Representational State Transfer: REST](https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm)
++ [RESTful Maturnity](https://martinfowler.com/articles/richardsonMaturityModel.html)
++ [Transitive dependencies](https://lexi-lambda.github.io/blog/2016/08/24/understanding-the-npm-dependency-model/)
 + [Node.js - Worker thread pool](https://kinsta.com/knowledgebase/what-is-node-js/)
 + [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
 + [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
@@ -295,6 +297,10 @@ Frontend
     + **Runtime dependency**: the ingredients you need to actually cook the meal (rice, vegetables).
     + **Dev dependency**: the tools you use in the kitchen but don’t serve with the meal (knife, chopping board).
 
++ --watch
+  - Automatic Change Tracking
+  - So it can be used like this "node --watch index.js"
+
 ## Classification
 
 ###  API
@@ -305,12 +311,19 @@ An application programming interface, which bridge application and database (or 
 So the API interface defines _how the application can ask for data or actions_, and the API implementation handles the connection to the database or other systems.
 
 In APIs, the interface **defines how other programs can interact** with the system. It usually includes:
-+ **Endpoints** (URLs or routes) → **where** to send requests → **server address + endpoint**. Not all APIs use URL-based resources; some (like GraphQL) use a single endpoint.
-+ **Methods** (or operations) → **what** kind of action you’re performing. In REST APIs, this is typically **HTTP methods (GET, POST, PUT, DELETE)**, but other APIs may use different conventions or protocols.
++ **Endpoints** (URL + routes) → **where** to send requests → **server address + routes** (i.e., <code>/api/notes</code>). Not all APIs use URL-based resources; some (like GraphQL) use a single endpoint.
++ **Methods** (or operations) → **what** kind of action you’re performing. In REST APIs, this is typically **HTTP methods** (i.e., <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>), but other APIs may use different conventions or protocols.
 + **Input** (parameters, request body, or query) → **How** you must format the _request_ → the data or instructions you must provide (**query, JSON, headers**).
 + **Output** (_response_) → **What** you’ll get back, often structured as **JSON, XML, status** or binary depending on the API type.
 
-So, in REST API, REST defines:
+### REST API
+REST API is an architectural style meant for building scalable web applications. In REST, singular things, like notes in the case of our application, are called **resources** in RESTful thinking. Every resource has an associated **URL** which is the resource's unique address (URL is called an **end point**).
++ **Resource**: the “thing” you’re working with (notes)
++ **Endpoint/URL/Route**: the address you use to perform actions on that resource (<code>/notes</code>, <code>/notes/123</code>)
+
+What REST refers to as a [uniform interface](https://en.wikipedia.org/wiki/REST#Architectural_constraints) is that a consistent way of defining interfaces that makes it possible for systems to cooperate.
+
+And REST defines:
 + How **requests** should act
   - Which HTTP methods to use (GET, POST, PUT, DELETE).
   - What kind of data the client should send (JSON body, query parameters, etc.).
@@ -322,6 +335,28 @@ So, in REST API, REST defines:
   - Usually JSON format.
   - Often includes a consistent structure, e.g., <code>{ success: true, data: ... }</code>.
 
+[The HTTP standard](https://www.rfc-editor.org/rfc/rfc9110.html#name-common-method-properties) talks about two properties related to request types, **safety** and **idempotency**.
++ Safety, in REST, means that the executing request must not cause any side effects on the server. By **side effects**, we mean that the state of the database must not change as a result of the request, and the response must only return data that already exists on the server.
+  - <code>GET</code> has no side effects.
+  - <code>POST/PUT/DELETE</code> have side effects.
++ Indempotency, in REST, means repeating an request doesn’t change the server’s data any further — the first time already set the state, and doing it again does nothing new.
+  - <code>PUT / DELETE / GET</code> are idempotent request.
+  - <code>POST</code> is not idempotent request.
+
+### Express Framework
+**Node.js** allows you to run JavaScript on the server, but by itself, it’s very low-level. You have to _handle HTTP requests and responses manually_.
+
+Express is a layer on top of Node.js that provides simpler methods to **create routes, handle requests, send responses**, and organize your application.
+
++ In Express, when the client **requests the full URL** (like, http://localhost:3001/api/notes/2).
++ In Express, you only need to define a route like <code>/api/notes/:id</code>', which means you’re only specifying the **route (path)** that the server will listen to.
+  ```js
+  app.get('/api/notes', (request, response) => {
+      response.json(notes)
+  })
+  ```
++ Because Express doesn’t need to know the full server URL (http://localhost:3001) at this stage — **it’s already running on a port**, so the base URL is implicit.
+
 ### Node.js
 A runtime environment (an environment that can run JavaScript) for executing JavaScript code, outside of the browsers.
 
@@ -329,18 +364,18 @@ A runtime environment (an environment that can run JavaScript) for executing Jav
 
 **🐥 Why do I need to convert data into JSON to send it back to client?**
 
-🐓 You don’t have to use JSON, but JSON has become the standard format for communication between servers and clients (especially in web APIs).
-+ 1. Clients need a structured, universal format
+🐓 It's note necessary to use JSON only, but JSON has become the standard format for communication between servers and clients (especially in web APIs).
+1. Clients need a structured, universal format
   - Raw JavaScript objects (<code>{ title: "Hello" }</code>) only exist inside your server’s memory.
   - When data leaves your server, it’s just text (or bytes) traveling over HTTP.
   - JSON provides a language-agnostic way of representing that data. (React app, an iPhone app-Swift, an Android app-Kotlin, or even Python)
-+ 2. HTTP requires strings, not raw objects
+2. HTTP requires strings, not raw objects
   - HTTP transmits text or binary data.
   - JSON is just a string representation of the object:
   ``` js
   { title: "Hello" } → '{"title":"Hello"}'
   ```
-+ 3. Automatic parsing on the client side
+3. Automatic parsing on the client side
   - Browsers, <code>fetch()</code>, <code>axios</code>, mobile SDKs — all expect JSON from an API.
   - In JavaScript, you can instantly parse JSON:
   ``` js
@@ -350,7 +385,7 @@ A runtime environment (an environment that can run JavaScript) for executing Jav
     // usable JavaScript object/array
     console.log(data);
   ```
-+ 4. Standards and interoperability
+4. Standards and interoperability
   - JSON is lightweight, human-readable, and widely supported.
   - It replaced older formats like XML because it’s simpler and faster.
   - By sending JSON, you ensure any client can work with your API.
@@ -721,11 +756,13 @@ In this code above:
 + <code>CounterDisplay</code> reads it via props.
 + <code>CounterButton</code> update the parent state via a callback prop.
 
+
+
 ✴️ **Hook** is a special function that lets you “hook into” React features like state and lifecycle methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
 
 **⚡ Most common hooks**
 + **useState** – manage state in a function component
-+ **[useEffect](https://fullstackopen.com/en/part2/getting_data_from_server#effect-hooks)** – run side effects (like data fetching, subscriptions, or DOM updates). And it takes two parameters - a function, the effect itself. The principle is that the effect is:
++ **[useEffect](https://fullstackopen.com/en/part2/getting_data_from_server#effect-hooks)** – run side effects, that something changes state outside of the function/request itself(like data fetching, subscriptions, or DOM updates). And it takes two parameters - a function, the effect itself. The principle is that the effect is:
   1. always executed **after the first render** of the component
   2. and when **the value of the [second parameter changes](https://react.dev/reference/react/useEffect#parameters)**.
 
@@ -1103,7 +1140,7 @@ return response.send(notes)
     ```
 
 **Note**
-From the code below, controller.js is handling HTTP request and return response after <code>res.json(data)</code>. But helper.js is not handling HTTP request, instead it just quering MongoDB directly and returns an a plain array of JS objects.
+From the code below, controller.js is handling HTTP request ([Routing or Router](https://expressjs.com/en/guide/routing.html)) and return response after <code>res.json(data)</code>. But helper.js is not handling HTTP request, instead it just quering MongoDB directly and returns an a plain array of JS objects.
 ```js
 // Handling HTTP by Express (via 'Router')
 notesRouter.get('/', async (req, res) => {
@@ -1514,7 +1551,7 @@ Bearer <Token_Credential>
 
 How to attach middleware **globally**?
 
-- Use <code>app.use()</code> to run middleware for all requests.
+- Use <code>app.use()</code> to run middleware as the callback function, for all requests.
   ```js
   import express from "express";
   const app = express();
