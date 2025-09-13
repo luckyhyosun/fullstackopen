@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/notes/68c55b83ebd577f0ba4510a0
+Content-Type: application/json
+
+{
+    "content": "Test: Error handling/ Node and Express",
+    "important": false
+}

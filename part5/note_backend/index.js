@@ -53,9 +53,28 @@ app.post('/api/notes', (request, response) => {
     newNote.save().then(newNote => response.json(newNote))
 })
 
+app.put('/api/notes/:id', (request, response, next) => {
+    const id = request.params.id
+    const body = request.body
+
+    Note.findById(id)
+        .then(note => {
+            if(!note){
+                return response.status(404).end()
+            }
+
+            note.content = body.content
+            note.important = body.important
+
+            return note.save()
+                .then(response.status(200).json(note))
+        })
+        .catch(error => next(error))
+})
+
 app.delete('/api/notes/:id', (request, response) => {
     const id = request.params.id
-    Note.findByIdAndDelete(id).then(response.status(200).end())
+    Note.findByIdAndDelete(id).then(response.status(204).end())
 })
 
 const unknownEndpoint = (request, response) => {
