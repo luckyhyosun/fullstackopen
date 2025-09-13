@@ -5,3 +5,12 @@ Content-Type: application/json
     "content": "Test: Node and Express",
     "important": true
 }
+
+### validation error check
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "dev",
+    "important": true
+}
