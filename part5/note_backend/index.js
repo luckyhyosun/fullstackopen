@@ -1,5 +1,5 @@
 require('dotenv').config()
-const cors = require('cors')
+// const cors = require('cors')
 const express = require('express')
 const app = express()
 const Note = require('./models/note')
@@ -12,7 +12,14 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-app.use(cors())
+//allow all origins
+//app.use(cors())
+
+// only allow this frontend
+// app.use(cors({
+//   origin: 'http://localhost:5173'
+// }));
+
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
