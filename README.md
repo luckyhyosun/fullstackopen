@@ -323,6 +323,9 @@ Frontend
   - Connects to Atlas and run all the code of index.js
   - Automatic Change Tracking of index.js
 
++ npm install dotenv
+  - Define environment variables with [dotenv](https://github.com/motdotla/dotenv#readme)
+
 ## Classification
 
 ###  API

@@ -1,27 +1,7 @@
+require('dotevn').config()
 const express = require('express')
 const app = express()
-const mongoose = require('mongoose')
-
-const password = process.argv[2]
-const url = `mongodb+srv://luckyFullstack:${password}@cluster0.dguebgx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
-
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-})
-
-noteSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-const Note = mongoose.model('Note', noteSchema)
+const Note = require('./models/note')
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -85,6 +65,5 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
-app.listen(PORT)
+app.listen(process.env.PORT)
 console.log(`Server running on port ${PORT}`)
