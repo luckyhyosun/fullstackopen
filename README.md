@@ -1635,6 +1635,151 @@ server: {
 
 The proxy solves this by making it look like the frontend is only ever talking to 5173 (same origin). Vite handles the cross-origin part behind the scenes.
 
+✴️ **middleware** are functions that can be used for handling request and response objects.
+
+It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches the route**. Middleware in frameworks like Express is a function that **runs for every incoming request**. Or for routes you attach it to, so it **runs every time that specific route is called**.
+
+**Any function with the signature (req, res, next)** can be used as middleware, but it **only actually acts as middleware** when it is registered with Express (e.g., via **<code>app.use()</code>** or in a route).
+
+How to attach middleware **globally**?
+
+- Use <code>app.use()</code> to run middleware as the callback function, for all requests.
+  ```js
+  import express from "express";
+  const app = express();
+
+  app.use(express.json());
+  ```
+
+**Why do we need middleware?**
+
+Becasue middleware allows you to reuse logic across multiple routes instead of repeating code. Such as, <code>app.use(express.json())</code>.
+
+  For example, [json-parser](https://expressjs.com/en/api.html) we used earlier takes the raw data from the requests that are stored in the request object, parses it into a JavaScript object and assigns it to the request object as a new property body.
+1. Raw request data :
+    ```js
+    // client sends a request with a JSON body
+
+    POST /api/blogs
+    Content-Type: application/json
+
+    {
+      "title": "My Blog",
+      "author": "Alice"
+    }
+    ```
+  - Before parsing, Express sees this as raw data — basically a stream of bytes inside <code>request</code>.
+  - You cannot access it directly as <code>request.body</code> yet; it’s just a chunk of text.
+2. JSON parser (<code>express.json()</code>)
+    ```js
+    app.use(express.json())
+    ```
+  - This middleware intercepts incoming requests.
+  - It reads the raw data from the request stream.
+  - **It parses the JSON string into a JavaScript object**.
+    ```js
+    { title: "My Blog", author: "Alice" }
+    ```
+3. Assigning to <code>request.body</code>
+    ```js
+    request.body = { title: "My Blog", author: "Alice" }
+    ```
+    So, we can use the object.
+    ```js
+    const body = request.body
+    console.log(body.title) // "My Blog"
+    ```
+
+Without middleware, you’d have to write things like token extraction, logging, body parsing inside every route. So it is **reusable** code which you can write once and use in multiple places without rewriting it.
+
+What is **basic structure** of custom middleware?
+1. Normal middleware has **three parameters**.
+    ```js
+    const tokenExtractor = (req, res, next) => {
+      const auth = req.get('authorization')
+      req.token = auth ? auth.replace('Bearer ', '') : null
+      next() // passes control
+    }
+    ```
+  - This middleware always runs for every request.
+  - If an error occurs inside it (like a thrown exception), Express will skip the rest of the normal middleware & route handlers, and go straight to error-handling middleware.
+
+
+2. Error-handling middleware has **four parameteres**.
+
+  - Express sees the error → automatically calls your <code>errorHandler</code> middleware.
+    ```js
+    // triggers CastError
+    const blog = await Blog.findById(invalidId)
+
+    //calls errorHandler middleware
+    app.use(middleware.errorHandler)
+    ```
+
+    ```js
+    const errorHandler = (error, request, response, next) => {
+    logger.error(error.message)
+
+      if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+      } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
+      } else if (error.name ===  'JsonWebTokenError') {
+        return response.status(401).json({ error: 'token invalid' })
+      }
+      next(error)
+    }
+    ```
+  - Your middleware checks <code>error.name</code> → sends a 400 response with “malformatted id”.
+  - **No route handler or other middleware runs after the response is sent**.
+    - Because once a response is sent in Express, the request/response cycle is considered finished, so no further middleware or route handlers run for that request.
+
+Express **Router middleware**?
+
+A [router](https://expressjs.com/en/api.html#router) object is an isolated instance of middleware and routes. You can think of it as a “mini-application,” capable only of performing middleware and routing functions. Every Express application has **a built-in app router**. Because:
++ It can have its own middleware
+  ```js
+  // note dealing in this course
+  noteRouter.use((req, res, next) => {
+    console.log('Note router received a request')
+    next()
+  })
+  ```
++ It has its own routes
+  ```js
+  // controllers/notes.js
+  const noteRouter = require('express').Router()
+
+  noteRouter.get('/', (req, res) => res.send('All notes'))
+  noteRouter.get('/:id', (req, res) => res.send(`Note ${req.params.id}`))
+
+  module.exports = noteRouter
+  ```
+  So, <code>notesRouter</code> is an object that can hold many routes (get/post/put/delete...), like a container. Then we export that container.
+  ```js
+  const express = require('express')
+  const app = express()
+
+  app.get('/api/notes', (req, res) => res.send('All notes'))
+  app.get('/api/notes/:id', (req, res) => res.send(`Note ${req.params.id}`))
+  ```
+  In the previous codes, <code>app</code> is your **main Express application**, compared to <code>noteRouter</code> which is a **router object**. And you attach routes directly to it, or mount routers on it (attaching <code>.get()</code>, <code>.post()</code>...etc). Then, <code>app</code> handles all requests.
+
++ It can be mounted wherever you want in the main app. So, it lets you define routes relative to a base path (<code>/api/notes</code>).
+  ```js
+  // app.js
+  const notesRouter = require('./controllers/notes')
+  app.use('/api/notes', notesRouter)
+  ```
+  So the codes above said, "For any request that starts with <code>/api/notes</code>, use this <code>notesRouter</code> to handle it." <br />
+  For this reason, the <code>notesRouter</code> object (from controllers/notes.js) must only define the **relative parts of the routes**, i.e. the empty path <code>/</code> or just the parameter <code>/:id</code>.
+
++ **Advantages**
+  - **No Repetition** → No need to write <code>/api/notes</code> in every route.
+  - **Easy to maintain** → If base path changes, update only in <code>app.use()</code>.
+  - **Modular code** → Other routers (like, User or Order) can be added and separated from noteRouter.
+  - **Router-specific middleware** → you can add middleware for only this feature without affecting other routes.
+
 ✴️ **Token** is a small piece of digital data that proves who you are.
 + It’s like a digital ticket or ID card.
 + Usually, it’s created by the server when you log in.
@@ -1766,102 +1911,3 @@ Bearer <Token_Credential>
 + **Server-side session**, which is to save info about each token to the backend database and to check for each API request if the access rights corresponding to the tokens are still valid. is to save info about each token to the backend database and to check for each API request if the access rights corresponding to the tokens are still valid. Database access is considerably slower compared to checking the validity of the token itself. That is why it is quite common to save the session corresponding to a token to a key-value database such as [Redis](https://redis.io/), that is limited in functionality compared to eg. MongoDB or a relational database, but extremely fast in some usage scenarios.
 + When server-side sessions are used, the **_token_** is quite often just **a random string**, that does not include any information about the user as it is quite often the case when jwt-tokens are used. For each API request, the server fetches the relevant information about the identity of the user from the database.
 + It is also quite usual that instead of using Authorization-header, **_cookies_** are used as the mechanism for transferring the token between the client and the server.
-
-✴️ **middleware** are functions that can be used for handling request and response objects.
-
-It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches the route**. Middleware in frameworks like Express is a function that **runs for every incoming request**. Or for routes you attach it to, so it **runs every time that specific route is called**.
-
-**Any function with the signature (req, res, next)** can be used as middleware, but it **only actually acts as middleware** when it is registered with Express (e.g., via **<code>app.use()</code>** or in a route).
-
-How to attach middleware **globally**?
-
-- Use <code>app.use()</code> to run middleware as the callback function, for all requests.
-  ```js
-  import express from "express";
-  const app = express();
-
-  app.use(express.json());
-  ```
-
-Then, **Why do we need middleware?**
-
-Becasue middleware allows you to reuse logic across multiple routes instead of repeating code. Such as, <code>app.use(express.json())</code>.
-
-  For example, [json-parser](https://expressjs.com/en/api.html) we used earlier takes the raw data from the requests that are stored in the request object, parses it into a JavaScript object and assigns it to the request object as a new property body.
-1. Raw request data :
-    ```js
-    // client sends a request with a JSON body
-
-    POST /api/blogs
-    Content-Type: application/json
-
-    {
-      "title": "My Blog",
-      "author": "Alice"
-    }
-    ```
-  - Before parsing, Express sees this as raw data — basically a stream of bytes inside <code>request</code>.
-  - You cannot access it directly as <code>request.body</code> yet; it’s just a chunk of text.
-2. JSON parser (<code>express.json()</code>)
-    ```js
-    app.use(express.json())
-    ```
-  - This middleware intercepts incoming requests.
-  - It reads the raw data from the request stream.
-  - **It parses the JSON string into a JavaScript object**.
-    ```js
-    { title: "My Blog", author: "Alice" }
-    ```
-3. Assigning to <code>request.body</code>
-    ```js
-    request.body = { title: "My Blog", author: "Alice" }
-    ```
-    So, we can use the object.
-    ```js
-    const body = request.body
-    console.log(body.title) // "My Blog"
-    ```
-
-Without middleware, you’d have to write things like token extraction, logging, body parsing inside every route. So it is **reusable** code which you can write once and use in multiple places without rewriting it.
-
-Then, what is **basic structure** of custom middleware?
-1. Normal middleware has **three parameters**.
-    ```js
-    const tokenExtractor = (req, res, next) => {
-      const auth = req.get('authorization')
-      req.token = auth ? auth.replace('Bearer ', '') : null
-      next() // passes control
-    }
-    ```
-  - This middleware always runs for every request.
-  - If an error occurs inside it (like a thrown exception), Express will skip the rest of the normal middleware & route handlers, and go straight to error-handling middleware.
-
-
-2. Error-handling middleware has **four parameteres**.
-
-  - Express sees the error → automatically calls your <code>errorHandler</code> middleware.
-    ```js
-    // triggers CastError
-    const blog = await Blog.findById(invalidId)
-
-    //calls errorHandler middleware
-    app.use(middleware.errorHandler)
-    ```
-
-    ```js
-    const errorHandler = (error, request, response, next) => {
-    logger.error(error.message)
-
-      if (error.name === 'CastError') {
-        return response.status(400).send({ error: 'malformatted id' })
-      } else if (error.name === 'ValidationError') {
-        return response.status(400).json({ error: error.message })
-      } else if (error.name ===  'JsonWebTokenError') {
-        return response.status(401).json({ error: 'token invalid' })
-      }
-      next(error)
-    }
-    ```
-  - Your middleware checks <code>error.name</code> → sends a 400 response with “malformatted id”.
-  - **No route handler or other middleware runs after the response is sent**.
-    - Because once a response is sent in Express, the request/response cycle is considered finished, so no further middleware or route handlers run for that request.
