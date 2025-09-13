@@ -970,18 +970,36 @@ Without axio, we can use **fetch**, which is JavaScript the built-in API. But it
   - **Axios** is just a **HTTP client**. It allows your frontend (or any JavaScript code) to make HTTP requests.
   - **REST API** is the server-side interface that defines how clients can interact with your backend data and logic. It’s what actually responds to the requests Axios makes.
 
-✴️ **Port** is a communication endpoint and listens for requests.
-
 ✴️ **JSON** (JavaScript Object Notation) is always a string representation of an object.
-+ 1. <code>.toJSON()</code> returns a plain JavaScript object.
+1. <code>.toJSON()</code> returns a **JSON-compatible format** (any of an object, array, string, number, boolean or null type) from the data (objectit’s called on). Which means it returns a data structure that can be safely turned into a JSON string using <code>JSON.stringify()</code> without losing information or causing errors.
 ``` js
+  //object
   { title: "Hello" }
+
+  //array
+  [1, 2, 3]
+
+  // primitives
+  "Hello"
+  100
+  true
+  null
   ```
-+ 2. <code>JSON.stringify(obj)</code> returns the obj a string.
+2. <code>JSON.stringify(obj)</code> returns the obj a string.
 ``` js
+  //object
   '{"title":"Hello"}'
+
+  //array
+  '[1, 2, 3]'
+
+  // primitives
+  '"Hello"'     //(note the double quotes)
+  '100'
+  'true'
+  'null'
 ```
-+ 3. <code>response.json(...)</code> Express does both steps automatically. Express calls <code>JSON.stringify</code>, which internally checks for <code>.toJSON()</code> and uses it if available.
+3. <code>response.json(...)</code> Express does both steps automatically. Express calls <code>JSON.stringify</code>, which internally checks for <code>.toJSON()</code> and uses it if available.
 ```
   response.json(notes)
     ↓
@@ -1197,6 +1215,33 @@ const notesInDb = async () => {
 }
 ```
 
+✴️ **Port** is a communication endpoint and listens for requests.
+
+✴️ **Mongoose** is ODM (Object Data Modeling) library for Node.js. It lets you **define schemas and models** in your Node.js application, so you interact with MongoDB using JavaScript objects instead of raw database commands. It is Node.js package (installed via npm install mongoose).
+```js
+await mongoose.connect("mongodb://localhost:27017/mydb");
+const User = mongoose.model("User", UserSchema);
+const alice = await User.findOne({ name: "Alice" });
+```
+
+✴️ **Mongosh** is the MongoDB Shell — an official tool from MongoDB. It lets you connect directly to a MongoDB server and run commands interactively. It is written in JavaScript/TypeScript, but it’s just a **CLI (command-line interface)**.
+```js
+db.users.findOne({ name: "Alice" })
+```
+
+✴️ **Query** is, in general, a request you send to a database asking it to return or modify data. Such as, "Insert a new user.", "Update this note’s content.", or "Give me all notes where <code>important: true</code>." etc.
++ **In MongoDB & Mongoose**: a query is typically a JavaScript object that specifies conditions or actions.
+  ```js
+  // query for one
+  await User.findOne({ username: 'mluukkai' })
+  // query to delete all notes
+  await Note.deleteMany({})
+
+  // query object
+  await Note.find({ important: true })
+  ```
+  From the code above,<code>{ important: true }</code> is a query object (condition). And <code>.find()</code> is the query method.
+
 ✴️ **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
 ✴️ **Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB:
@@ -1262,14 +1307,14 @@ In the code above,
 const Note = mongoose.model('Hey', noteSchema)
 const Note = mongoose.model('Hey')
 
-// both get all documents in the "heys" collection
+// they get all documents in the "heys" collection
 const allNotes = await Note.find({})
 const allNotes = await mongoose.model('Hey').find({})
 const allNotes = await db.heys.find({})
 
 console.log(allNotes)
 
-// both delete all documents in the "heys" collection
+// they delete all documents in the "heys" collection
 Note.deleteMany({})
 mongoose.model('Hey').deleteMany({})
 db.heys.deleteMany({})
@@ -1334,32 +1379,6 @@ Mongoose validations do not detect the index violation, and instead of **Validat
 
 👉 In short: The issue was a timing problem. Data got seeded before MongoDB had finished building indexes, so constraints weren’t applied. **The solution is to explicitly wait for indexes to be in place** using <code>syncIndexes()</code> (all models) or <code>createIndexes()</code> (per model) before inserting data.
 
-
-✴️ **Query** is, in general, a request you send to a database asking it to return or modify data. Such as, "Insert a new user.", "Update this note’s content.", or "Give me all notes where <code>important: true</code>." etc.
-+ **In MongoDB & Mongoose**: a query is typically a JavaScript object that specifies conditions or actions.
-  ```js
-  // query for one
-  await User.findOne({ username: 'mluukkai' })
-  // query to delete all notes
-  await Note.deleteMany({})
-
-  // query object
-  await Note.find({ important: true })
-  ```
-  From the code above,<code>{ important: true }</code> is a query object (condition). And <code>.find()</code> is the query method.
-
-
-✴️ **Mongosh** is the MongoDB Shell — an official tool from MongoDB. It lets you connect directly to a MongoDB server and run commands interactively. It is written in JavaScript/TypeScript, but it’s just a **CLI (command-line interface)**.
-```js
-db.users.findOne({ name: "Alice" })
-```
-
-✴️ **Mongoose** is ODM (Object Data Modeling) library for Node.js. It lets you **define schemas and models** in your Node.js application, so you interact with MongoDB using JavaScript objects instead of raw database commands. It is Node.js package (installed via npm install mongoose).
-```js
-await mongoose.connect("mongodb://localhost:27017/mydb");
-const User = mongoose.model("User", UserSchema);
-const alice = await User.findOne({ name: "Alice" });
-```
 
 ✴️ **populate()** is a Mongoose method that replaces the ObjectId reference in a document with the actual document(s) from another collection. It’s how Mongoose simulates a join between collections.
   + **With join queries in Mongoose**, Mongoose runs two queries.
