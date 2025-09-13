@@ -1480,6 +1480,71 @@ await Note.find({}).populate('user')
 ````
 <code>"user"</code> here is the field name in the document <code>(user: ObjectId(...))</code>.
 
+✴️ **URI** (Uniform Resource Identifier) is the umbrella term, which refers to any string that identifies a resource, whether by location, name, or both.
+```
+URI
+├─ URL (location + access method)
+└─ URN (name only, no location)
+```
+
+✴️ **URL** (Uniform Resource Locator) is a standard way to describe where a resource lives on the internet and how to access it. So, it
+includes **origin** and **path**(<code>/api/notes</code>).
+
+http://localhost:3001/api/notes <br />
+→ path: <code>/api/notes</code>
+
+✴️ **Origin** is **protocol** + **domain** (or **host** which is the “address” of the server) + **port**.
+
+http://localhost:3001 <br />
+→ protocol: <code>http</code>, <br />
+→ domain: <code>localhost</code>, <br />
+→ port: <code>3001</code>
+
+✴️ **SOP** (Same-Origin Policy) is a **security rule enforced by browsers** that blocks scripts from one origin from accessing resources on another origin (by default).
+
+Why does it matter?
+  - Your frontend runs at http://localhost:5173.
+  - Your backend runs at http://localhost:3001.
+  - These are **different origins**, so the browser blocks direct requests for security reasons (**SOP** issue).
+  - To sovle this SOP problem, there are 2 ways of fix:
+  - **Enable CORS** on the backend
+  - **Use a proxy** (common in development)
+
+✴️ **CORS** (Cross-Origin Resource Sharing) is a **mechanism where the server explicitly grants permission** (via HTTP headers) for specific cross-origin requests, overriding the default SOP block.
++ If backend responses with this CORS:
+  ```pgsql
+  Access-Control-Allow-Origin: http://localhost:5173
+  Access-Control-Allow-Methods: GET, POST
+  Access-Control-Allow-Headers: Content-Type
+  ```
++ This tells the browser:
+  ```pgsql
+  “Requests from http://localhost:5173 are allowed.”
+  ```
++ So, if the frontend is at <code>5173</code> and the backend is at <code>3001</code>, you need CORS headers from the backend to make it work.
+
+✴️ **Proxy** is like a middleman (or gatekeeper) that sits between a client (your browser/frontend) and a server (your backend or an external API).
+```js
+server: {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    },
+  },
+}
+```
++ How does it work?
+  1. Frontend app (React/Vite) runs at http://localhost:5173.
+  2. Backend API runs at http://localhost:3001.
+  3. Browser says: “Nope, **SOP blocks this, different origins!**”
+  4. Instead of asking the backend directly, you ask the proxy at <code>5173</code>.
+  5. Proxy secertly forwards your request to <code>3001</code>
+  6. Gets the response and gives it back to you as if it came from <code>5173</code>.
+  7. SOP is happy, because as far as the browser can tell, everything stayed within the same origin (<code>5173</code>).
+
+The proxy solves this by making it look like the frontend is only ever talking to 5173 (same origin). Vite handles the cross-origin part behind the scenes.
+
 ✴️ **Token** is a small piece of digital data that proves who you are.
 + It’s like a digital ticket or ID card.
 + Usually, it’s created by the server when you log in.
