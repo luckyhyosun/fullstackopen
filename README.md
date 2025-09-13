@@ -245,6 +245,9 @@ Frontend
 + [Debugging](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer/)
 + [Beyond debugging](https://swizec.com/blog/javascript-debugging-slightly-beyond-consolelog/)
 + [Node.js - Worker thread pool](https://kinsta.com/knowledgebase/what-is-node-js/)
++ [Static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis)
++ [JavaScript Style Guide -  Airbnb style guide](https://github.com/airbnb/javascript)
++ [Ready-made configuration -  Airbnb configuration](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)
 + [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
 + [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
 + [Token-based authentication](https://www.digitalocean.com/community/tutorials/the-ins-and-outs-of-token-based-authentication#how-token-based-works)
@@ -277,6 +280,7 @@ Frontend
   - start the JSON Server on port 3001
   - **json-server** is a handy tool that enables the use of server-side functionality in the development phase without the need to program any of it
   - http://localhost:3001/notes
+
 + npm install json-server --save-dev
    - Install json-server as a **development dependency**
    - Only used during **development**, not in production.
@@ -342,10 +346,23 @@ Frontend
   - Copy the production build (the dist directory) to the root of the backend directory
   - Configure the backend to show the frontend's main page (the file dist/index.html) as its main page, by using <code>app.use(express.static('dist'))</code> in backend
 
-+ fly auth login
-  - Production environment
-  - Deploying
-  - Start authentification of fly.io
++ npm install eslint @eslint/js --save-dev
+  - A static code analysis tool (linter) for JavaScript and TypeScript
+  - Analyzes the code without running it.
+  - Looks for errors, bugs, bad practices, or style issues.
+  - Auto-fix many issues (like formatting, unused imports, missing semicolons).
+  - A **development dependency** for the backend
+
++ npx eslint --init
+  - [Initialize](https://fullstackopen.com/en/part3/validation_and_es_lint#lint) a default ESlint configuration
+
++ npm install --save-dev @stylistic/eslint-plugin-js
+  - ESLint Stylistic [plugin](https://eslint.style/rules)
+  - D efines a set of code style-related rules
+
++ npx eslint index.js
+	- Running the Linter
+	- But I'm using <code>npm run lint</code>, which I made a script in package.json file.
 
 ## Classification
 
