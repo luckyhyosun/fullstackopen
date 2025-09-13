@@ -7,7 +7,7 @@ const Footer = () => {
     return (
       <div style={footerStyle}>
           <p>
-            Note app, Media Technology, Computer Science, KTH 2025
+            Note app by Lucky, Media Technology, Computer Science, KTH 2025
           </p>
       </div>
     )

@@ -1,11 +1,23 @@
+*{
+  font-family: sans-serif;
+  padding: 0;
+}
+
 h1 {
   color: green;
-  font-style: italic;
+}
+
+ul {
+  padding: 30px;
+  border: 1px solid grey;
+  border-radius: 10px;
+  width: 400px;
 }
 
 .note {
   padding-top: 3px;
   font-size: 15px;
+  list-style-type: none;
 }
 
 button {
@@ -14,6 +26,7 @@ button {
     background-color: lightgray;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 button:hover {
@@ -34,6 +47,20 @@ button:hover {
   color: white
 }
 
+.deleteBtn {
+  background-color: rgb(255, 255, 255);
+  padding: 5px 10px;
+  margin-right: 10px;
+  color: red
+}
+
+.deleteBtn:hover {
+  background-color: #a3a2a2;
+  padding: 5px 10px;
+  margin-right: 10px;
+  color: white
+}
+
 .error {
   color: red;
   background: #dddddd;
@@ -42,4 +69,6 @@ button:hover {
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+  width: 400px;
+  padding: 10px 30px;
 }

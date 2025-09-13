@@ -7,7 +7,7 @@ import Footer from './components/Footer'
 
 const App = () => {
   const [notes, setNotes] = useState(null)
-  const [newNote, setNewNote] = useState('Add a new note here')
+  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(false)
   const [errorMsg, setErrorMsg] = useState('Error console')
 
@@ -48,20 +48,26 @@ const App = () => {
     ? notes.filter(note => note.important)
     : notes
 
-  const handelChangeImportant = (id) => {
+  const handelChangeImportant = id => {
     const note = notes.find(note => note.id === id)
     const updatedNote = { ...note, important: !note.important }
 
     noteService
       .update(id, updatedNote)
       .then(result => setNotes(notes.map(note => note.id === id ? result : note)))
-      .catch(error => {
+      .catch(() => {
         setErrorMsg(`Note '${note.content}' was already deleted from server`)
         setTimeout(() => {
           setErrorMsg('Error console')
         }, 5000)
         setNotes(notes.filter(n => n.id !== id))
     })
+  }
+
+  const handleDeleteNote = id => {
+    noteService
+      .remove(id)
+      .then(setNotes(notes.filter(note => note.id !== id)))
   }
 
   return (
@@ -79,11 +85,12 @@ const App = () => {
             key={note.id}
             note={note}
             handelChangeImportant={() => handelChangeImportant(note.id)}
+            handleDeleteNote={() => handleDeleteNote(note.id)}
           />)}
       </ul>
 
       <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange}/>
+        <input value={newNote} onChange={handleNoteChange} placeholder='Add note here...'/>
         <button className='functionalBtn'>save</button>
       </form>
 
