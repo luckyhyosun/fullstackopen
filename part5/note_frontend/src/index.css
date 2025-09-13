@@ -11,21 +11,27 @@ h1 {
 button {
     padding: 5px;
     margin-left: 10px;
-    background-color: #dddddd;
-    border: 1px solid #a3a2a2;
+    background-color: lightgray;
+    border: none;
     border-radius: 5px;
 }
 
 button:hover {
   padding: 5px;
   background-color: #a3a2a2;
-  border: 1px solid #a3a2a2;
+  border: none;
   border-radius: 5px;
 }
 
 .functionalBtn {
-    background-color: #717171;
-    color: #fff
+    background-color: lightgray;
+    padding: 5px 30px;
+}
+
+.functionalBtn:hover {
+  background-color: black;
+  padding: 5px 30px;
+  color: white
 }
 
 .error {

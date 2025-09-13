@@ -331,6 +331,11 @@ Frontend
   - Install cors in backend
   - Since the backend is not expected to be visible to the public in the production environment, it may make more sense to only enable cors from a specific origin (e.g. the front end).
 
++ fly auth login
+  - Production environment
+  - Deploying
+  - Start authentification of fly.io
+
 ## Classification
 
 ###  API
