@@ -331,6 +331,16 @@ Frontend
   - Install cors in backend
   - Since the backend is not expected to be visible to the public in the production environment, it may make more sense to only enable cors from a specific origin (e.g. the front end).
 
++ npm run build
+  - A production build for applications created with Vite
+  - Run in frontend
+
++ cp -r dist ../note_backend
+  - Deploying the frontend
+  - Run in frontend
+  - Copy the production build (the dist directory) to the root of the backend directory
+  - Configure the backend to show the frontend's main page (the file dist/index.html) as its main page, by using <code>app.use(express.static('dist'))</code> in backend
+
 + fly auth login
   - Production environment
   - Deploying
