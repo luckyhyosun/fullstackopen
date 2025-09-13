@@ -269,6 +269,7 @@ Frontend
 + Event-driven / Data-driven
 + Algorithm
 + [CSS preprocessor](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor)
++ [Sentry](https://sentry.io/welcome/)
 
 ## Script
 + npx json-server --port 3001 db.json
@@ -675,8 +676,9 @@ const App = ({ props }) => {
 }
 ```
 
-**Pro Tips**
-+ [Conditional Rendering](https://fullstackopen.com/en/part2/adding_styles_to_react_app#couple-of-important-remarks) of Component
+✴️ **null** is a **value** that represents “nothing” or “empty”, which means <code>null</code> is a valid “no data” result. <code>null</code>is not an error in JavaScript (frontend) or Mongoose (backend). But to handle <code>null</code>, we need this:
+
++ **Frontend**: [Conditional Rendering](https://fullstackopen.com/en/part2/adding_styles_to_react_app#couple-of-important-remarks) of Component
   ```jsx
   const App = () => {
   const [notes, setNotes] = useState([])
@@ -707,6 +709,77 @@ const App = ({ props }) => {
   3. But if you return <code>null</code> from a component, React interprets it as:
   “**Render nothing in the DOM here**.”
   4. So, when the **notes arrive from the backend**, the effect used function <code>setNotes</code> to set the value of the state notes.
+
++ **Backend**: [Error Handling](https://fullstackopen.com/en/part3/saving_data_to_mongo_db#error-handling)
+
+  From the code below, I can check 2 things: **resource** and **query**
+    ```jsx
+    app.get('/api/notes/:id', (request, response) => {
+      const id = request.params.id
+
+      Note.findById(id)
+        .then(note => {
+            if(note){
+                response.json(note)
+            }else{
+                response.state(404)
+            }
+        })
+        .catch(error => {
+            console.log(error.name);    // e.g., "MongoNetworkError"
+            console.log(error.message); // e.g., "failed to connect to server..."
+            console.log(error.stack);   // stack trace
+            response.status(500).end()
+        })
+    })
+    ```
+  + If no document with that ID exists, note will be <code>null</code>.
+  + So you manually check <code>if (note)</code> → if false, you send 404 Not Found.
+  + ✅ This handles the “resource doesn’t exist” case.
+
+  On the other hand,
+  + If it has database connection issues
+  + The <code>error</code> parameter is going to be an **Error object describing the connection problem**.
+  + And <code>.catch()</code> handles that error by letting you respond appropriately (e.g., log it, send a 500 response) rather than letting the application crash.
+  + ✅ This handles the “server or query error” case.
+
+  So basically:
+  + 404 → the query succeeded, but there was no document with that ID.
+  + 500 → the query failed due to a server/database error, so the resource could be there or not
+
+✴️ **Error Handler** is a Express [error handling](https://expressjs.com/en/guide/error-handling.html) middleware that are defined with a function that **accepts four parameters**. Express does not have a fully automatic built-in error handler for custom messages. So, the developer usually **manually define** it like this:
+```js
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+// this has to be the last loaded middleware, also all the routes should be registered before this!
+app.use(errorHandler)
+```
+So, in the code:
++ <code>next</code> is a function provided by Express.
++ if <code>next</code> function is called **without** an argument, then the execution will simply **move onto** the next route or middleware.
++ if <code>next</code> function is called **with** an argument, then the execution will continue to the **error handler middleware**.
+```js
+app.get('/api/notes/:id', (request, response, next) => {
+  Note.findById(request.params.id)
+    .then(note => {
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
+    })
+
+    .catch(error => next(error))
+})
+```
 
 ✴️ **State** is a component's memory. Components often need to change what’s on the screen as a result of an interaction, such as, clicking “buy” should put a product in the shopping cart. So, components need to **remember** things: the current input value, the current image, the shopping cart. In React, this kind of component-specific memory is called state.
 
@@ -1677,7 +1750,11 @@ Bearer <Token_Credential>
 + When server-side sessions are used, the **_token_** is quite often just **a random string**, that does not include any information about the user as it is quite often the case when jwt-tokens are used. For each API request, the server fetches the relevant information about the identity of the user from the database.
 + It is also quite usual that instead of using Authorization-header, **_cookies_** are used as the mechanism for transferring the token between the client and the server.
 
-✴️ **middleware** are functions that can be used for handling request and response objects. It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches the route**. Middleware in frameworks like Express is a function that **runs for every incoming request**. Or for routes you attach it to, so it **runs every time that specific route is called**.
+✴️ **middleware** are functions that can be used for handling request and response objects.
+
+It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches the route**. Middleware in frameworks like Express is a function that **runs for every incoming request**. Or for routes you attach it to, so it **runs every time that specific route is called**.
+
+**Any function with the signature (req, res, next)** can be used as middleware, but it **only actually acts as middleware** when it is registered with Express (e.g., via **<code>app.use()</code>** or in a route).
 
 How to attach middleware **globally**?
 

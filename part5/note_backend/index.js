@@ -1,5 +1,4 @@
 require('dotenv').config()
-// const cors = require('cors')
 const express = require('express')
 const app = express()
 const Note = require('./models/note')
@@ -12,14 +11,6 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-//allow all origins
-//app.use(cors())
-
-// only allow this frontend
-// app.use(cors({
-//   origin: 'http://localhost:5173'
-// }));
-
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
@@ -28,13 +19,21 @@ app.get('/', (request, response) => {
     response.json('<h1>Hello</h1>')
 })
 
-app.get('/api/notes', (request, response) => {
+app.get('/api/notes', (request, response, next) => {
     Note.find({}).then(notes => response.json(notes))
 })
 
 app.get('/api/notes/:id', (request, response) => {
     const id = request.params.id
-    Note.findById(id).then(note => response.json(note))
+    Note.findById(id)
+        .then(note => {
+            if(note){
+                response.json(note)
+            }else{
+                response.state(404)
+            }
+        })
+        .catch(error => next(error))
 })
 
 app.post('/api/notes', (request, response) => {
@@ -64,6 +63,18 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => console.log(`Server running on port ${process.env.PORT}`))
