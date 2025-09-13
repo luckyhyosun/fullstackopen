@@ -326,6 +326,11 @@ Frontend
 + npm install dotenv
   - Define environment variables with [dotenv](https://github.com/motdotla/dotenv#readme)
 
++ npm install cors
+  - Allow requests from other origins (SOP/ CORS)
+  - Install cors in backend
+  - Since the backend is not expected to be visible to the public in the production environment, it may make more sense to only enable cors from a specific origin (e.g. the front end).
+
 ## Classification
 
 ###  API
