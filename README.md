@@ -248,6 +248,7 @@ Frontend
 + [Static code analysis](https://en.wikipedia.org/wiki/Static_program_analysis)
 + [JavaScript Style Guide -  Airbnb style guide](https://github.com/airbnb/javascript)
 + [Ready-made configuration -  Airbnb configuration](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)
++ [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)
 + [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
 + [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
 + [Token-based authentication](https://www.digitalocean.com/community/tutorials/the-ins-and-outs-of-token-based-authentication#how-token-based-works)
@@ -764,6 +765,40 @@ const App = ({ props }) => {
   + 404 → the query succeeded, but there was no document with that ID.
   + 500 → the query failed due to a server/database error, so the resource could be there or not
 
+**🐬 Pro Tips**
++ In code using **promises** and **.then()**, a possible error was passed to <code>next(error)</code> which forwards the error to the error-handling middleware (which has the 4-arg signature) like this:
+  ```js
+  notesRouter.post('/', (request, response, next) => {
+  const body = request.body
+
+  const note = new Note({
+    content: body.content,
+    important: body.important || false,
+  })
+
+  note
+    .save()
+    .then((savedNote) => {
+      response.status(201).json(savedNote)
+    })
+    .catch((error) => next(error))
+  })
+  ```
++ When using **async/await** syntax, Express will [automatically call](https://expressjs.com/en/guide/error-handling.html) the error-handling middleware **if an await statement throws an error** or **the awaited promise is rejected**. This makes the final code even cleaner.
+  ```js
+  notesRouter.post('/', async (request, response) => {
+  const body = request.body
+
+  const note = new Note({
+    content: body.content,
+    important: body.important || false,
+  })
+
+  const savedNote = await note.save()
+  response.status(201).json(savedNote)
+  })
+  ```
+
 ✴️ **Error Handler** is a Express [error handling](https://expressjs.com/en/guide/error-handling.html) middleware that are defined with a function that **accepts four parameters**. Express does not have a fully automatic built-in error handler for custom messages. So, the developer usually **manually define** it like this:
 ```js
 const errorHandler = (error, request, response, next) => {
@@ -1121,9 +1156,17 @@ Without axio, we can use **fetch**, which is JavaScript the built-in API. But it
 ```
   So, that's why some documents said <code>.toJSON()</code> is called first and <code>.stringify()</code> later.
 
-✴️ **Async**  is a keyword (a modifier) which declares a function as asynchronous which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
+✴️ **Async**  is a keyword (a modifier) which declares a function as **asynchronous** which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
 
-✴️ **Await** is an operator and is possible only inside of an async function. And it waits for a Promise.
+✴️ **Await** is an operator and is possible **only inside of an async** function. And it waits for a Promise.
+```js
+const notes = await Note.find({})
+
+console.log('operation returned the following notes', notes)
+```
+The code **looks exactly like synchronous** code. The execution of code pauses at <code>const notes = await Note.find({})</code> and waits until the related promise is _fulfilled_, and then continues its execution to the next line. When the execution continues, the result of the operation that returned a _promise_ is assigned to the notes variable.
+
+Thanks to the new syntax (<code>async/ await</code>), the code is a lot simpler than the previous <code>.then</code>-chain.
 
 ✴️ **Promise** is an object, a special kind of JavaScript object, that represents the eventual result of an asynchronous operation. So it's like
 > "I don’t have the value yet(pending), but I promise I’ll either give you the value (resolve) or an error (reject) in the future."
