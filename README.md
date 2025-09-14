@@ -490,6 +490,27 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
     + Even for thousands of requests, this is much less load than querying a session store for each request
   - Stateless: The server does not store session data.
 
+## Higher Order Functions
+✴️ **Concat**
++ Combines two or more arrays (or add elements) and return a **new array**.
++ **Not modify** the original array
+  ```js
+  user.notes.concat(savedNote._id)
+  ```
++ **Must assign it back** to the original array, otherwise the user’s notes array in memory and in MongoDB won’t include the new note.
+  ```js
+  user.notes = user.notes.concat(savedNote._id)
+  ```
++ if you want mutation, you could use <code>.push()</code>
+
+✴️ **Push**
++ Add one or more elements to the end of an array.
++ **NOT return the array**.
++ **Modifies the original array** in place.
+  ```js
+  user.notes.push(savedNote._id)
+  ```
+
 ## Appendix
 ✴️ **Module** is basically a **self-contained piece of code** that has its own variables, functions, or classes.
 + Each file is a module → can export anything (<code>export default</code>, <code>export const</code>, etc.).

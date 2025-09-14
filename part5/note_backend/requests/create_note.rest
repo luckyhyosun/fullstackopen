@@ -14,3 +14,13 @@ Content-Type: application/json
     "content": "dev",
     "important": true
 }
+
+### create note with userId
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "User's note",
+    "important": true,
+    "userId": "68c68451adf97975f53703c7"
+}
