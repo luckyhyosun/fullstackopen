@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import noteService from './services/notes'
+import loginService from './services/login'
 
 import Note from './components/Note'
 import Notification from './components/Notification'
@@ -13,6 +14,7 @@ const App = () => {
   const [errorMsg, setErrorMsg] = useState('Error console')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     noteService
@@ -73,9 +75,19 @@ const App = () => {
       .then(setNotes(notes.filter(note => note.id !== id)))
   }
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
+    try {
+      const user = await loginService.login({ username, password })
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch {
+      setErrorMsg('wrong credentials')
+      setTimeout(() => {
+        setErrorMsg(null)
+      }, 5000)
+    }
   }
 
   return (

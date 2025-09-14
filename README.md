@@ -899,6 +899,33 @@ const [username, setUsername] = useState('')
 In this code,
 + <code>value={username}</code> → this makes the <code>&lt;input&gt;</code> a **controlled component**. The value shown inside the text box is tied to the React state variable <code>username</code>.
 + <code>{ target }</code> is **object destructuring**: it takes the target property from the event object.
+  ```js
+  // 1. explicit version
+  onChange={(event) => setUsername(event.target.value)}
+
+  // 2. not declare defalut parameter
+  onChange={() => setUsername(target.value)}
+
+  // destructuring version
+  onChange={({ target }) => setUsername(target.value)}
+  ```
+  - Because the **first argument** to the _onChange_ handler is always the **event object**, by default. (see code no.1)
+  - Even though event object is default parameter, if you want to use the event → **declare a parameter** for it. Otherwise, your function body doesn’t know what <code>target</code> is. (see code no.2) Because <code>target</code> is not a global variable, nor event object.
+  -  JavaScript object destructuring being applied directly to the function parameter. (see code no.3) Like, using <code>target</code>, instead of using <code>event.target</code>, in the parameter of onChange function.
+      ```js
+      const event = {
+        target: { value: 'typed text', ... },
+        preventDefault: function() { ... },
+      };
+
+      // destructuring
+      const target = event.target;
+
+      // what you actually want
+      const value = target.value;
+
+      onChange={({ target }) => setUsername(target.value)}
+      ```
 
 Why does it matter?
 + In a controlled component, the **React state** (<code>username</code>) is the **single source of truth**.

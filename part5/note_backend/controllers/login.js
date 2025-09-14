@@ -4,13 +4,13 @@ const loginRouter = require('express').Router()
 const User = require('../models/user')
 
 loginRouter.post('/', async (request, response) => {
-  const { username, pw } = request.body
+  const { username, password } = request.body
 
   const user = await User.findOne({ username })
 
   const correctpw = user === null
     ? false
-    : await bcrypt.compare(pw, user.passwordHash)
+    : await bcrypt.compare(password, user.passwordHash)
 
   if(!(user && correctpw)){
     return response.status(401).json({
