@@ -516,11 +516,67 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
   ```
 
 ## Appendix
+✴️ **Function**
++ Function definition
+  ```js
+  const sayHello = () => {
+    console.log("Hello");
+  };
+  ```
+  - This just **defines** the function.
+  - At this point, nothing happens yet.
++ Function reference
+  ```js
+  sayHello
+  ```
+  - This is a **function reference**.
+  - It’s like **holding the function in your hand, without running it**.
+  - You can pass it around, assign it to variables, or give it to another function.
++ Function call
+  ```js
+  sayHello()    // prints "Hello"
+  ```
+  - The <code>()</code> actually **run**s the function.
+  - It executes the code inside and produces a result (or side effect).
+
+So, in React Code, when a function **returns a JSX element**,
+```js
+const loginForm = () => {
+  return <LoginForm
+    handleLogin={handleLogin}
+    username={username}
+    setUsername={setUsername}
+    password={password}
+    setPassword={setPassword}
+  />
+}
+
+// ❌ Doesn’t work:
+{!user && loginForm}
+
+// ✅ Works:
+{!user && loginForm()}
+```
+React can’t render a plain function (**function reference**) unless it’s used as a component like <code>&lt;LoginForm /&gt;</code>. But instead, a **function call** returns the JSX element (<code>&lt;LoginForm... /&gt;</code>) immediately.
+
 ✴️ **Module** is basically a **self-contained piece of code** that has its own variables, functions, or classes.
 + Each file is a module → can export anything (<code>export default</code>, <code>export const</code>, etc.).
 + Modules have their own scope → variables inside one file don’t automatically exist in another.
 + Modules communicate via import/export → that’s how components share code.
 + A component itself is not a module, but in React, each file that defines a component is a module.
+```js
+// Common JS
+const math = require('../address/math')
+
+module.exports = addFunction;     // export a single function
+module.exports = { addFunction, multiplyFunction };   // export multiple functions
+
+// ES6
+import math from '../address/math'
+
+exports default addFunction     // export a single function
+export { addFunction, multiplyFunction }    // export multiple functions
+```
 
 ✴️ **DOM** is Document Object Model, **a tree of objects** that represents all the HTML elements on the page. Each element is an object you can read or change with JavaScript.
 ```html

@@ -90,18 +90,35 @@ const App = () => {
     }
   }
 
-  return (
-    <div>
-      <h1>Notes</h1>
-      <Notification message={errorMsg}/>
-
-      <LoginForm
+  const loginForm = () => {
+    return <LoginForm
         handleLogin={handleLogin}
         username={username}
         setUsername={setUsername}
         password={password}
         setPassword={setPassword}
       />
+  }
+
+  const noteForm = () => {
+    return <form onSubmit={addNote} className='noteform'>
+        <input value={newNote} onChange={handleNoteChange} placeholder='Add note here...'/>
+        <button className='functionalBtn'>save</button>
+      </form>
+  }
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <Notification message={errorMsg}/>
+
+      {!user && loginForm()}
+      {user && (
+        <div>
+          <h2>Hello, {user.name}! 👋</h2>
+          {noteForm()}
+        </div>
+      )}
 
       <button onClick={handleShowAllBtn} className='functionalBtn'>
         Show {showAll ? 'All Note' : 'Important Note'}
@@ -116,11 +133,6 @@ const App = () => {
             handleDeleteNote={() => handleDeleteNote(note.id)}
           />)}
       </ul>
-
-      <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} placeholder='Add note here...'/>
-        <button className='functionalBtn'>save</button>
-      </form>
 
       <Footer />
     </div>
