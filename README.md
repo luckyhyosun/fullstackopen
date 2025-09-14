@@ -1397,7 +1397,7 @@ db.users.findOne({ name: "Alice" })
 
 ✴️ **Schema** is only defines structure and rules for a document (fields, types, validations, etc). The schema does not talk to the database. By itself, it’s just a “plan” for what a document should look like.
 
-✴️ **Model** is a JavaScript function Object (class), created from the schema. This object has methods attached that let you interact with MongoDB:
+✴️ **Model** is a JavaScript function Object (class), created from the schema. The model (<code>User</code>) is just Mongoose’s **wrapper around the collection** (<code>users</code>) in MongoDB. So, this object has methods attached that let you interact with MongoDB:
 + Static methods (Model-level):
   - You call them on the model class itself, not on an individual document.
   - <code>.find()</code>, <code>.findById()</code>, <code>.deleteMany()</code>, <code>.insertMany()</code> etc.
@@ -1577,15 +1577,32 @@ Mongoose validations do not detect the index violation, and instead of **Validat
   // Example: populating note inside a user
   const users = await User.find({}).populate('notes')
   ```
+So ,basically, this code says "When I populate this ObjectId, look for the document in the collection managed by the Note model."
 
 1. Mongoose first gets all the users from the users collection.
-2. Then, for each user, it looks at the notes field (which stores ObjectIds). <code>type: mongoose.Schema.Types.ObjectId</code> means that each item in the notes array is an <code>ObjectId</code> that refers to another document. And <code>ref: 'Note'</code> refers to the **Mongoose model name**, not the collection name.
-3. Mongoose uses the model name (<code>'Note'</code>) to figure out which collection to look in. By default, it converts the model name to a collection name by pluralizing and lowercasing it (<code>'notes</code>).
-4. It uses those ObjectIds to fetch the actual note documents from the notes collection and fills them in.
+2. Then, for each user, it looks at the notes field (which stores ObjectIds). <code>type: mongoose.Schema.Types.ObjectId</code> means. MongoDB document automatically has an <code>_id</code> field, and by **default its type** is an **ObjectId**.
+    ```js
+    {
+      "_id": ObjectId("123note..."),
+      "content": "Buy milk",
+      "important": true
+    }
+    ```
+3. If another collection (<code>User</code>) wants to “reference” this (a document created by <code>Note</code> model), it just stores the ObjectId.
+    ```js
+    {
+      "_id": ObjectId("456user"),
+      "username": "Alice",
+      "notes": [ ObjectId("123note...") ]
+    }
+    ```
+    So, <code>ref: 'Note'</code> refers to the **Mongoose model name**, not the collection name.
+  4. Mongoose uses the model name (<code>'Note'</code>) to figure out which collection to look in. By default, it converts the model name to a collection name by pluralizing and lowercasing it (<code>'notes</code>).
+  5. It uses those ObjectIds to fetch the actual note documents from the notes collection and fills them in.
 
   Those are two separate queries, so the data in <code>users</code> or <code>notes</code> could change in between (inconsistent state).
 
-✴️ **field** is a key–value pair inside a document.
+✴️ **field** is a key–value pair inside a document, in MongoDB/Mongoose.
 ```js
 {
   "_id": "64fabcd123...",
