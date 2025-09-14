@@ -250,7 +250,10 @@ Frontend
 + [Ready-made configuration -  Airbnb configuration](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)
 + [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions)
 + [bcrypt](https://codahale.com/how-to-safely-store-a-password/)
++ [Salt Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
++ [One-way hash function](https://en.wikipedia.org/wiki/Cryptographic_hash_function)
 + [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
++ [test-driven development (TDD)](https://en.wikipedia.org/wiki/Test-driven_development)
 + [Token-based authentication](https://www.digitalocean.com/community/tutorials/the-ins-and-outs-of-token-based-authentication#how-token-based-works)
 
 ## Someone/things to know
@@ -359,11 +362,15 @@ Frontend
 
 + npm install --save-dev @stylistic/eslint-plugin-js
   - ESLint Stylistic [plugin](https://eslint.style/rules)
-  - D efines a set of code style-related rules
+  - Defines a set of code style-related rules
 
 + npx eslint index.js
 	- Running the Linter
 	- But I'm using <code>npm run lint</code>, which I made a script in package.json file.
+
++ npm install bcrypt
+  - Generating the password hashes
+  - Run in backend
 
 ## Classification
 
@@ -1839,6 +1846,18 @@ A [router](https://expressjs.com/en/api.html#router) object is an isolated insta
   - **Easy to maintain** → If base path changes, update only in <code>app.use()</code>.
   - **Modular code** → Other routers (like, User or Order) can be added and separated from noteRouter.
   - **Router-specific middleware** → you can add middleware for only this feature without affecting other routes.
+
+✴️ **Hash** is, in this project, an output of a **cryptographic hash function**.
+
+✴️ **Cryptographic hash function** is a mathematical function that:
++ takes any input (a message, a file, a password)
++ produces a fixed-size output (the hash)
++ is designed to be **infeasible to reverse**. Other stricter properties are:
+  - One-way (hard to invert).
+  - Collision-resistant (hard to find two inputs with the same hash).
+  - Avalanche effect (tiny input change → completely different output).
+
+Note. **Normal (Non-cryptographic) hash functions** are used mainly for data structures and integrity checks, not security .
 
 ✴️ **Token** is a small piece of digital data that proves who you are.
 + It’s like a digital ticket or ID card.

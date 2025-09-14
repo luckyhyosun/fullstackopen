@@ -1,3 +1,4 @@
+// router for Note only
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
