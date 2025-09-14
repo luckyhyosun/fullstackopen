@@ -8,21 +8,21 @@ const setToken = newToken => {
 }
 
 const getAll = () => {
-    return axios
-      .get(baseUrl)
-      .then(response => response.data)
+  return axios
+    .get(baseUrl)
+    .then(response => response.data)
 }
 
 const create = async newObj => {
-    const config = {headers: { Authorization: token }}
-    const response =  await axios.post(baseUrl, newObj, config)
-    return response.data
+  const config = {headers: { Authorization: token }}
+  const response =  await axios.post(baseUrl, newObj, config)
+  return response.data
 }
 
 const update = (id, updatedObj) => {
-    return axios
-      .put(`${baseUrl}/${id}`, updatedObj)
-      .then(response => response.data)
+  return axios
+    .put(`${baseUrl}/${id}`, updatedObj)
+    .then(response => response.data)
 }
 
 const remove = id => {
