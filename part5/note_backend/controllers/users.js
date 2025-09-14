@@ -9,13 +9,13 @@ userRouter.get('/', async (request, response) => {
 })
 
 userRouter.post('/', async (request, response) => {
-  const { id, name, pw } = request.body
+  const { username, name, pw } = request.body
 
   const saltRounds = 10
   const hashpw = await bcrypt.hash(pw, saltRounds)
 
   const newUser = new User({
-    id,
+    username,
     name,
     passwordHash: hashpw
   })

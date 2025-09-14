@@ -337,7 +337,7 @@ Frontend
 
 + npm install cors
   - Allow requests from other origins (SOP/ CORS)
-  - Install cors in backend
+  - Run in backend
   - Since the backend is not expected to be visible to the public in the production environment, it may make more sense to only enable cors from a specific origin (e.g. the front end).
 
 + npm run build
@@ -370,6 +370,10 @@ Frontend
 
 + npm install bcrypt
   - Generating the password hashes
+  - Run in backend
+
++ npm install jsonwebtoken
+  - Generate JSON web tokens
   - Run in backend
 
 ## Classification
@@ -1911,7 +1915,9 @@ Note. **Normal (Non-cryptographic) hash functions** are used mainly for data str
     }
     ```
   - **signature** is a cryptographic “stamp” made with the secret key, that makes sure nobody has changed the token. (Declared in <code>.env</code> file, in the notes project)
-+ How does it work?
+
++ How does it work? (image from [here](https://fullstackopen.com/en/part4/token_authentication))
+  ![Alt text](https://fullstackopen.com/static/259c9dce6b3d1d77bedb04e799ac7dd3/5a190/16new.png)
   - 1. Client logs in → gets token → stores it locally.
   - 2. Client wants to do a protected action → adds token to Authorization header.
   - 3. Server reads the header, verifies the token, and allows or denies access.
