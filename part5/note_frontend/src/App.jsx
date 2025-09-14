@@ -4,12 +4,15 @@ import noteService from './services/notes'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
+import LoginForm from './components/Login'
 
 const App = () => {
   const [notes, setNotes] = useState(null)
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(false)
   const [errorMsg, setErrorMsg] = useState('Error console')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   useEffect(() => {
     noteService
@@ -70,10 +73,23 @@ const App = () => {
       .then(setNotes(notes.filter(note => note.id !== id)))
   }
 
+  const handleLogin = (event) => {
+    event.preventDefault()
+    console.log('logging in with', username, password)
+  }
+
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMsg}/>
+
+      <LoginForm
+        handleLogin={handleLogin}
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+      />
 
       <button onClick={handleShowAllBtn} className='functionalBtn'>
         Show {showAll ? 'All Note' : 'Important Note'}

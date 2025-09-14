@@ -886,6 +886,26 @@ const App = () => {
 
 export default App
 ```
+One other important thing to know is a **controlled component**.
+```js
+const [username, setUsername] = useState('')
+
+<input
+  type="text"
+  value={username}
+  onChange={({ target }) => setUsername(target.value)}
+/>
+```
+In this code,
++ <code>value={username}</code> → this makes the <code>&lt;input&gt;</code> a **controlled component**. The value shown inside the text box is tied to the React state variable <code>username</code>.
++ <code>{ target }</code> is **object destructuring**: it takes the target property from the event object.
+
+Why does it matter?
++ In a controlled component, the **React state** (<code>username</code>) is the **single source of truth**.
++ That means what you see in the input is always exactly what React thinks it is.
++ This keeps your UI predictable and consistent.
+
+
 **🐬 Pro Tips**
 + It is **forbidden** in React to **mutate state directly**, since it can result in [unexpected side effects](https://stackoverflow.com/questions/37755997/why-cant-i-directly-modify-a-components-state-really/40309023#40309023). Changing state has to always be done by setting the state to **a new object**. If properties from the previous state object are not changed, they need to simply be copied, which is done by copying those properties into a new object and setting that as the new state. Using such as, <code>spread syntax(...)</code>, <code>.map()</code>, <code>.filter()</code>, etc.
 + Storing all of the state in a single state object is a bad choice for this particular application.
