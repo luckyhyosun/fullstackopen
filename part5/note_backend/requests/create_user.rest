@@ -6,3 +6,13 @@ Content-Type: application/json
   "name": "hyosun",
   "pw": "good"
 }
+
+### another user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "fullstack",
+  "name": "kim",
+  "pw": "allgood"
+}

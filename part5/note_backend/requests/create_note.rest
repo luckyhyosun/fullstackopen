@@ -24,3 +24,14 @@ Content-Type: application/json
     "important": true,
     "userId": "68c6a942cac92c7dde6d60dc"
 }
+
+### create note with token
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZ1bGxzdGFjayIsImlkIjoiNjhjNmIwMTJjOTQwMTY3OTdkYzEzODhhIiwiaWF0IjoxNzU3ODUxNzcwfQ.Swh_z7NEZAogC7iTLc-thgyk1-Xt9660rteA0ngjGXE
+
+{
+    "content": "Other user's note",
+    "important": true,
+    "userId": "68c6a942cac92c7dde6d60dc"
+}
