@@ -26,6 +26,7 @@ const App = () => {
     if(loggedinUser){
       const user = JSON.parse(loggedinUser)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -47,10 +48,20 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedinUser')
     setUser(null)
+    setBlogTitle('')
+    setBlogAuthor('')
+    setBlogUrl('')
   }
 
   const handleNewblog = async (event) => {
     event.preventDefault()
+    if(!user){
+      window.alert('only logged-in user can create note!')
+      setBlogTitle('')
+      setBlogAuthor('')
+      setBlogUrl('')
+      return
+    }
     const newBlog = await blogService.create({ title, author, url })
     setBlogs(blogs.concat(newBlog))
   }
@@ -79,6 +90,10 @@ const App = () => {
           {`Hello, ${user.name}! 👋`}
           <button onClick={handleLogout} className='functionalBtn inlineBtn'>Logout</button>
         </h2>
+        {showblogs()}
+        </div>
+        }
+
         <Newblog
           title={title}
           author={author}
@@ -88,9 +103,6 @@ const App = () => {
           setBlogUrl={setBlogUrl}
           handleNewblog={handleNewblog}
         />
-        {showblogs()}
-      </div>
-      }
     </div>
   )
 }

@@ -2089,6 +2089,69 @@ Authorization: <scheme> <credentials>
 ```js
 Bearer <Token_Credential>
 ```
+**🐬 Pro Tips**
+1. Backend give a token to fronend when user login.
+    ```js
+    const userForToken = {
+      username: user.username,
+      id: user._id
+    }
+
+    const token = jwt.sign(
+      userForToken,
+      process.env.SECRET,
+      { expiresIn: 60*60 }
+    )
+
+    res.status(200).json({
+      token,
+      username: user.username,
+      name: user.name
+    })
+    ```
+2. When user need authentification for action, frontend send the token to backend for asking authorization, using **cusomized http HEADER**.
+    ```js
+    const setToken = newToken => {
+      token = `Bearer ${newToken}`
+    }
+
+    const create = async newblogObj => {
+      const config = {headers: { Authorization: token }}
+      const response = await axios.post(baseUrl, newblogObj, config)
+        return response.data
+    }
+    ```
+    - Axios (and the browser) adds some default headers automatically.
+      ```js
+      Content-Type: application/json
+      Accept: application/json, text/plain, */*
+      ```
+    - But, by passing <code>{ headers: { Authorization: token } }</code>, Axio overrides or extends the default headers.
+      ```js
+      Content-Type: application/json
+      Accept: application/json, text/plain
+      Authorization: Bearer abc123xyz
+      ```
+3. Backend check if the token is valid. <code>request.get('authorization')</code> retrieves the **Authorization header** from the **HTTP request**.
+    ```js
+    const getTokenFrom = request => {
+      const authorization = request.get('authorization')
+
+      // be aware of "sapce" after Bearer!
+      if(authorization && authorization.startsWith('Bearer ')){
+        return authorization.replace('Bearer ', '')
+      }
+      return null
+    }
+    ```
+
+So basically,
+  1. Backend: provide a token
+  2. Frontend: Store in a browser
+  3. Frontend: Add prefix (<code>Bearer</code>) to send the token back to backend
+  4. Backend: Remove prefix (<code>Bearer</code>) and decode the token
+  + If we don't skip add/remove prefix (<code>Bearer</code>), it **breaks the HTTP standard** — other tools (Postman, proxies, libraries) expect "Bearer " prefix for tokens.
+
 ✴️ **Session + Cookie**
 + Definition
   - A server-side authentication method.
