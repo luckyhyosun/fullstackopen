@@ -105,6 +105,11 @@ const App = () => {
     }
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
+  }
+
   const loginForm = () => {
     return <LoginForm
         handleLogin={handleLogin}
@@ -130,7 +135,10 @@ const App = () => {
       {!user && loginForm()}
       {user && (
         <div>
-          <h2>Hello, {user.name}! 👋</h2>
+          <h2>
+            Hello, {user.name}! 👋
+            <button onClick={handleLogout}>Logout</button>
+          </h2>
           {noteForm()}
         </div>
       )}
