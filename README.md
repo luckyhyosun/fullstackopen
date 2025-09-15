@@ -1864,6 +1864,24 @@ server: {
 
 The proxy solves this by making it look like the frontend is only ever talking to 5173 (same origin). Vite handles the cross-origin part behind the scenes.
 
++ How does **frontend request** work?
+  1. In the frontend, you fetch something like:
+    ```js
+    fetch('/api/notes')
+    ```
+  2. Vite sees: “oh, this starts with <code>/api</code>, so I should proxy it.”
+  3. It forwards the request to the backend, keeping <code>/api</code> as a prefix.
+    ```bash
+    http://localhost:3003/api/notes
+    ```
+  4. So, basically, proxy send this request to the backend instead of serving it from the frontend dev server.
+
++ Why use <code>/api</code> as prefix?
+  - **To distinguish API calls from frontend routes**.
+    + <code>/about</code> or <code>/blog</code> → frontend React router which decides **what to render**.
+    + <code>/api/...</code> → backend Express router which **receives the request** and **response** JSON data.
+  - To avoid collisions and make proxying simpler.
+
 ✴️ **middleware** are functions that can be used for handling request and response objects.
 
 It is the function code that sits between the request and the final handler to process, modify, or filter the request/response. Think of middleware as “layers” or “filters” that **a request passes through before it reaches the route**. Middleware in frameworks like Express is a function that **runs for every incoming request**. Or for routes you attach it to, so it **runs every time that specific route is called**.
