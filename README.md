@@ -1765,7 +1765,7 @@ So ,basically, <code>userSchema</code> code says "When I populate this ObjectId,
   const users = await User.find({}).populate('notes')
   ```
 
-The **advantage** of using <code>field()</code> is:
+The **advantage** of using <code>populate()</code> is:
 + If you update a <code>Note</code>, the <code>user.notes</code> field (the ObjectIds) doesn’t automatically change, in document DB.
 + However, <code>.populate()</code> will **fetch the latest version of the note document** when you query.
 + But it's **not real-time** — changes to the referenced documents after your query won’t update automatically.
