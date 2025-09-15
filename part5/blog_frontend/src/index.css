@@ -1,0 +1,25 @@
+*{
+  font-family: sans-serif;
+}
+
+.functionalBtn{
+  background-color: cornflowerblue;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 10px;
+  display: block;
+  margin-top: 10px;
+}
+
+.loginform{
+  width: 300px;
+  border: 1px solid cornflowerblue;
+  border-radius: 10px;
+  padding: 10px 30px 20px;
+}
+
+.loginform input{
+  font-size: 20px;
+  display: block;
+}

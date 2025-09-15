@@ -1,5 +1,10 @@
 const Blog = ({ blog }) => {
-  return <p>blog titles...</p>
+  return (
+    <div>
+      <h3>{blog.title}</h3>
+      by {blog.author}
+    </div>
+  )
 }
 
 export default Blog
