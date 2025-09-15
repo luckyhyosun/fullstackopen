@@ -279,6 +279,9 @@ Frontend
 + [Sentry](https://sentry.io/welcome/)
 
 ## Script
++ npm create vite@latest introdemo -- --template react
+  - Create an application called introdemo, with vite
+
 + npx json-server --port 3001 db.json
   - Serve the notes we wrote to the file in JSON format (db.json)
   - start the JSON Server on port 3001
@@ -1066,10 +1069,32 @@ In this code above:
 ✴️ **Hook** is a special function that lets you “hook into” React features like state and lifecycle methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
 
 **⚡ Most common hooks**
-+ **useState** – manage state in a function component
++ **[useState](https://react.dev/reference/react/useState)** – manage state in a function component
 + **[useEffect](https://fullstackopen.com/en/part2/getting_data_from_server#effect-hooks)** – run side effects, that something changes state outside of the function/request itself(like data fetching, subscriptions, or DOM updates). And it takes two parameters - a function, the effect itself. The principle is that the effect is:
   1. always executed **after the first render** of the component
   2. and when **the value of the [second parameter changes](https://react.dev/reference/react/useEffect#parameters)**.
+
+    **🐬 Pro Tips**
+    - <code>useEffect</code> does not allow its callback to be async directly. So this **old-school** way of handling Promises with <code>.then()</code> is working in useEffect, instead of <code>await</code>. That’s why <code>.then()</code> is commonly used inside useEffect.
+      ```js
+      useEffect(() => {
+        blogService.getAll().then(blogs =>
+          setBlogs(blogs)
+        )
+      }, [])
+      ```
+    - But if  really want to use <code>async/await</code>, I can still use <code>async/await</code> inside useEffect by defining an **inner async function**, but not clean:
+      ```js
+      useEffect(() => {
+        const fetchBlogs = async () => {
+          const blogs = await blogService.getAll()
+          setBlogs(blogs)
+        }
+        fetchBlogs()
+      }, [])
+      ```
+
+
 
 **⚡ Rules of Hooks**
 The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
