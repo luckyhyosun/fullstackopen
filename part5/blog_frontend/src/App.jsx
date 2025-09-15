@@ -58,7 +58,7 @@ const App = () => {
   const handleNewblog = async (event) => {
     event.preventDefault()
     if(!user){
-      window.alert('only logged-in user can create note!')
+      window.alert('only logged-in user can create blog!')
       setBlogTitle('')
       setBlogAuthor('')
       setBlogUrl('')
@@ -66,11 +66,14 @@ const App = () => {
     }
     const newBlog = await blogService.create({ title, author, url })
     setBlogs(blogs.concat(newBlog))
+    setBlogTitle('')
+    setBlogAuthor('')
+    setBlogUrl('')
   }
 
   const handleDelete = async (id) => {
     if(!user){
-      window.alert('only logged-in user can delete note!')
+      window.alert('only logged-in user can delete blog!')
       return
     }
     const removedBlog = await blogService.remove(id)
