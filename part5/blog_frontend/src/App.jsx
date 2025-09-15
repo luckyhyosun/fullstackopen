@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Newblog from './components/Newblog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -10,6 +11,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   const [title, setBlogTitle] = useState('')
   const [author, setBlogAuthor] = useState('')
@@ -34,6 +37,7 @@ const App = () => {
     event.preventDefault()
     try{
       const user = await loginService.login({username, password})
+
       setUser(user)
 
       window.localStorage.setItem('loggedinUser', JSON.stringify(user))
@@ -42,8 +46,9 @@ const App = () => {
 
       setUsername('')
       setPassword('')
-    }catch{
-      console.log('longin error!')
+    }catch(error){
+      setIsError(true)
+      showNotification(error)
     }
   }
 
@@ -58,13 +63,16 @@ const App = () => {
   const handleNewblog = async (event) => {
     event.preventDefault()
     if(!user){
-      window.alert('only logged-in user can create blog!')
+      setIsError(true)
+      showNotification('only logged-in user can create blog!')
       setBlogTitle('')
       setBlogAuthor('')
       setBlogUrl('')
       return
     }
     const newBlog = await blogService.create({ title, author, url })
+    setIsError(false)
+    showNotification(`${title} by ${author} is created!`)
     setBlogs(blogs.concat(newBlog))
     setBlogTitle('')
     setBlogAuthor('')
@@ -73,7 +81,8 @@ const App = () => {
 
   const handleDelete = async (id) => {
     if(!user){
-      window.alert('only logged-in user can delete blog!')
+      setIsError(true)
+      showNotification('only logged-in user can delete blog!')
       return
     }
     const removedBlog = await blogService.remove(id)
@@ -100,9 +109,18 @@ const App = () => {
       />)
   }
 
+  const showNotification = (msg) => {
+    setNotification(msg)
+    setTimeout(() => {
+      setNotification(null)
+    }, 3000)
+  }
+
   return (
     <div>
       <h2>blogs</h2>
+
+      {notification && <Notification notification={notification} isError={isError}/>}
 
       {!user && showLoginform()}
       {user && <div>
