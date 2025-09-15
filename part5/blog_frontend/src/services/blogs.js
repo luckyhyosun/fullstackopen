@@ -6,6 +6,12 @@ const getAll = async () => {
   return response.data
 }
 
+const create = async newblogObj => {
+  const response = await axios.post(baseUrl, newblogObj)
+  return response.data
+}
+
 export default {
-  getAll
+  getAll,
+  create
 }

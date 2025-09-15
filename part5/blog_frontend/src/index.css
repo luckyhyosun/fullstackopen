@@ -1,11 +1,21 @@
 *{
   font-family: sans-serif;
+  margin-left: 5px;
+}
+
+label{
+  display: block;
+  margin: 15px;
+}
+label input{
+  padding: 5px;
+  margin-left: 10px;
 }
 
 .functionalBtn{
   background-color: cornflowerblue;
   color: white;
-  padding: 5px 10px;
+  padding: 10px;
   border: none;
   border-radius: 10px;
   display: block;
@@ -16,10 +26,9 @@
   display: inline;
   margin-left:  20px;
   font-size: 15px;
-  padding: 10px;
 }
 
-.loginform{
+.loginform, .newBlogform{
   width: 300px;
   border: 1px solid cornflowerblue;
   border-radius: 10px;
@@ -27,6 +36,6 @@
 }
 
 .loginform input{
-  font-size: 20px;
+  padding: 5px;
   display: block;
 }
