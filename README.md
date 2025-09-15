@@ -279,8 +279,13 @@ Frontend
 + [Sentry](https://sentry.io/welcome/)
 
 ## Script
++ npm init → npm install
+  - <code>npm init</code> creates a package.json file
+  - <code>npm install</code> installs the dependency and saves it into package.json.
+
 + npm create vite@latest introdemo -- --template react
   - Create an application called introdemo, with vite
+  - Don't need to do <code>npm init</code> with vite
 
 + npx json-server --port 3001 db.json
   - Serve the notes we wrote to the file in JSON format (db.json)
