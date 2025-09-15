@@ -1321,7 +1321,17 @@ Without axio, we can use **fetch**, which is JavaScript the built-in API. But it
 ```
   So, that's why some documents said <code>.toJSON()</code> is called first and <code>.stringify()</code> later.
 
-✴️ **Async**  is a keyword (a modifier) which declares a function as **asynchronous** which will require time to complete that JavaScript may have to wait for. And it returns a Promise.
+✴️ **Async**  is a keyword (a modifier) which declares a function as **asynchronous** which will require time to complete that JavaScript may have to wait for. And it returns **a Promise object**, which is always **a truthy value** in JavaScript.
+```js
+// in my login router, i always succeed to login without pw
+// ❌ this is why
+// because missing 'await'
+
+const checkpw = user === null
+  ? false
+  : bcrypt.compare(password, user.passwordHash)
+```
+Since <code>bcrypt.compare</code> is asynchronous, It returns a Promise. At this point, <code>checkpw</code> is always a Promise object, which is a **truthy** value in JavaScript. So your <code>if (!(user && checkpw))</code> condition never fails → login always succeeds.
 
 ✴️ **Await** is an operator and is possible **only inside of an async** function. And it waits for a Promise.
 ```js

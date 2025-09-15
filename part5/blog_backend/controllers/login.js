@@ -10,7 +10,7 @@ loginRouter.post('/', async (req, res) => {
 
   const checkpw = user === null
     ? false
-    : bcrypt.compare(password, user.passwordHash)
+    : await bcrypt.compare(password, user.passwordHash)
 
   if(!(user && checkpw)){
     return res.status(401).json({
