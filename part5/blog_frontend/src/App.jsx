@@ -16,6 +16,14 @@ const App = () => {
     )
   }, [])
 
+  useEffect(() => {
+    const loggedinUser = localStorage.getItem('loggedinUser')
+    if(loggedinUser){
+      const user = JSON.parse(loggedinUser)
+      setUser(user)
+    }
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try{
