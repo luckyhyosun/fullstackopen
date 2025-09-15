@@ -60,13 +60,25 @@ blogRouter.delete('/:id', async (req, res) => {
       error: 'token invalid'
     })
   }
+  const blog = await Blog.findById(id)
 
-  const user = await User.findById(decodedToken.id).populate('blogs')
+  if (!blog) {
+    return res.status(404).json({
+      error: 'blog not found'
+    })
+  }
 
-  user.blogs = user.blogs.filter(blog => blog._id.toString() !== id)
-  await user.save()
+  if(blog.user._id.toString() !== decodedToken.id){
+    return res.status(401).json({
+      error: 'user not authorized'
+    })
+  }
 
   const removedBlog = await Blog.findByIdAndDelete(id)
+
+  const user = await User.findById(decodedToken.id)
+  user.blogs = user.blogs.filter(blog => blog._id.toString() !== id)
+  await user.save()
 
   return res.status(200).json(removedBlog)
 })

@@ -85,8 +85,13 @@ const App = () => {
       showNotification('only logged-in user can delete blog!')
       return
     }
-    await blogService.remove(id)
-    setBlogs(blogs.filter(blog => blog.id !== id))
+    try{
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+    }catch(error){
+      setIsError(true)
+      showNotification(error)
+    }
   }
 
   const showLoginform = () => {

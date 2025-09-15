@@ -19,9 +19,14 @@ const create = async newblogObj => {
 }
 
 const remove = async id => {
-  const config = {headers: { Authorization: token}}
-  const response = await axios.delete(`${baseUrl}/${id}`, config)
-  return response.data
+  try{
+    const config = {headers: { Authorization: token}}
+    const response = await axios.delete(`${baseUrl}/${id}`, config)
+    return response.data
+  }catch(error){
+    throw error.response.data.error
+  }
+
 }
 
 export default {
