@@ -27,7 +27,7 @@ blogRouter.post('/', async (req, res) => {
     })
   }
 
-  const user = await User.findById(decodedToken.id)
+  const user = await User.findById(decodedToken.id).populate('blogs')
 
   if(!user){
     return response.status(400).json({
@@ -61,7 +61,7 @@ blogRouter.delete('/:id', async (req, res) => {
     })
   }
 
-  const user = await User.findById(decodedToken.id)
+  const user = await User.findById(decodedToken.id).populate('blogs')
 
   user.blogs = user.blogs.filter(blog => blog._id.toString() !== id)
   await user.save()

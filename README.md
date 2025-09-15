@@ -1764,12 +1764,50 @@ So ,basically, <code>userSchema</code> code says "When I populate this ObjectId,
   // Example: populating note inside a user
   const users = await User.find({}).populate('notes')
   ```
-
-The **advantage** of using <code>populate()</code> is:
-+ If you update a <code>Note</code>, the <code>user.notes</code> field (the ObjectIds) doesn’t automatically change, in document DB.
-+ However, <code>.populate()</code> will **fetch the latest version of the note document** when you query.
-+ But it's **not real-time** — changes to the referenced documents after your query won’t update automatically.
-+ So if someone else updates a note while you are querying, you might see slightly different data than expected — unlike a **relational join**, which guarantees a consistent snapshot at query time.
+So, without <code>populate</code>, the <code>user</code> value is **just ObjectId**, like <code>new ObjectId('456...')</code>.
+```js
+{
+  _id: new ObjectId('123...'),
+  username: 'park',
+  name: 'yule',
+  passwordHash: '$$$$',
+  blogs: [
+    new ObjectId('456...'),
+    new ObjectId('789...')
+  ],
+  __v: 13
+}
+```
+With <code>populate</code>, it’s still **a Mongoose document**, not a plain JS object. But you can access to the field <code>_id</code>.
+```js
+{
+  _id: new ObjectId('123...'),
+  username: 'park',
+  name: 'yule',
+  passwordHash: '$$$$',
+  blogs: [
+    {
+      _id: new ObjectId('456...'),
+      title: 'hello',
+      author: 'world',
+      user: new ObjectId('123...'),
+      __v: 0
+    },
+    {
+      _id: new ObjectId('789...'),
+      title: 'hello2',
+      author: 'world2',
+      user: new ObjectId('123...'),
+      __v: 0
+    }
+  ],
+  __v: 12
+}
+```
+And use <code>_id</code> for filtering or mapping, like this:
+```js
+user.blogs = user.blogs.filter(blog => blog._id.toString() !== id)
+```
 
 ✴️ **field** is a key–value pair inside a document, in MongoDB/Mongoose.
 ```js

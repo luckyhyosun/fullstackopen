@@ -85,8 +85,7 @@ const App = () => {
       showNotification('only logged-in user can delete blog!')
       return
     }
-    const removedBlog = await blogService.remove(id)
-    console.log(removedBlog);
+    await blogService.remove(id)
     setBlogs(blogs.filter(blog => blog.id !== id))
   }
 
