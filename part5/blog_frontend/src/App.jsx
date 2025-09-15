@@ -66,6 +66,16 @@ const App = () => {
     setBlogs(blogs.concat(newBlog))
   }
 
+  const handleDelete = async (id) => {
+    if(!user){
+      window.alert('only logged-in user can delete note!')
+      return
+    }
+    const removedBlog = await blogService.remove(id)
+    console.log(removedBlog);
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
   const showLoginform = () => {
     return <Login
         username={username}
@@ -77,7 +87,12 @@ const App = () => {
   }
 
   const showblogs = () => {
-    return blogs.map(blog => <Blog key={blog.id} blog={blog} />)
+    return blogs.map(blog =>
+      <Blog
+        key={blog.id}
+        blog={blog}
+        handleDelete={() => handleDelete(blog.id)}
+      />)
   }
 
   return (
@@ -90,10 +105,6 @@ const App = () => {
           {`Hello, ${user.name}! 👋`}
           <button onClick={handleLogout} className='functionalBtn inlineBtn'>Logout</button>
         </h2>
-        {showblogs()}
-        </div>
-        }
-
         <Newblog
           title={title}
           author={author}
@@ -103,6 +114,9 @@ const App = () => {
           setBlogUrl={setBlogUrl}
           handleNewblog={handleNewblog}
         />
+        </div>
+      }
+      {showblogs()}
     </div>
   )
 }

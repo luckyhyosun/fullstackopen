@@ -26,8 +26,6 @@ blogRouter.post('/', async (req, res) => {
     })
   }
 
-  console.log(decodedToken)
-
   const newBlog = new Blog({
     title,
     author,
@@ -36,6 +34,22 @@ blogRouter.post('/', async (req, res) => {
 
   const savedBlog = await newBlog.save()
   return res.status(201).json(savedBlog)
+})
+
+blogRouter.delete('/:id', async (req, res) => {
+  const id = req.params.id
+
+  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+
+  if(!decodedToken.id){
+    return res.status(401).json({
+      error: 'token invalid'
+    })
+  }
+
+  const removedBlog = await Blog.findByIdAndDelete(id)
+
+  return res.status(200).json(removedBlog)
 })
 
 module.exports = blogRouter
