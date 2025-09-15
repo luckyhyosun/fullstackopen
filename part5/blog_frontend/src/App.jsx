@@ -18,12 +18,22 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    const user = await loginService.login({username, password})
-    setUser(user)
-    console.log(user);
+    try{
+      const user = await loginService.login({username, password})
+      setUser(user)
 
-    setUsername('')
-    setPassword('')
+      window.localStorage.setItem('loggedinUser', JSON.stringify(user))
+
+      setUsername('')
+      setPassword('')
+    }catch{
+      console.log('longin error!')
+    }
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedinUser')
+    setUser(null)
   }
 
   const showLoginform = () => {
@@ -46,7 +56,10 @@ const App = () => {
 
       {!user && showLoginform()}
       {user && <div>
-        <h2>{`Hello, ${user.name}! 👋`}</h2>
+        <h2>
+          {`Hello, ${user.name}! 👋`}
+          <button onClick={handleLogout} className='functionalBtn inlineBtn'>Logout</button>
+        </h2>
         {showblogs()}
         </div>
       }

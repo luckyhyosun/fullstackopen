@@ -12,6 +12,13 @@
   margin-top: 10px;
 }
 
+.inlineBtn{
+  display: inline;
+  margin-left:  20px;
+  font-size: 15px;
+  padding: 10px;
+}
+
 .loginform{
   width: 300px;
   border: 1px solid cornflowerblue;
