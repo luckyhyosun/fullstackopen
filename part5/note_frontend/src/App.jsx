@@ -68,10 +68,13 @@ const App = () => {
     })
   }
 
-  const handleDeleteNote = id => {
-    noteService
-      .remove(id)
-      .then(setNotes(notes.filter(note => note.id !== id)))
+  const handleDeleteNote = async id => {
+    try{
+      await noteService.remove(id)
+      setNotes(notes.filter(note => note.id !== id))
+    }catch(error) {
+      setErrorMsg(error)
+    }
   }
 
   const handleLogin = async (event) => {

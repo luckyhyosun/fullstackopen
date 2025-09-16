@@ -60,8 +60,29 @@ notesRouter.post('/', async (request, response) => {
 })
 
 notesRouter.delete('/:id', async (request, response) => {
-  const deletedNote = await Note.findByIdAndDelete(request.params.id)
-  response.status(204).json(deletedNote)
+  const id = request.params.id
+
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if(!decodedToken.id){return response.status(401).json({ error: 'token invalid' }) }
+  const user = await User.findById(decodedToken.id)
+  if(!user){return response.status(404).json({ error: 'user not authorized' })}
+  const note = await Note.findById(id)
+  if(!note){return response.status(404).json({ error: 'can not find the Note' })}
+
+  // console.log(note.user._id.toString())
+  // console.log(user.id);
+  // console.log(decodedToken.id);
+
+  if(note.user._id.toString() !== decodedToken.id){
+    return response.status(500).json({ error: 'only the original writer can delete the note!' })
+  }
+
+  const deletedNote = await Note.findByIdAndDelete(id)
+
+  user.notes = user.notes.filter(note => note._id.toString() !== id)
+  await user.save()
+
+  return response.status(200).json(deletedNote)
 })
 
 notesRouter.put('/:id', async (request, response) => {

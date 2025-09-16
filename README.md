@@ -570,6 +570,36 @@ const loginForm = () => {
 ```
 React can’t render a plain function (**function reference**) unless it’s used as a component like <code>&lt;LoginForm /&gt;</code>. But instead, a **function call** returns the JSX element (<code>&lt;LoginForm... /&gt;</code>) immediately.
 
+✴️ **Error Handling**
++ **try/catch** is a built-in JavaScript way to handle errors safely
+  ```js
+  // service function
+  const remove = async id => {
+    try {
+      const response = await axios.delete(`${baseUrl}/${id}`, { headers: { Authorization: token } })
+      return response.data
+    } catch(error) {
+      throw error.response.data.error  // <-- sending the error up to frontend
+    }
+  }
+
+  // frontend function
+  const handleDeleteNote = async id => {
+    try {
+      await noteService.remove(id)
+      setNotes(notes.filter(note => note.id !== id))
+    } catch(error) {
+      setErrorMsg(error)  // <-- catches the error from remove
+    }
+  }
+  ```
+  1. <code>remove</code> calls the backend.
+  2. If something **goes wrong** with server (e.g., delete fails)
+  3.Axios automatically **rejects the promise**. This rejection comes in the form of an **error object**, then **Axios throws this error object**.
+  3. You **catch** it in <code>remove</code>
+  4. But you want the **deliver this error to frontend** to know about it.
+  5. throw inside <code>remove</code> passes the error to the caller (handleDeleteNote), by using <code>throw error.response.data.error</code>, which can then show a message in frontend.
+
 ✴️ **Module** is basically a **self-contained piece of code** that has its own variables, functions, or classes.
 + Each file is a module → can export anything (<code>export default</code>, <code>export const</code>, etc.).
 + Modules have their own scope → variables inside one file don’t automatically exist in another.
@@ -1071,8 +1101,6 @@ In this code above:
 + <code>count</code> is lifted to CounterApp.
 + <code>CounterDisplay</code> reads it via props.
 + <code>CounterButton</code> update the parent state via a callback prop.
-
-
 
 ✴️ **Hook** is a special function that lets you “hook into” React features like state and lifecycle methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
 
