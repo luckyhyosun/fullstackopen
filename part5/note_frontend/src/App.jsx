@@ -104,6 +104,7 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteappUser')
     setUser(null)
+    noteService.setToken(null)
   }
 
   const loginForm = () => (
