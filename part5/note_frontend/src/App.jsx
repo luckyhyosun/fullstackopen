@@ -5,11 +5,12 @@ import loginService from './services/login'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
-import LoginForm from './components/Login'
+import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
+import NoteForm from './components/Noteform'
 
 const App = () => {
   const [notes, setNotes] = useState(null)
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(false)
   const [errorMsg, setErrorMsg] = useState('Error console')
   const [username, setUsername] = useState('')
@@ -35,23 +36,12 @@ const App = () => {
 
   if(!notes){return null}
 
-  const addNote = (e) => {
-    e.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-  }
-
+  const addNote = noteObject => {
     noteService
       .create(noteObject)
       .then(result => {
         setNotes(notes.concat(result))
-        setNewNote('')
       })
-  }
-
-  const handleNoteChange = (e) => {
-    setNewNote(e.target.value)
   }
 
   const handleShowAllBtn = () => {
@@ -110,27 +100,28 @@ const App = () => {
     setUser(null)
   }
 
-  const loginForm = () => {
-    return <LoginForm
+  const loginForm = () => (
+    <Togglable buttonLabel="Show login">
+      <LoginForm
         handleLogin={handleLogin}
         username={username}
-        setUsername={setUsername}
         password={password}
+        setUsername={setUsername}
         setPassword={setPassword}
       />
-  }
+    </Togglable>
+  )
 
-  const noteForm = () => {
-    return <form onSubmit={addNote} className='noteform'>
-        <input value={newNote} onChange={handleNoteChange} placeholder='Add note here...'/>
-        <button className='functionalBtn'>save</button>
-      </form>
-  }
+  const noteForm = () => (
+    <Togglable buttonLabel="New note">
+      <NoteForm createNote={addNote}/>
+    </Togglable>
+  )
 
   return (
     <div>
       <h1>Notes</h1>
-      <Notification message={errorMsg}/>
+      {errorMsg && <Notification message={errorMsg}/>}
 
       {!user && loginForm()}
       {user && (
@@ -143,7 +134,7 @@ const App = () => {
         </div>
       )}
 
-      <button onClick={handleShowAllBtn} className='functionalBtn'>
+      <button onClick={handleShowAllBtn} className='functionalBtn showHideLogin'>
         Show {showAll ? 'All Note' : 'Important Note'}
       </button>
 

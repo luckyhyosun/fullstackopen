@@ -255,6 +255,9 @@ Frontend
 + [A Note on Rounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds)
 + [test-driven development (TDD)](https://en.wikipedia.org/wiki/Test-driven_development)
 + [Token-based authentication](https://www.digitalocean.com/community/tutorials/the-ins-and-outs-of-token-based-authentication#how-token-based-works)
++ [Cross Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)
++ [React Sanitization](https://legacy.reactjs.org/docs/introducing-jsx.html#jsx-prevents-injection-attacks)
++ [Minimize the rist of XSS](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)
 
 ## Someone/things to know
 + [John Mccarthy](https://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist))
@@ -1037,7 +1040,7 @@ Why does it matter?
   <image src="https://react.dev/images/docs/illustrations/i_render2.png" width="150" />
   <image src="https://react.dev/images/docs/illustrations/i_render3.png" width="200" />
 
-✴️ **Lifting state up** is a concept in React. Sometimes, you want the state of two components to always change together. To do it, remove state from both of them, **lift** the state up to their closest common parent, and then pass it down to them via props. This is known as [lifting state up](https://react.dev/learn/sharing-state-between-components), and it’s one of the most common things you will do writing React code.
+✴️ **[Lifting state up](https://react.dev/learn/sharing-state-between-components)** is a concept in React. Sometimes, you want the state of two components to always change together. To do it, remove state from both of them, **lift** the state up to their closest common parent, and then pass it down to them via props. This is known as [lifting state up](https://react.dev/learn/sharing-state-between-components), and it’s one of the most common things you will do writing React code.
 ```jsx
 // Suppose you have two components that need to know the same “count”:
 
@@ -1187,14 +1190,14 @@ console.log(callUser) // { username: "kim", id: 1 }
 ```
 
 ✴️ **Arrow function** is a compact alternative expression to a traditional function expression. And it has two **“styles” of body**.
-+ Concise body (no braces) → implicit return
++ **Implicit return** → Concise body (no braces)
   ```js
   const add = (a, b) => a + b; // returns a + b automatically
   ```
   - Here, <code>a + b</code> is an **expression**, not a statement.
   - Arrow functions automatically return the result of the expression.
-  - You cannot write multiple statements here; it’s only a single expression.
-+ Block body (with braces <code>{}</code>) → explicit return
+  - It’s only **for a single expression**.
++ **Explicit return**  → Block body (with braces <code>{}</code>)
   ```js
   const add = (a, b) => {
     const sum = a + b;
@@ -1202,15 +1205,44 @@ console.log(callUser) // { username: "kim", id: 1 }
   };
   ```
   - The <code>{}</code> defines a **function block**.
-  - Inside a block, you can have multiple statements.
-  - You must use <code>return</code> to send a value back.
+  - Inside a block, you can have **multiple statements**.
+  - You **must use <code>return</code>** to send a value back.
+  - It's for **logic first** (variables, conditions, loops), **before return**.
+
+Same thing happens in React, because **React components (functions) return exactly one JSX root element**.
++ **Implicit return**
+  ```jsx
+  const MathApp = ({ a, b }) => (
+    <div>
+      <h2>Calculation</h2>
+      <p>{a} + {b} = {a + b}</p>
+    </div>
+  )
+  ```
++ **Explicit return**
+  ```jsx
+  const Calculate = ({ a, b }) => {
+  const sum = a + b
+    return (
+      <div>
+        <h2>Calculation</h2>
+        <p>{a} + {b} = {sum}</p>
+      </div>
+    )
+  }
+  ```
+  ⚠️ That’s why your **JSX** must either:
+    - Start on the **same line as return**, or
+    - Be wrapped in **parentheses** <code>()</code>. Because JSX often spans multiple lines.
 
 Then what about **object literal** with an arrow function?
 ```js
 const getUser = () => ({ username: "kim" }); // ✅ works
+
+console.log(getUser())  // { username: "kim" }
 ```
 + The <code>()</code> around <code>{}</code> tells JS: “This is an object literal, not a function block.” → work.
-+ Without <code>()</code>, JS would think <code>{ username: "kim" }</code> is a block, not an object → error.
++ Without <code>()</code>, JS would think <code>{ username: "kim" }</code> is a function block, not an object → error.
 
 And <code>map()</code> is an array method that creates a new array by applying a callback function to each element of the original array. In the code below, map callback is an arrow function.
 
@@ -2201,6 +2233,8 @@ So basically,
   + If we don't skip add/remove prefix (<code>Bearer</code>), it **breaks the HTTP standard** — other tools (Postman, proxies, libraries) expect "Bearer " prefix for tokens.
 
 ✴️ **Session + Cookie**
+![sessionCooie](https://developer.mozilla.org/shared-assets/images/diagrams/http/cookies/cookie-basic-example.png)
+(image from [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies#restrict_access_to_cookies))
 + Definition
   - A server-side authentication method.
   - **Session** = data stored on the server to track a logged-in user.
@@ -2283,3 +2317,26 @@ So basically,
 + **Server-side session**, which is to save info about each token to the backend database and to check for each API request if the access rights corresponding to the tokens are still valid. is to save info about each token to the backend database and to check for each API request if the access rights corresponding to the tokens are still valid. Database access is considerably slower compared to checking the validity of the token itself. That is why it is quite common to save the session corresponding to a token to a key-value database such as [Redis](https://redis.io/), that is limited in functionality compared to eg. MongoDB or a relational database, but extremely fast in some usage scenarios.
 + When server-side sessions are used, the **_token_** is quite often just **a random string**, that does not include any information about the user as it is quite often the case when jwt-tokens are used. For each API request, the server fetches the relevant information about the identity of the user from the database.
 + It is also quite usual that instead of using Authorization-header, **_cookies_** are used as the mechanism for transferring the token between the client and the server.
+
+✴️ **props.children** is a [special prop](https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children) of React that lets a component render whatever you put between its opening and closing tags.
+```jsx
+function Box(props) {
+  return <div className="box">{props.children}</div>;
+}
+
+function App() {
+  return (
+    <Box>
+      <p>Hello inside the box!</p>
+      <button>Click me</button>
+    </Box>
+  );
+}
+```
+This is what <code>Box</code> component render:
+```js
+<div class="box">
+  <p>Hello inside the box!</p>
+  <button>Click me</button>
+</div>
+```

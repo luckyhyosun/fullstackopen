@@ -73,9 +73,7 @@ button:hover {
   margin-bottom: 10px;
   width: 400px;
   padding: 10px 30px;
-  margin-bottom: 70px;
 }
-
 
 .loginComp {
   margin-right: 20px;
@@ -87,10 +85,14 @@ button:hover {
   border-radius: 10px;
 }
 
-.loginField{
+.loginField {
   margin-bottom: 10px;
 }
-.loginField input{
+.loginField input {
   margin: 5px;
   height: 20px;
+}
+
+.showHideLogin {
+  margin-top: 50px;
 }
