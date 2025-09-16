@@ -68,7 +68,7 @@ const App = () => {
           setErrorMsg('Error console')
         }, 5000)
         setNotes(notes.filter(n => n.id !== id))
-    })
+      })
   }
 
   const handleDeleteNote = async id => {

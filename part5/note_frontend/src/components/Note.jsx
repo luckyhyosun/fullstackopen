@@ -1,5 +1,5 @@
 const Note = ({ note, handelChangeImportant, handleDeleteNote }) => {
-  const label = note.important ? "🔁 Not important" : "🔁 Imortant"
+  const label = note.important ? '🔁 Not important' : '🔁 Imortant'
 
   return (
     <li className='note'>

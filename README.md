@@ -371,6 +371,10 @@ Frontend
 + npx eslint --init
   - [Initialize](https://fullstackopen.com/en/part3/validation_and_es_lint#lint) a default ESlint configuration
 
++ npx eslint . --fix
+  - <code>.</code> Checks all files in your project based on rules that i defined
+  - <code>--fix</code> Automatically fixes all fixable issues
+
 + npm install --save-dev @stylistic/eslint-plugin-js
   - ESLint Stylistic [plugin](https://eslint.style/rules)
   - Defines a set of code style-related rules
@@ -1147,33 +1151,74 @@ In this code above:
   noteFormRef.current.toggleVisibility()
   ```
 + [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle) - decides what functions the parent can call.
-  ```jsx
-  // parent component
-  const App = () => {
+```jsx
+// Child component = LightBulb
+const LightBulb = ((props) => {
+  const [on, setOn] = useState(false);
 
-  const noteFormRef = useRef()
+  // Expose functions to parent through ref
+  useImperativeHandle(ref, () => ({
+    turnOn: () => setOn(true),
+    turnOff: () => setOn(false),
+  }));
 
-    return (
-      <Child ref={noteFormRef}>
-        <NoteForm />
-      </Child>
-    )
-  }
+  return (
+    <div style={{ margin: "10px" }}>
+      <p>{props.label}: {on ? "💡 ON" : "⚫ OFF"}</p>
+      <button onClick={() => setOn(prev => !prev)}>Switch</button>
+    </div>
+  );
+});
 
-  // child component
-  const Child = () => {
-    const [hello, setHello] = useState(false)
+// Parent component
+const App = () => {
+  const bulb1Ref = useRef();
+  const bulb2Ref = useRef();
 
-    function sayHello = () => {setHello(ture)}
+  const turnAllOff = () => {
+    bulb1Ref.current.turnOff();
+    bulb2Ref.current.turnOff();
+  };
 
-    useImperativeHandle(props.ref, () => {
-      return { sayHello }
-    })
+  const turnOnOff = () => {
+    bulb1Ref.current.turnOn();    // turn on bulb 1
+    bulb2Ref.current.turnOff();   // turn off bulb 2
+  };
 
-    return <div>This is child</div>
-  }
-  ```
-  <code>useImperativeHandle</code> hook to make its <code>sayHello</code> function available outside of the component. Since imperative means giving you step-by-step commands (how to do something), it **lets the parent directly command the child component to run specific actions, instead of just passing data through props**.
+  return (
+    <div>
+      <h1>Light Bulb Example 💡</h1>
+
+      <LightBulb label="Bulb 1" ref={bulb1Ref} />
+      <LightBulb label="Bulb 2" ref={bulb2Ref} />
+
+      <hr />
+      <button onClick={turnAllOff}>Turn All OFF</button>
+      <button onClick={turnOnOff}>Toggle All</button>
+    </div>
+  );
+};
+```
+The <code>useImperativeHandle</code> hook to make its <code>sayHello</code> function available outside of the component. Since imperative means giving you step-by-step commands (how to do something), it **lets the parent directly command the child component to run specific actions, instead of just passing data through props**.
+
+The key concept of <code>ref</code>is:
+  1. <code>useRef()</code> → creates a container object that looks like <code>{ current: null }</code>:
+      ```js
+      const bulb1Ref = useRef();  // { current: null }
+      ```
+  2. Then, you are telling React: “After rendering this <code>&lt;LightBulb /&gt;</code>, **store a thing to refer (reference)** to <code>ref</code> (or its imperative handle) inside <code>bulb1Ref.current</code>.”
+      ```js
+      ref={bulb1Ref}
+      ```
+  3. Inside the child <code>&lt;LightBulb /&gt;</code>, you **decide what gets stored or be refered to parents** in that ref.
+      ```js
+      useImperativeHandle(ref, ...)
+      ```
+  4. Then, React stores **the child reference** in <code>.current</code> container after rendering. So, we can use the thing to refer (the **object returned by <code>useImperativeHandle</code>**) in <code>.current</code>.
+      ```js
+      bulb1Ref.current.turnOff()
+      ```
+
 
 **⚡ Rules of Hooks**
 The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
