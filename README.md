@@ -1129,8 +1129,51 @@ In this code above:
         fetchBlogs()
       }, [])
       ```
++ [useRef](https://react.dev/reference/react/useRef) - offers access to a component's functions from outside the component. Because it's nice to leave a component to be responsible for its own state, instead of using [lifting state up](https://react.dev/learn/sharing-state-between-components). Which means The **parent doesn’t need to** store state in its own state and constantly **pass it down via props**.
+  ```js
+  const App = () => {
 
+  const noteFormRef = useRef()
 
+    return (
+      <Child ref={noteFormRef}>
+        <NoteForm />
+      </Child>
+    )
+  }
+  ```
+  The parent componenet <code>App</code> can use the function inside of <code>Child</code> component.
+  ```jsx
+  noteFormRef.current.toggleVisibility()
+  ```
++ [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle) - decides what functions the parent can call.
+  ```jsx
+  // parent component
+  const App = () => {
+
+  const noteFormRef = useRef()
+
+    return (
+      <Child ref={noteFormRef}>
+        <NoteForm />
+      </Child>
+    )
+  }
+
+  // child component
+  const Child = () => {
+    const [hello, setHello] = useState(false)
+
+    function sayHello = () => {setHello(ture)}
+
+    useImperativeHandle(props.ref, () => {
+      return { sayHello }
+    })
+
+    return <div>This is child</div>
+  }
+  ```
+  <code>useImperativeHandle</code> hook to make its <code>sayHello</code> function available outside of the component. Since imperative means giving you step-by-step commands (how to do something), it **lets the parent directly command the child component to run specific actions, instead of just passing data through props**.
 
 **⚡ Rules of Hooks**
 The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
