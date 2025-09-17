@@ -14,8 +14,11 @@ test('<NoteForm /> updates parent state and calls onSubmit', async () => {
   await user.type(input, 'testing a form...')
   await user.click(sendButton)
 
+  await user.type(input, '2nd testing a form...')
+  await user.click(sendButton)
+
   console.log(createNote.mock.calls)
 
-  expect(createNote.mock.calls).toHaveLength(1)
-  expect(createNote.mock.calls[0][0].content).toBe('testing a form...')
+  expect(createNote.mock.calls).toHaveLength(2)
+  expect(createNote.mock.calls[1][0].content).toBe('2nd testing a form...')
 })
