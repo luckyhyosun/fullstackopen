@@ -604,6 +604,27 @@ React can’t render a plain function (**function reference**) unless it’s use
   4. But you want the **deliver this error to frontend** to know about it.
   5. throw inside <code>remove</code> passes the error to the caller (handleDeleteNote), by using <code>throw error.response.data.error</code>, which can then show a message in frontend.
 
+✴️ **event.preventDefault()** is a method on the event object in JavaScript (and React) that tells the browser: “**Don’t do the default action** that would normally happen **for this event**.”
+
+Then, what are the **default actions**?
+1. **Form elements**
++ <code>&lt;button type="submit"&gt;</code> inside a <code>&lt;form&gt;... &lt;/form&gt;</code> → **submits** the form and **reloads the page**.
++ <code>&lt;input type="text"&gt;</code> + pressing Enter → submits the form.
+
+2. **Links**
++ <code>&lt;a href="https://example.com"&gt;</code> → navigates to that URL.
+
+3. **Checkboxes & radios**
++ Clicking a <code>&lt;input type="checkbox"&gt;</code> → toggles checked/unchecked.
++ Clicking a <code>&lt;input type="radio"&gt;</code> → selects it and unselects others in the same group.
+
+4. **Keyboard**
+5. **Drag & drop**
+
+So, if the **clickable element** is a <code>&lt;button&gt;</code> inside a <code>&lt;form&gt;</code>, the button’s default behavior is to submit the form and reload the page.
+
+If the button is not inside a <code>&lt;form&gt;</code>, then there’s no default behavior to prevent. In that case, <code>event.preventDefault()</code> does nothing (but it won’t cause an error).
+
 ✴️ **Module** is basically a **self-contained piece of code** that has its own variables, functions, or classes.
 + Each file is a module → can export anything (<code>export default</code>, <code>export const</code>, etc.).
 + Modules have their own scope → variables inside one file don’t automatically exist in another.

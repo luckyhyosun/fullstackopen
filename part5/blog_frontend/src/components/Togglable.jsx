@@ -6,8 +6,7 @@ const Togglable = props => {
   const hideBlock = { display: visible ? 'none' : '' }
   const showBlock = { display: visible ? '' : 'none' }
 
-  const handleToggle = (event) => {
-    event.preventDefault()
+  const handleToggle = () => {
     setVisible(!visible)
   }
 
@@ -25,7 +24,6 @@ const Togglable = props => {
         {props.children}
       </div>
     </div>
-
   )
 }
 
