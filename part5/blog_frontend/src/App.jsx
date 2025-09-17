@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Newblog from './components/Newblog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -14,9 +15,7 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   const [isError, setIsError] = useState(false)
 
-  const [title, setBlogTitle] = useState('')
-  const [author, setBlogAuthor] = useState('')
-  const [url, setBlogUrl] = useState('')
+  const createBlogRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -55,28 +54,24 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedinUser')
     setUser(null)
-    setBlogTitle('')
-    setBlogAuthor('')
-    setBlogUrl('')
+    // setBlogTitle('')
+    // setBlogAuthor('')
+    // setBlogUrl('')
   }
 
-  const handleNewblog = async (event) => {
+  const handleNewblog = async (event, newObj) => {
+    createBlogRef.current.toggleAction()
+
     event.preventDefault()
     if(!user){
       setIsError(true)
       showNotification('only logged-in user can create blog!')
-      setBlogTitle('')
-      setBlogAuthor('')
-      setBlogUrl('')
       return
     }
-    const newBlog = await blogService.create({ title, author, url })
+    const newBlog = await blogService.create(newObj)
     setIsError(false)
-    showNotification(`${title} by ${author} is created!`)
+    showNotification(`${newBlog.title} by ${newBlog.author} is created!`)
     setBlogs(blogs.concat(newBlog))
-    setBlogTitle('')
-    setBlogAuthor('')
-    setBlogUrl('')
   }
 
   const handleDelete = async (id) => {
@@ -132,15 +127,9 @@ const App = () => {
           {`Hello, ${user.name}! 👋`}
           <button onClick={handleLogout} className='functionalBtn inlineBtn'>Logout</button>
         </h2>
-        <Newblog
-          title={title}
-          author={author}
-          url={url}
-          setBlogTitle={setBlogTitle}
-          setBlogAuthor={setBlogAuthor}
-          setBlogUrl={setBlogUrl}
-          handleNewblog={handleNewblog}
-        />
+        <Togglable buttonLabel="Create Blog" ref={createBlogRef}>
+          <Newblog createBlog={handleNewblog} />
+        </Togglable>
         </div>
       }
       {showblogs()}
