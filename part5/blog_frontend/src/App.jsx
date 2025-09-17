@@ -35,7 +35,7 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try{
-      const user = await loginService.login({username, password})
+      const user = await loginService.login({ username, password })
 
       setUser(user)
 
@@ -95,24 +95,24 @@ const App = () => {
 
   const showLoginform = () => {
     return <Login
-        username={username}
-        password={password}
-        setUsername={setUsername}
-        setPassword={setPassword}
-        handleLogin={handleLogin}
-      />
+      username={username}
+      password={password}
+      setUsername={setUsername}
+      setPassword={setPassword}
+      handleLogin={handleLogin}
+    />
   }
 
   const showblogs = () => {
     return blogs
-    .sort((a, b) => b.likes - a.likes)
-    .map(blog =>
-      <Blog
-        key={blog.id}
-        blog={blog}
-        handleDelete={() => handleDelete(blog.id)}
-        updateBlog={handleUpdate}
-      />)
+      .sort((a, b) => b.likes - a.likes)
+      .map(blog =>
+        <Blog
+          key={blog.id}
+          blog={blog}
+          handleDelete={() => handleDelete(blog.id)}
+          updateBlog={handleUpdate}
+        />)
   }
 
   const showNotification = (msg) => {
@@ -137,7 +137,7 @@ const App = () => {
         <Togglable buttonLabel="Create Blog" ref={createBlogRef}>
           <Newblog createBlog={handleNewblog} />
         </Togglable>
-        </div>
+      </div>
       }
       {showblogs()}
     </div>

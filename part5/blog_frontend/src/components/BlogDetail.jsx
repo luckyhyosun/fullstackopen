@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const BlogDetail = ({ blog, updateBlog }) => {
   const [likes, setLikes] = useState(blog.likes)
@@ -28,7 +28,7 @@ const BlogDetail = ({ blog, updateBlog }) => {
   return (
     <div>
       <p>author: {blog.author}</p>
-      <p style={{display: 'inline'}}>likes: {likes}</p>
+      <p style={{ display: 'inline' }}>likes: {likes}</p>
       <button style={likeStyle} onClick={handleLikes}>👍</button>
       <p>url: <a href={blog.url}>{blog.url}</a></p>
     </div>

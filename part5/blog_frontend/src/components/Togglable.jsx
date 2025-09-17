@@ -1,7 +1,7 @@
-import { useState, useImperativeHandle } from "react";
+import { useState, useImperativeHandle } from 'react'
 
 const Togglable = props => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false)
 
   const hideBlock = { display: visible ? 'none' : '' }
   const showBlock = { display: visible ? '' : 'none' }

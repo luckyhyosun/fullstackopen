@@ -1,5 +1,5 @@
-import Togglable from "./Togglable"
-import BlogDetail from "./BlogDetail"
+import Togglable from './Togglable'
+import BlogDetail from './BlogDetail'
 
 const Blog = ({ blog, handleDelete, updateBlog }) => {
   const blogStyle = {
@@ -16,7 +16,7 @@ const Blog = ({ blog, handleDelete, updateBlog }) => {
 
   return (
     <div style={blogStyle}>
-      <h3 style={{display: "inline"}}>{blog.title}</h3>
+      <h3 style={{ display: 'inline' }}>{blog.title}</h3>
       <button onClick={handleDelete}>Delete</button>
 
       <Togglable buttonLabel="More...">
