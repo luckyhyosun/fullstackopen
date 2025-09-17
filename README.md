@@ -418,6 +418,10 @@ Frontend
   - [react-testing-library](https://github.com/testing-library/react-testing-library) help us render components for testing purposes
   - Use another test library [jest-dom](https://github.com/testing-library/jest-dom)
 
++ npm install --save-dev @testing-library/user-event
+  - [user-even](https://testing-library.com/docs/user-event/intro/) dispatches the events that would happen if the interaction took place in a browser
+  - The event handler is a [mock](https://vitest.dev/api/mock) function defined with Vitest (<code>const mockHandler = vi.fn()</code>)
+
 ## Classification
 
 ###  API
@@ -2504,3 +2508,39 @@ This is what <code>Box</code> component render:
   <button>Click me</button>
 </div>
 ```
+✴️ **Testing**
++ The principle of how you select elements in tests
+  - **avoiding selectors** that rely on implementation details, like CSS classes or container hierarchies, because these can change without affecting what the user sees.
+  - Instead, you should select elements based on **visible-text queries** or meaningful to the user, like the **text content, labels, elements** or **role**.
+    ```js
+    const element = await screen.findByText('Does not work anymore :(');
+    ```
++ **Mock function** is a fake function doesn’t have real logic, but it lets you check later if it was called, how many times, and with what arguments.
+  ```js
+  test('renders content', async () => {
+    const note = {
+      content: 'Component testing is done with react-testing-library',
+      important: true
+    }
+
+    const mockHandler = vi.fn()
+
+    render(<Note note={note} toggleImportance={mockHandler}/>)
+
+    const user = userEvent.setup()
+    const button = screen.getByText('make not important')
+    await user.click(button)
+
+    expect(mockHandler.mock.calls).toHaveLength(1)
+  })
+  ```
+    1. The code <code>const mockHandler = vi.fn()</code> is a **mock function** which is created using Vitest.
+    2. In this case, it’s being passed to the component as an **event handler** (like <code>onClick={mockHandler}</code>).
+    3. The code <code>const user = userEvent.setup()</code> [sets up](https://testing-library.com/docs/user-event/setup/) a **simulated user** using <code>@testing-library/user-event</code>.
+    4. With <code>user</code>, you can **simulate realistic interactions** such as [clicking](https://testing-library.com/docs/user-event/convenience/#click), typing, or tabbing, instead of just calling <code>element.click()</code> directly. So, it makes the test behave more like a real user is using the component.
+    5. And then, finding the button by text and clicking it.
+        ```js
+        const button = screen.getByText('Some button text')
+        await user.click(button)
+        ```
+    6. The expectation of the test uses <code>.[toHaveLength()](https://vitest.dev/api/expect.html#tohavelength)</code> to verify that the mock function has been called exactly once.
