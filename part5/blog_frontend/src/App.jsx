@@ -59,15 +59,15 @@ const App = () => {
     // setBlogUrl('')
   }
 
-  const handleNewblog = async (event, newObj) => {
-    createBlogRef.current.toggleAction()
+  const handleNewblog = async (newObj) => {
+    createBlogRef.current.handleToggle()
 
-    event.preventDefault()
     if(!user){
       setIsError(true)
       showNotification('only logged-in user can create blog!')
       return
     }
+
     const newBlog = await blogService.create(newObj)
     setIsError(false)
     showNotification(`${newBlog.title} by ${newBlog.author} is created!`)
