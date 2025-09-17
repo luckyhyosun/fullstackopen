@@ -89,6 +89,10 @@ const App = () => {
     }
   }
 
+  const handleUpdate = async updatedObj => {
+    await blogService.update(updatedObj)
+  }
+
   const showLoginform = () => {
     return <Login
         username={username}
@@ -105,6 +109,7 @@ const App = () => {
         key={blog.id}
         blog={blog}
         handleDelete={() => handleDelete(blog.id)}
+        updateBlog={handleUpdate}
       />)
   }
 

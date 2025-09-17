@@ -18,6 +18,11 @@ const create = async newblogObj => {
   return response.data
 }
 
+const update = async (updateObj) => {
+  const response = await axios.put(`${baseUrl}/${updateObj.id}`, updateObj)
+  return response.data
+}
+
 const remove = async id => {
   try{
     const config = {headers: { Authorization: token}}
@@ -32,6 +37,7 @@ const remove = async id => {
 export default {
   getAll,
   create,
+  update,
   remove,
   setToken
 }

@@ -1,7 +1,7 @@
 import Togglable from "./Togglable"
 import BlogDetail from "./BlogDetail"
 
-const Blog = ({ blog, handleDelete }) => {
+const Blog = ({ blog, handleDelete, updateBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -13,13 +13,14 @@ const Blog = ({ blog, handleDelete }) => {
     marginTop: 10,
     marginLeft: 20
   }
+
   return (
     <div style={blogStyle}>
       <h3 style={{display: "inline"}}>{blog.title}</h3>
       <button onClick={handleDelete}>Delete</button>
 
       <Togglable buttonLabel="More...">
-        <BlogDetail blog={blog}/>
+        <BlogDetail blog={blog} updateBlog={updateBlog}/>
       </Togglable>
     </div>
   )

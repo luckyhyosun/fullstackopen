@@ -17,7 +17,7 @@ blogRouter.get('/', async (req, res) => {
 })
 
 blogRouter.post('/', async (req, res) => {
-  const {title, author, url} = req.body
+  const {title, author, url, likes} = req.body
 
   const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
 
@@ -39,6 +39,7 @@ blogRouter.post('/', async (req, res) => {
     title,
     author,
     url,
+    likes: likes || 0,
     user: user.id
   })
 
@@ -48,6 +49,22 @@ blogRouter.post('/', async (req, res) => {
   await user.save()
 
   return res.status(201).json(savedBlog)
+})
+
+blogRouter.put('/:id', async (req, res) => {
+  const body = req.body
+  console.log(body);
+
+  const blog = await Blog.findById(req.params.id)
+
+  blog.title = body.title
+  blog.author = body.author
+  blog.likes = body.likes
+  blog.url = body.url
+  blog.user = body.user
+
+  const updatedBlog = await blog.save()
+  return res.status(200).json(updatedBlog)
 })
 
 blogRouter.delete('/:id', async (req, res) => {
