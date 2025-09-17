@@ -20,8 +20,8 @@ const Togglable = props => {
         <button onClick={handleToggle}>{props.buttonLabel}</button>
       </div>
       <div style={showBlock}>
-        {props.children}
         <button onClick={handleToggle}>Cancle</button>
+        {props.children}
       </div>
     </div>
 
