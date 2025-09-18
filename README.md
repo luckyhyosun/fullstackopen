@@ -422,6 +422,15 @@ Frontend
   - [user-even](https://testing-library.com/docs/user-event/intro/) dispatches the events that would happen if the interaction took place in a browser
   - The event handler is a [mock](https://vitest.dev/api/mock) function defined with Vitest (<code>const mockHandler = vi.fn()</code>)
 
++ npm install --save-dev @vitest/coverage-v8
+  - [coverage](https://vitest.dev/guide/coverage.html#coverage) is a library to generate A HTML report to the coverage directory.
+
++ npm test -- --coverage
+  - Make a 'coverage' directory in the root directory.
+  - The report will tell us the lines of untested code in each component.
+  - After making 'coverage' directory, add _coverage/_ to _.gitignore_ file to exclude the file from version control.
+
+
 ## Classification
 
 ###  API
