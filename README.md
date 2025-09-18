@@ -409,12 +409,17 @@ Frontend
   - Run in backend
 
 + npm init playwright@latest
-  - Install Playwright by running in the new project directory
+  - Install Playwright by running in **the new project directory**
   - When using script from package.json:
     - <code>"test": "playwright test"</code>
     - <code>"test:report": "playwright show-report"</code>
   - npm run test -- --ui
     - Tests can also be run via the graphical UI with the command
+  - npm test -- --project chromium
+    - Define the browser engine to be used
+  - And a script to the backend package.json:
+    - <code>"start:test": "cross-env NODE_ENV=test node --watch index.js"</code>
+    - which will enable the backend code to be started in testing mode, i.e. so that _NODE_ENV_ gets the value test.
 
 **To test React Apps**,
 + npm install --save-dev vitest jsdom
@@ -2574,7 +2579,10 @@ This is what <code>Box</code> component render:
     + It is slow & large system.
     + It can also be [flaky](https://hackernoon.com/flaky-tests-a-war-that-never-ends-9aa32fdef359). Some tests might pass one time and fail another, even if the code does not change at all.
   - [Cypress](https://www.cypress.io/) : run entirely within the browser
-  - [Playwright](https://playwright.dev/) : executed in the Node process, which is connected to the browser via programming interfaces.
+  - [Playwright](https://playwright.dev/) :
+    + executed in the Node process, which is connected to the browser via programming interfaces.
+    + The execution of the tests is quite fast when they pass, but much slower if the they do not pass.
+    + Because Playwright's policy is to wait for searched elements until they are [rendered and ready for action](https://playwright.dev/docs/actionability).
   - Cypress vs Playwright :
     + [key difference](https://www.lambdatest.com/blog/cypress-vs-playwright/)
     + [comparison](https://www.browserstack.com/guide/playwright-vs-cypress)
