@@ -7,7 +7,7 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
-import NoteForm from './components/Noteform'
+import NoteForm from './components/NoteForm'
 
 const App = () => {
   const [notes, setNotes] = useState(null)
