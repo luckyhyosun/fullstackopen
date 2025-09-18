@@ -56,4 +56,24 @@ describe('<Togglable /> component renering', () => {
     expect(likes).toBeVisible()
     expect(url).toBeVisible()
   })
+
+  test('click like button twice', async () => {
+    const blogDetail = {
+      likes: 0,
+      url: 'hello.com'
+    }
+
+    const updateLike = vi.fn()
+    const user = userEvent.setup()
+
+    render (<BlogDetail blog={blogDetail} updateBlog={updateLike}/>)
+
+    const updateButton = screen.getByText('👍')
+    expect(updateButton).toBeVisible()
+
+    await user.click(updateButton)
+    await user.click(updateButton)
+    const updatedLike = screen.getByText('likes: 2')
+    expect(updatedLike).toBeVisible()
+  })
 })
