@@ -398,7 +398,7 @@ Frontend
 
 + npx eslint index.js
 	- Running the Linter
-	- But I'm using <code>npm run lint</code>, which I made a script in package.json file.
+	- When using scipt from package.json: <code>npm run lint</code>
 
 + npm install bcrypt
   - Generating the password hashes
@@ -407,6 +407,14 @@ Frontend
 + npm install jsonwebtoken
   - Generate JSON web tokens
   - Run in backend
+
++ npm init playwright@latest
+  - Install Playwright by running in the new project directory
+  - When using script from package.json:
+    - <code>"test": "playwright test"</code>
+    - <code>"test:report": "playwright show-report"</code>
+  - npm run test -- --ui
+    - Tests can also be run via the graphical UI with the command
 
 **To test React Apps**,
 + npm install --save-dev vitest jsdom
@@ -2517,7 +2525,12 @@ This is what <code>Box</code> component render:
 </div>
 ```
 ✴️ **Testing**
-+ The principle of how you select elements in tests
++ It is beneficial to be able to run tests as often as possible in case of code **[regressions](https://en.wikipedia.org/wiki/Regression_testing)**
++ Backend uses integrating test using node:test which is the built-in test runner that comes with Node.js.
++ Fronend uses unit test using vitest and jsdom
+
+**Vitest and jsdon**
++ The principle of how you select elements in tests in Frontend:
   - **avoiding selectors** that rely on implementation details, like CSS classes or container hierarchies, because these can change without affecting what the user sees.
   - Instead, you should select elements based on **visible-text queries** or meaningful to the user, like the **text content, labels, elements** or **role**.
     ```js
@@ -2552,3 +2565,18 @@ This is what <code>Box</code> component render:
         await user.click(button)
         ```
     6. The expectation of the test uses <code>.[toHaveLength()](https://vitest.dev/api/expect.html#tohavelength)</code> to verify that the mock function has been called exactly once.
+
++ **[snapshot](https://vitest.dev/guide/snapshot)**
++ **[System as a whole](https://en.wikipedia.org/wiki/System_testing)**, using **End to End (E2E) tests**.
+  - [Selenium](https://www.selenium.dev/)
+  - [Headerless browsers](https://en.wikipedia.org/wiki/Headless_browser)
+    + Configuring E2E tests is more challenging than unit or integration tests.
+    + It is slow & large system.
+    + It can also be [flaky](https://hackernoon.com/flaky-tests-a-war-that-never-ends-9aa32fdef359). Some tests might pass one time and fail another, even if the code does not change at all.
+  - [Cypress](https://www.cypress.io/) : run entirely within the browser
+  - [Playwright](https://playwright.dev/) : executed in the Node process, which is connected to the browser via programming interfaces.
+  - Cypress vs Playwright :
+    + [key difference](https://www.lambdatest.com/blog/cypress-vs-playwright/)
+    + [comparison](https://www.browserstack.com/guide/playwright-vs-cypress)
+
+  - Unlike the backend tests or unit tests done on the React front-end, End to End tests **do not need to be located in the same npm project** where the code is.
