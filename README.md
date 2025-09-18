@@ -129,7 +129,7 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 + RTL uses the test runner from Jest/Vitest but adds functions like <code>render()</code>, <code>screen.getByText()</code>, etc.
 
 #### Assertion extensions
-+ **jest-dom**
++ **jest-dom Library**
 + extends them by adding new, DOM-specific matchers (<code>.toHaveAttribute()</code>), on top of the test framework.
 
 ## Workflow
@@ -408,13 +408,12 @@ Frontend
   - Generate JSON web tokens
   - Run in backend
 
+**To test React Apps**,
 + npm install --save-dev vitest jsdom
-  - To test React Apps,
   - Use [vitest](https://vitest.dev/) testing tools from Vite
   - [jsdom](https://github.com/jsdom/jsdom) library simulating a web browser
 
 + npm install --save-dev @testing-library/react @testing-library/jest-dom
-  - To test React Apps,
   - [react-testing-library](https://github.com/testing-library/react-testing-library) help us render components for testing purposes
   - Use another test library [jest-dom](https://github.com/testing-library/jest-dom)
 
