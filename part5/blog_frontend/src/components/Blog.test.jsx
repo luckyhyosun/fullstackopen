@@ -17,8 +17,8 @@ test('<Blog /> component rendering with <BlogDetail /> comp', () => {
   )
 
   const title = screen.getByText('Test title for Blog')
-  const author = screen.getByText('author: Kim developer')
+  const author = screen.getByText(/Kim developer/, { exact: false })
 
   expect(title).toBeDefined()
-  expect(author).toBeDefined()
+  expect(author).toBeInTheDocument()
 })
