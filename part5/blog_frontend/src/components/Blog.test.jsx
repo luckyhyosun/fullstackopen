@@ -40,16 +40,11 @@ describe('<Togglable /> component renering', () => {
 
   test('after clicking the button, children are displayed', async () => {
     const blogDetail = {
-      title: 'Test title for Blog',
-      author: 'Kim developer',
       likes: 0,
-      url: 'hello.com',
-      user: 'id1024'
+      url: 'hello.com'
     }
 
-    const mockHandler = vi.fn()
-
-    render(<BlogDetail blog={blogDetail} handleToggle={mockHandler}/>)
+    render(<BlogDetail blog={blogDetail} />)
 
     const user = userEvent.setup()
     const button = screen.getByText('More...')
@@ -57,6 +52,7 @@ describe('<Togglable /> component renering', () => {
     await user.click(button)
     const likes = screen.getByText('likes: 0')
     const url = screen.getByText(/hello.com/, { exact : false })
+
     expect(likes).toBeVisible()
     expect(url).toBeVisible()
   })
