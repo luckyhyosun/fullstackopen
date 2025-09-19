@@ -413,10 +413,10 @@ Frontend
   - When using script from package.json:
     - <code>"test": "playwright test"</code>
     - <code>"test:report": "playwright show-report"</code>
+  - npm test -- --project chromium
+    - Define the browser engine to be used, in this case it is define Chrome for test
   - npm run test -- --ui
     - Tests can also be run via the graphical UI with the command
-  - npm test -- --project chromium
-    - Define the browser engine to be used
   - And a script to the backend package.json:
     - <code>"start:test": "cross-env NODE_ENV=test node --watch index.js"</code>
     - which will enable the backend code to be started in testing mode, i.e. so that _NODE_ENV_ gets the value test.
@@ -2573,16 +2573,20 @@ This is what <code>Box</code> component render:
 
 + **[snapshot](https://vitest.dev/guide/snapshot)**
 + **[System as a whole](https://en.wikipedia.org/wiki/System_testing)**, using **End to End (E2E) tests**.
-  - [Selenium](https://www.selenium.dev/)
   - [Headerless browsers](https://en.wikipedia.org/wiki/Headless_browser)
+    + The challenge with E2E tests is that...
     + Configuring E2E tests is more challenging than unit or integration tests.
     + It is slow & large system.
     + It can also be [flaky](https://hackernoon.com/flaky-tests-a-war-that-never-ends-9aa32fdef359). Some tests might pass one time and fail another, even if the code does not change at all.
+    + It does not have access to the database, so the solution is to **create API endpoints for the backend** tests.
+  - [Selenium](https://www.selenium.dev/) : can be used with almost any browser.
   - [Cypress](https://www.cypress.io/) : run entirely within the browser
   - [Playwright](https://playwright.dev/) :
     + executed in the Node process, which is connected to the browser via programming interfaces.
     + The execution of the tests is quite fast when they pass, but much slower if the they do not pass.
     + Because Playwright's policy is to wait for searched elements until they are [rendered and ready for action](https://playwright.dev/docs/actionability).
+    - Playwright acts like a user in **Frontend** : needs **the app running beforehand**.
+    - But, Playwright often **start the system themselves** during test execution, in **Backend** integration tests.
   - Cypress vs Playwright :
     + [key difference](https://www.lambdatest.com/blog/cypress-vs-playwright/)
     + [comparison](https://www.browserstack.com/guide/playwright-vs-cypress)
