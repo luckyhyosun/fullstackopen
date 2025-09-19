@@ -65,7 +65,7 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 #### Libraries:
 + state management → **frontend only**
   - **React**
-  - **Redux**
+  - **Redux** (implementing **Flux** pattern)
   - MobX
   - Pinia (state management)
 + HTTP / API calls
@@ -77,6 +77,8 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
   - Vuetify
   - Angular Material
   - Tailwind CSS
+#### Architecture
++  **Flux**
 #### APIs:
 + Browser APIs: <code>fetch()</code>, <code>localStorage</code>, <code>IndexedDB</code>, <code>WebSocket</code>
 + Third-party APIs: Google Maps API, Stripe API, OpenWeatherMap API
@@ -2592,3 +2594,78 @@ This is what <code>Box</code> component render:
     + [comparison](https://www.browserstack.com/guide/playwright-vs-cypress)
 
   - Unlike the backend tests or unit tests done on the React front-end, End to End tests **do not need to be located in the same npm project** where the code is.
+
+✴️ **Flux-architecture**
+
+Flux is the **application architecture pattern**, unlike **REST(Software architectural style for networked systems)**, which have three major parts: the **dispatcher, the stores, and the views** (React components).
+
+In [Flux](https://facebookarchive.github.io/flux/docs/in-depth-overview/), the state is separated from the React components and into its own stores. State in the store is not changed directly, but with different actions.
+
+When an action changes the state of the store, the views are rerendered:
+![Alt text](https://facebookarchive.github.io/flux/img/overview/flux-simple-f8-diagram-1300w.png)
+
+If some action on the application, for example pushing a button, causes the need to change the state, the change is made with an action. This causes re-rendering the view again:
+![Alt text](https://facebookarchive.github.io/flux/img/overview/flux-simple-f8-diagram-explained-1300w.png)
+(images from [flux](https://facebookarchive.github.io/flux/docs/in-depth-overview/))
+
+Flux offers a standard way for how and where the application's state is kept and how it is modified.
+
+**MVC vs Flux**
++ **MVC (Model–View–Controller)** flow is **bidirectional**
+  - Model – holds the data and business logic.
+  - View – displays data (UI).
+  - Controller – handles user input, updates the model, and decides what view to render.
+  - **As apps grow**, the bidirectional links between models, views, and controllers can create complex tangled dependencies ("**spaghetti code**").
+
++ **Flux** flow is **unidirectional**
+  - [Action](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#actions) – plain objects describing “what happened” (e.g., ADD_TODO).
+  - Dispatcher – central hub that sends actions to stores.
+  - [Store](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#store) – holds application state and logic; updates itself when receiving actions.
+  - View (React components) – renders based on store data and can trigger actions via user events.
+  - Much easier to reason about **state changes in large apps**, avoids circular updates
+
+✴️ **Redux**
++ [Reducer](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)
+  - a function that receives the current _state_ and an _action object_, decides how to update the state if necessary, and returns the new state.
+  - The term comes from functional programming, specifically **Array.reduce** in JavaScript:
+    ```js
+    [1,2,3].reduce((acc, val) => acc + val, 0)
+    // sums the array → 6
+    ```
+    + reduce takes a current accumulated value (<code>acc</code>) and combines it with a new item (<code>val</code>) to produce a new accumulated value.
+    + In Redux: the **current state** is like <code>acc</code>, the **action** is like <code>val</code>, and the **reducer returns the new state**.
+    + So “reduce” here is more like “**combining previous state + action → new state**”, not literally “reducing the state.”
+  - the **[switch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch)** statement is the **most common** approach to writing a **reducer**.
+  - The reducer is **never** supposed to be called directly from the application's code. It is only **given as a parameter** to the **configureStore function** which creates the store:
+
+    ```js
+    import { createStore } from 'redux'
+
+    const counterReducer = (state = 0, action) => {
+      // ...
+    }
+
+    const store = createStore(counterReducer)
+    ```
+  - The store now uses the reducer to handle actions, which are dispatched or 'sent' to the store with its **dispatch** method.
+
++ [Dispatch](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#dispatch)
+  - is the **central hub** that decides which parts of the app get the action.
+  - the messenger that sends actions to the store.
+  - The **store** holds the **state**, but it doesn’t know by itself that you want to update the state.
+  - An **action** is just a **plain object** describing “what happened” (like { type: 'INCREMENT' }).
+  - **Dispatch** is the function you call to tell the store: “Hey store, here’s an action—please **process it using your reducer**.”
+
+  - Why dispatch is important?
+    + Dispatch is like a **Central hub** : In large apps, you may have multiple stores. The dispatcher ensures that all stores receive actions in the correct order.
+    + Dispatcher is where **middleware can intercept actions** for logging, analytics, or async tasks, like **Redux Thunk**.
+    + **Decoupling** view from store logic: The view only sends an action. It doesn’t need to know how the store updates state.
+
+
+| Redux Component | Analogy                                     | Job                                                                                                                        |
+| --------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **Action**      | Letter / request                            | Describes what happened (“Add 1 to counter”)                                                                               |
+| **Dispatcher**  | Postman / delivery system outside city hall | **Delivers the letter** to the correct department (store). Doesn’t read or change anything—just ensures it arrives safely. |
+| **Store**       | Cabinet / official records           | Holds the **state**. Reducer updates this.
+| **Reducer**     | Worker / clerk inside city hall             | **Reads the letter (action)** and **updates the official records (state)** according to rules.                                          |                                                                  |
+| **View**        | Citizens / notice board                     | Observes changes in records and updates UI accordingly.                                                                    |
