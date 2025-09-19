@@ -2625,8 +2625,48 @@ Flux offers a standard way for how and where the application's state is kept and
   - Much easier to reason about **state changes in large apps**, avoids circular updates
 
 ✴️ **Redux**
-+ [Reducer](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)
+
+| Redux Component | Analogy                                     | Job                                                                                                                        |
+| --------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **Action**      | Letter / request                            | Describes what happened (“Add 1 to counter”)                                                                               |
+| **Dispatcher**  | Postman / delivery system outside city hall | **Delivers the letter** to the correct department (store). Doesn’t read or change anything—just ensures it arrives safely. |
+| **Store**       | Cabinet / official records           | Holds the **state**. Reducer updates this.
+| **Reducer**     | Worker / clerk inside city hall             | **Reads the letter (action)** and **updates the official records (state)** according to rules.                                          |                                                                  |
+| **View**        | Citizens / notice board                     | Observes changes in records and updates UI accordingly.                                                                    |
+
+---
+
++ **Action**
+  - The general convention of action object is that actions have **exactly two fields**:
+    - **type** telling the type
+    - **payload** containing the data included with the Action
+      ```js
+      {
+        type: 'NEW_NOTE',
+        payload: {
+          content: 'state changes are made with actions',
+          important: false,
+          id: 2
+        }
+      }
+      ```
+
++ **[Dispatch](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#dispatch)**
+  - is the **central hub** that decides which parts of the app get the action.
+  - the messenger that sends actions to the store.
+  - The **store** holds the **state**, but it doesn’t know by itself that you want to update the state.
+  - An **action** is just a **plain object** describing “what happened” (like { type: 'INCREMENT' }).
+  - **Dispatch** is the function you call to tell the store: “Hey store, here’s an action—please **process it using your reducer**.”
+
+  - Why dispatch is important?
+    + Dispatch is like a **Central hub** : In large apps, you may have multiple stores. The dispatcher ensures that all stores receive actions in the correct order.
+    + Dispatcher is where **middleware can intercept actions** for logging, analytics, or async tasks, like **Redux Thunk**.
+    + **Decoupling** view from store logic: The view only sends an action. It doesn’t need to know how the store updates state.
+
++ **[Reducer](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**
   - a function that receives the current _state_ and an _action object_, decides how to update the state if necessary, and returns the new state.
+  - Reducers must be **[pure functions](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**, which menas they _do not cause any side effects_ and they must always return the same response when called with the same parameters.
+  - It’s the same idea as React’s **[immutability](https://en.wikipedia.org/wiki/Immutable_object) rule**.
   - The term comes from functional programming, specifically **Array.reduce** in JavaScript:
     ```js
     [1,2,3].reduce((acc, val) => acc + val, 0)
@@ -2648,24 +2688,3 @@ Flux offers a standard way for how and where the application's state is kept and
     const store = createStore(counterReducer)
     ```
   - The store now uses the reducer to handle actions, which are dispatched or 'sent' to the store with its **dispatch** method.
-
-+ [Dispatch](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#dispatch)
-  - is the **central hub** that decides which parts of the app get the action.
-  - the messenger that sends actions to the store.
-  - The **store** holds the **state**, but it doesn’t know by itself that you want to update the state.
-  - An **action** is just a **plain object** describing “what happened” (like { type: 'INCREMENT' }).
-  - **Dispatch** is the function you call to tell the store: “Hey store, here’s an action—please **process it using your reducer**.”
-
-  - Why dispatch is important?
-    + Dispatch is like a **Central hub** : In large apps, you may have multiple stores. The dispatcher ensures that all stores receive actions in the correct order.
-    + Dispatcher is where **middleware can intercept actions** for logging, analytics, or async tasks, like **Redux Thunk**.
-    + **Decoupling** view from store logic: The view only sends an action. It doesn’t need to know how the store updates state.
-
-
-| Redux Component | Analogy                                     | Job                                                                                                                        |
-| --------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| **Action**      | Letter / request                            | Describes what happened (“Add 1 to counter”)                                                                               |
-| **Dispatcher**  | Postman / delivery system outside city hall | **Delivers the letter** to the correct department (store). Doesn’t read or change anything—just ensures it arrives safely. |
-| **Store**       | Cabinet / official records           | Holds the **state**. Reducer updates this.
-| **Reducer**     | Worker / clerk inside city hall             | **Reads the letter (action)** and **updates the official records (state)** according to rules.                                          |                                                                  |
-| **View**        | Citizens / notice board                     | Observes changes in records and updates UI accordingly.                                                                    |
