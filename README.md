@@ -132,8 +132,10 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 
 #### Assertion extensions
 + **jest-dom Library**
-+ extends them by adding new, DOM-specific matchers (<code>.toHaveAttribute()</code>), on top of the test framework.
-
++ An extension _library for Jest_
++ It works with any **DOM-testing setup**, not only React but React devs commonly use it.
++ It **extends default matchers** by adding new, DOM-specific matchers (<code>.toHaveAttribute()</code>), on top of the test framework.
++ In practice, it’s usually used together with React Testing Library (<code>@testing-library/react</code>), since most people writing DOM tests are testing React components.
 ## Workflow
 ```
 Frontend request →
@@ -444,6 +446,9 @@ Frontend
   - The report will tell us the lines of untested code in each component.
   - After making 'coverage' directory, add _coverage/_ to _.gitignore_ file to exclude the file from version control.
 
++ npm install --save-dev jest @babel/preset-env @babel/preset-react eslint-plugin-jest
+  - Create Vite application first
+  - This configures the **Jest** testing library
 
 ## Classification
 
