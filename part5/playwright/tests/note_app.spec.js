@@ -11,12 +11,20 @@ describe('Note app', () => {
     await expect(page.getByText('Note app by Lucky, Media Technology, Computer Science, KTH 2025')).toBeVisible()
   })
 
-  test('user can log in', async ({ page }) => {
-    await page.getByRole('button', { name: 'Login' }).click()
-    await page.getByLabel('Username:').fill('developer')
-    await page.getByLabel('Password:').fill('good')
-    await page.getByRole('button', { name: 'login' }).click()
+  describe('when logged in', () => {
+    beforeEach(async ({ page }) => {
+      await page.getByRole('button', { name: 'Login' }).click()
+      await page.getByLabel('Username:').fill('developer')
+      await page.getByLabel('Password:').fill('good')
+      await page.getByRole('button', { name: 'login' }).click()
+      await expect(page.getByText('Hello, hyosun! 👋')).toBeVisible()
+    })
 
-    await expect(page.getByText('Hello, hyosun! 👋')).toBeVisible()
+    test('a new note can be created', async ({ page }) => {
+      await page.getByRole('button', { name: 'New note' }).click()
+      await page.getByRole('textbox').fill('Playwright test')
+      await page.getByRole('button', { name: 'save'}).click()
+      await expect(page.getByText('Playwright test')).toBeVisible()
+    })
   })
 })
