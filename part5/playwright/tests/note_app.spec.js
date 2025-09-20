@@ -2,6 +2,15 @@ const { test, describe, expect, beforeEach } = require('@playwright/test')
 
 describe('Note app', () => {
   beforeEach(async ({ page }) => {
+    await request.post('http://localhost:3001/api/testing/reset')
+    await request.post('http://localhost:3001/api/users', {
+      data: {
+        name: 'Matti Luukkainen',
+        username: 'mluukkai',
+        password: 'joy'
+      }
+    })
+
     await page.goto('http://localhost:5173')
   })
 
