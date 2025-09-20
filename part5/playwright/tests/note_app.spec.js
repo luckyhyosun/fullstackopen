@@ -1,13 +1,13 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
 
 describe('Note app', () => {
-  beforeEach(async ({ page }) => {
+  beforeEach(async ({ page, request}) => {
     await request.post('http://localhost:3001/api/testing/reset')
     await request.post('http://localhost:3001/api/users', {
       data: {
         name: 'Matti Luukkainen',
         username: 'mluukkai',
-        password: 'joy'
+        pw: 'joy'
       }
     })
 
@@ -23,10 +23,10 @@ describe('Note app', () => {
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
       await page.getByRole('button', { name: 'Login' }).click()
-      await page.getByLabel('Username:').fill('developer')
-      await page.getByLabel('Password:').fill('good')
+      await page.getByLabel('Username:').fill('mluukkai')
+      await page.getByLabel('Password:').fill('joy')
       await page.getByRole('button', { name: 'login' }).click()
-      await expect(page.getByText('Hello, hyosun! 👋')).toBeVisible()
+      await expect(page.getByText('Hello, Matti Luukkainen! 👋')).toBeVisible()
     })
 
     test('a new note can be created', async ({ page }) => {
