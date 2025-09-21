@@ -20,12 +20,21 @@ describe('Note app', () => {
     await expect(page.getByText('Note app by Lucky, Media Technology, Computer Science, KTH 2025')).toBeVisible()
   })
 
+  test('login fails with wrong password', async ({ page }) => {
+    await page.getByRole('button', { name: 'Show login' }).click()
+    await page.getByLabel('Username:').fill('mluukkai')
+    await page.getByLabel('Password:').fill('wrong')
+    await page.getByRole('button', { name: 'Login' }).click()
+
+    await expect(page.getByText('wrong credentials')).toBeVisible()
+  })
+
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await page.getByRole('button', { name: 'Login' }).click()
+      await page.getByRole('button', { name: 'Show login' }).click()
       await page.getByLabel('Username:').fill('mluukkai')
       await page.getByLabel('Password:').fill('joy')
-      await page.getByRole('button', { name: 'login' }).click()
+      await page.getByRole('button', { name: 'Login' }).click()
       await expect(page.getByText('Hello, Matti Luukkainen! 👋')).toBeVisible()
     })
 
