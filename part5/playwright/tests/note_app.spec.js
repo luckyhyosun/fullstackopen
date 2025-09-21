@@ -1,5 +1,5 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
-const { loginWith } = require('./helper')
+const { loginWith, createNote } = require('./helper')
 
 describe('Note app', () => {
   beforeEach(async ({ page, request}) => {
@@ -38,17 +38,13 @@ describe('Note app', () => {
     })
 
     // test('a new note can be created', async ({ page }) => {
-    //   await page.getByRole('button', { name: 'New note' }).click()
-    //   await page.getByRole('textbox').fill('Playwright test')
-    //   await page.getByRole('button', { name: 'save'}).click()
+    //   await createNote(page, 'New note', 'Playwright test')
     //   await expect(page.getByText('Playwright test')).toBeVisible()
     // })
 
     describe('and a note exists', () => {
       beforeEach(async ({ page }) => {
-        await page.getByRole('button', { name: 'New note' }).click()
-        await page.getByRole('textbox').fill('another note by playwright')
-        await page.getByRole('button', { name: 'save'}).click()
+        await createNote(page, 'New note', 'another note by playwright')
         await expect(page.getByText('another note by playwright')).toBeVisible({ timeout: 50000})
       })
 
