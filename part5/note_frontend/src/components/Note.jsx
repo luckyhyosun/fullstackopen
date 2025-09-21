@@ -4,7 +4,7 @@ const Note = ({ note, handelChangeImportant, handleDeleteNote }) => {
   return (
     <li className='note'>
       <button className="deleteBtn" onClick={handleDeleteNote}>X</button>
-      {note.content}
+      <span>{note.content}</span>
       <button onClick={handelChangeImportant}>{label}</button>
     </li>
   )

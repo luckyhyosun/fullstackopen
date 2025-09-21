@@ -45,12 +45,33 @@ describe('Note app', () => {
     describe('and a note exists', () => {
       beforeEach(async ({ page }) => {
         await createNote(page, 'another note by playwright')
-        await expect(page.getByText('another note by playwright')).toBeVisible({ timeout: 50000})
+        await expect(page.getByText('another note by playwright')).toBeVisible()
       })
 
       test('importance can be changed', async ({ page }) => {
         await page.getByRole('button', { name: '🔁 Not important' }).click()
         await expect(page.getByText('🔁 Important')).toBeVisible()
+      })
+    })
+
+    describe('and several notes exists', () => {
+      beforeEach(async ({ page }) => {
+        // use "await expect(...getByText(...)).toBeVisible()" to fix timing issue
+        await createNote(page, 'first note')
+        await expect(page.getByText('first note')).toBeVisible()
+        await createNote(page, 'second note')
+        await expect(page.getByText('second note')).toBeVisible()
+        await createNote(page, 'third note')
+        await expect(page.getByText('third note')).toBeVisible()
+
+      })
+
+      test.only('one of those can be made nonimportant', async ({ page }) => {
+        const otherNoteText = page.getByText('second note')
+        const otherNoteElement = otherNoteText.locator('..')
+
+        await otherNoteElement.getByRole('button', { name: '🔁 Not important' }).click()
+        await expect(otherNoteElement.getByText('🔁 Important')).toBeVisible()
       })
     })
   })
