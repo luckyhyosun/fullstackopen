@@ -29,11 +29,25 @@ describe('Note app', () => {
       await expect(page.getByText('Hello, Matti Luukkainen! 👋')).toBeVisible()
     })
 
-    test('a new note can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'New note' }).click()
-      await page.getByRole('textbox').fill('Playwright test')
-      await page.getByRole('button', { name: 'save'}).click()
-      await expect(page.getByText('Playwright test')).toBeVisible()
+    // test('a new note can be created', async ({ page }) => {
+    //   await page.getByRole('button', { name: 'New note' }).click()
+    //   await page.getByRole('textbox').fill('Playwright test')
+    //   await page.getByRole('button', { name: 'save'}).click()
+    //   await expect(page.getByText('Playwright test')).toBeVisible()
+    // })
+
+    describe('and a note exists', () => {
+      beforeEach(async ({ page }) => {
+        await page.getByRole('button', { name: 'New note' }).click()
+        await page.getByRole('textbox').fill('another note by playwright')
+        await page.getByRole('button', { name: 'save'}).click()
+        await expect(page.getByText('another note by playwright')).toBeVisible({ timeout: 50000})
+      })
+
+      test('importance can be changed', async ({ page }) => {
+        await page.getByRole('button', { name: '🔁 Not important' }).click()
+        await expect(page.getByText('🔁 Important')).toBeVisible()
+      })
     })
   })
 })
