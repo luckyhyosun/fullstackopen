@@ -5,8 +5,8 @@ const loginWith = async (page, username, password)  => {
   await page.getByRole('button', { name: 'Login' }).click()
 }
 
-const createNote = async (page, button, text) => {
-  await page.getByRole('button', { name: button }).click()
+const createNote = async (page, text) => {
+  await page.getByRole('button', { name: 'New note' }).click()
   await page.getByRole('textbox').fill(text)
   await page.getByRole('button', { name: 'save' }).click()
 }

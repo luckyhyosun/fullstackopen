@@ -37,14 +37,14 @@ describe('Note app', () => {
       await expect(page.getByText('Matti Luukkainen logged in')).not.toBeVisible()
     })
 
-    // test('a new note can be created', async ({ page }) => {
-    //   await createNote(page, 'New note', 'Playwright test')
-    //   await expect(page.getByText('Playwright test')).toBeVisible()
-    // })
+    test('a new note can be created', async ({ page }) => {
+      await createNote(page, 'Playwright test')
+      await expect(page.getByText('Playwright test')).toBeVisible()
+    })
 
     describe('and a note exists', () => {
       beforeEach(async ({ page }) => {
-        await createNote(page, 'New note', 'another note by playwright')
+        await createNote(page, 'another note by playwright')
         await expect(page.getByText('another note by playwright')).toBeVisible({ timeout: 50000})
       })
 
