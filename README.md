@@ -424,6 +424,18 @@ Frontend
   - And a script to the backend package.json:
     - <code>"start:test": "cross-env NODE_ENV=test node --watch index.js"</code>
     - which will enable the backend code to be started in testing mode, i.e. so that _NODE_ENV_ gets the value test.
+  - Running only one test
+    - <code>npm test -- -g 'one of those can be made nonimportant'</code>
+  - Debugging
+    - Playwright-inspector shows the progress of the tests step by step.
+    - <code>npm test -- -g'one of those can be made nonimportant' --debug</code>
+    - Using [Trace Viewer](https://playwright.dev/docs/trace-viewer-intro)
+      + Trace viewer is a "visual trace" of the tests is saved.
+      + <code>npm run test -- --trace on</code>
+      + <code>npx playwright show-report</code> or <code>npm run test:report</code>
+  - [API](https://playwright.dev/docs/api/class-playwright)
+  - class [Page](https://playwright.dev/docs/api/class-page)
+  - class [Locater](https://playwright.dev/docs/api/class-locator)
 
 **To test React Apps**,
 + npm install --save-dev vitest jsdom

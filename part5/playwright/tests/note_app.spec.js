@@ -56,14 +56,9 @@ describe('Note app', () => {
 
     describe('and several notes exists', () => {
       beforeEach(async ({ page }) => {
-        // use "await expect(...getByText(...)).toBeVisible()" to fix timing issue
         await createNote(page, 'first note')
-        await expect(page.getByText('first note')).toBeVisible()
         await createNote(page, 'second note')
-        await expect(page.getByText('second note')).toBeVisible()
         await createNote(page, 'third note')
-        await expect(page.getByText('third note')).toBeVisible()
-
       })
 
       test.only('one of those can be made nonimportant', async ({ page }) => {
