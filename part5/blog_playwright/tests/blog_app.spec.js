@@ -117,6 +117,10 @@ describe('Blog app', () => {
         await clickLike(lastBlogDiv)
         await clickLike(lastBlogDiv)
         await clickLike(lastBlogDiv)
+
+        await expect(firstBlogDiv.getByText('likes: 1')).toBeVisible()
+        await expect(secondBlogDiv.getByText('likes: 2')).toBeVisible()
+        await expect(lastBlogDiv.getByText('likes: 4')).toBeVisible()
       })
     })
   })
