@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith, createBlog } = require('./helper')
+const { loginWith, createBlog, filterBlog, clickLike } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -80,6 +80,43 @@ describe('Blog app', () => {
           const deleteBtn = page.locator('.hideBtn')
           await expect(deleteBtn).toBeHidden();
         })
+      })
+    })
+
+    describe('and several notes exists', () => {
+      beforeEach(async ({ page }) => {
+        await createBlog(
+          page,
+          'First Blog',
+          'frontend developer',
+          'front.com'
+        )
+        await createBlog(
+          page,
+          'Second Blog',
+          'backend developer',
+          'back.com'
+        )
+        await createBlog(
+          page,
+          'Last Blog',
+          'fullstack developer',
+          'full.com'
+        )
+      })
+
+      test('change likes value of multiple blogs', async ({ page }) => {
+        const firstBlogDiv = await filterBlog(page, 'First Blog')
+        const secondBlogDiv = await filterBlog(page, 'Second Blog')
+        const lastBlogDiv = await filterBlog(page, 'Last Blog')
+
+        await clickLike(firstBlogDiv)
+        await clickLike(secondBlogDiv)
+        await clickLike(secondBlogDiv)
+        await clickLike(lastBlogDiv)
+        await clickLike(lastBlogDiv)
+        await clickLike(lastBlogDiv)
+        await clickLike(lastBlogDiv)
       })
     })
   })

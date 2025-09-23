@@ -10,9 +10,19 @@ const createBlog = async (page, title, author, url) => {
   await page.getByLabel('Author:').fill(author)
   await page.getByLabel('URL:').fill(url)
   await page.getByRole('button', {name: 'Create'}).click()
-  // to fix strict mode violation: getByText(author) resolved to 2 elements
+
   // to fix timing issue
-  await page.getByText('by ', author).waitFor()
+  const blogDiv = page.locator('.blogList').filter({ hasText: title })
+  await blogDiv.getByText(title).waitFor()
 }
 
-export {loginWith, createBlog}
+const filterBlog = async (page, title) => {
+  const blogDiv = page.locator('.blogList').filter({ hasText: title })
+  await blogDiv.getByRole('button', {name: 'More...'}).click()
+  return blogDiv
+}
+const clickLike = async (blogDiv) => {
+  await blogDiv.getByRole('button', {name: '👍'}).click()
+}
+
+export {loginWith, createBlog, filterBlog, clickLike}

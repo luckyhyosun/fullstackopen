@@ -23,7 +23,7 @@ const Blog = ({ blog, handleDelete, updateBlog, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blogList'>
       <h3 style={{ display: 'inline' }}>{blog.title}</h3>
       <button
         onClick={handleDelete}
