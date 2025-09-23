@@ -1,7 +1,7 @@
 const Login = ({ username, password, setUsername, setPassword, handleLogin }) => {
   return (
     <div className="loginform">
-      <h2>Login</h2>
+      <h2>Login Form</h2>
       <form onSubmit={handleLogin}>
         <label>
           Username:
