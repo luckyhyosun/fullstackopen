@@ -59,7 +59,7 @@ describe('Blog app', () => {
         await expect(page.getByText('by luckyKim')).toBeVisible()
       })
 
-      test('like button clicked', async ({ page }) => {
+      test('the like value can be changed', async ({ page }) => {
         await page.getByRole('button', {name: 'More...'}).click()
         await page.getByRole('button', {name: '👍'}).click()
         await expect(page.getByText('likes: 1')).toBeVisible()
