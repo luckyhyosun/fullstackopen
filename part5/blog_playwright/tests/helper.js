@@ -10,6 +10,9 @@ const createBlog = async (page, title, author, url) => {
   await page.getByLabel('Author:').fill(author)
   await page.getByLabel('URL:').fill(url)
   await page.getByRole('button', {name: 'Create'}).click()
+  // to fix strict mode violation: getByText(author) resolved to 2 elements
+  // to fix timing issue
+  await page.getByText('by ', author).waitFor()
 }
 
 export {loginWith, createBlog}

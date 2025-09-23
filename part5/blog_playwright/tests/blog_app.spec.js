@@ -45,7 +45,25 @@ describe('Blog app', () => {
         'A fullstack developer',
         'helloworld.com'
       )
-      await expect(page.getByText('Blog playwright test by A fullstack developer')).toBeVisible()
+      await expect(page.getByText('by A fullstack developer')).toBeVisible()
+    })
+
+    describe('and a blog exists', () => {
+      beforeEach(async ({ page }) => {
+        await createBlog(
+          page,
+          'Another Blog test',
+          'luckyKim',
+          'hellobonjour.com'
+        )
+        await expect(page.getByText('by luckyKim')).toBeVisible()
+      })
+
+      test('like button clicked', async ({ page }) => {
+        await page.getByRole('button', {name: 'More...'}).click()
+        await page.getByRole('button', {name: '👍'}).click()
+        await expect(page.getByText('likes: 1')).toBeVisible()
+      })
     })
   })
 })
