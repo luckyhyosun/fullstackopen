@@ -104,6 +104,7 @@ const App = () => {
   }
 
   const showblogs = (user) => {
+    // sorting blogs in descending number of likes value
     return blogs
       .sort((a, b) => b.likes - a.likes)
       .map(blog =>
