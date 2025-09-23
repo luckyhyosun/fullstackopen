@@ -65,15 +65,20 @@ describe('Blog app', () => {
         await expect(page.getByText('likes: 1')).toBeVisible()
       })
 
-      describe('not valid user tries', () => {
+      describe('not valid user', () => {
         beforeEach(async ({ page }) => {
           await page.getByRole('button', {name: 'Logout'}).click()
           await expect(page.getByText('Login Form')).toBeVisible()
         })
 
-        test('to delete the blog', async ({ page }) => {
+        test('tries to delete the blog', async ({ page }) => {
           await page.getByRole('button', {name: 'Delete'}).click()
           await expect(page.getByText('only logged-in user can delete blog!')).toBeVisible()
+        })
+
+        test('can not see the delete button', async ({ page }) => {
+          const deleteBtn = page.locator('.hideBtn')
+          await expect(deleteBtn).toBeHidden();
         })
       })
     })

@@ -1,7 +1,7 @@
 import Togglable from './Togglable'
 import BlogDetail from './BlogDetail'
 
-const Blog = ({ blog, handleDelete, updateBlog }) => {
+const Blog = ({ blog, handleDelete, updateBlog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,10 +14,22 @@ const Blog = ({ blog, handleDelete, updateBlog }) => {
     marginLeft: 20
   }
 
+  const hideBtn = {
+    display : 'none'
+  }
+
+  const showBtn = {
+    display : 'inline'
+  }
+
   return (
     <div style={blogStyle}>
       <h3 style={{ display: 'inline' }}>{blog.title}</h3>
-      <button onClick={handleDelete}>Delete</button>
+      <button
+        onClick={handleDelete}
+        style={user? showBtn : hideBtn}>
+        Delete
+      </button>
 
       <Togglable buttonLabel="More...">
         <BlogDetail blog={blog} updateBlog={updateBlog}/>

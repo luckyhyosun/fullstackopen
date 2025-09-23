@@ -103,11 +103,12 @@ const App = () => {
     />
   }
 
-  const showblogs = () => {
+  const showblogs = (user) => {
     return blogs
       .sort((a, b) => b.likes - a.likes)
       .map(blog =>
         <Blog
+          user={user}
           key={blog.id}
           blog={blog}
           handleDelete={() => handleDelete(blog.id)}
@@ -139,7 +140,7 @@ const App = () => {
         </Togglable>
       </div>
       }
-      {showblogs()}
+      {showblogs(user)}
     </div>
   )
 }
