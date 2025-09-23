@@ -2647,7 +2647,7 @@ Flux offers a standard way for how and where the application's state is kept and
 | --------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | **Action**      | Letter / request                            | Describes what happened (“Add 1 to counter”)                                                                               |
 | **Dispatcher**  | Postman / delivery system outside city hall | **Delivers the letter** to the correct department (store). Doesn’t read or change anything—just ensures it arrives safely. |
-| **Store**       | Cabinet / official records           | Holds the **state**. Reducer updates this.
+| **Store**       | Cabinet / official records of city hall          | Holds the **state**. It delegates that job to the reducer you assign and the reducer updates this.
 | **Reducer**     | Worker / clerk inside city hall             | **Reads the letter (action)** and **updates the official records (state)** according to rules.                                          |                                                                  |
 | **View**        | Citizens / notice board                     | Observes changes in records and updates UI accordingly.                                                                    |
 
@@ -2671,7 +2671,7 @@ Flux offers a standard way for how and where the application's state is kept and
 + **[Dispatch](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#dispatch)**
   - is the **central hub** that decides which parts of the app get the action.
   - the messenger that sends actions to the store.
-  - The **store** holds the **state**, but it doesn’t know by itself that you want to update the state.
+  - The **store** holds **state in memory** (not in the db) while your app is running in the browser, but it doesn’t know by itself that you want to update the state.
   - An **action** is just a **plain object** describing “what happened” (like { type: 'INCREMENT' }).
   - **Dispatch** is the function you call to tell the store: “Hey store, here’s an action—please **process it using your reducer**.”
 
@@ -2705,3 +2705,5 @@ Flux offers a standard way for how and where the application's state is kept and
     const store = createStore(counterReducer)
     ```
   - The store now uses the reducer to handle actions, which are dispatched or 'sent' to the store with its **dispatch** method.
+  - **In Flux (multi-store)**: Each store manages its own piece of state and its own logic. So every store has its own reducer-like logic.
+  - **In Redux (single store)**: There’s just one big store, but you can split the reducer into smaller reducers (via combineReducers). Each reducer handles its slice of the state.
