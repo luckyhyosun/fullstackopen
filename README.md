@@ -391,6 +391,9 @@ Frontend
 
 + npx eslint --init
   - [Initialize](https://fullstackopen.com/en/part3/validation_and_es_lint#lint) a default ESlint configuration
+  - Then, [configuration file](https://fullstackopen.com/en/part3/validation_and_es_lint) should be formatted
+    + **Older versions** of ESLint used <code>.eslintrc.*</code> files (<code>.eslintrc.json</code>, <code>.eslintrc.js</code>, <code>.eslintrc.cjs</code>).
+    + Starting with **ESLint v9** (and experimental in v8), the team introduced a new **flat config system**, where config is written in <code>eslint.config.js</code>.
 
 + npx eslint . --fix
   - <code>.</code> Checks all files in your project based on rules that i defined
@@ -461,6 +464,9 @@ Frontend
 + npm install --save-dev jest @babel/preset-env @babel/preset-react eslint-plugin-jest
   - Create Vite application first
   - This configures the **Jest** testing library
+
++ npm install --save-dev deep-freeze
+  - add the library _deep-freeze_, which can be used to ensure that the **reducer** has been correctly defined as **an immutable function**.
 
 ## Classification
 
@@ -2643,6 +2649,29 @@ Flux offers a standard way for how and where the application's state is kept and
 
 ✴️ **Redux**
 
+Redux is also **unidirectional** (like Flux).
+Differences from Flux:
+  + **One single store** (= one big object) for the whole app (not many stores).
+  + Store is just **a big JavaScript object** holding the entire state tree.
+    ```js
+    {
+      counter: 5
+    }
+    ```
+  + When your **app grows**, you don’t make new stores. Instead, you **add more fields** to the same state object.
+    ```js
+    {
+      counter: 5,
+      user: { id: 1, name: "Alice", isLoggedIn: true },
+      notes: [
+        { id: 101, text: "Redux is cool!" },
+        { id: 102, text: "Don’t forget to swim later" }
+      ],
+      ui: { modalOpen: false }
+    }
+    ```
+  + Uses reducers (pure functions) to decide how state changes.
+
 | Redux Component | Analogy                                     | Job                                                                                                                        |
 | --------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | **Action**      | Letter / request                            | Describes what happened (“Add 1 to counter”)                                                                               |
@@ -2707,3 +2736,5 @@ Flux offers a standard way for how and where the application's state is kept and
   - The store now uses the reducer to handle actions, which are dispatched or 'sent' to the store with its **dispatch** method.
   - **In Flux (multi-store)**: Each store manages its own piece of state and its own logic. So every store has its own reducer-like logic.
   - **In Redux (single store)**: There’s just one big store, but you can split the reducer into smaller reducers (via combineReducers). Each reducer handles its slice of the state.
+
++ [Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today) is the official recommended approach for writing Redux logic

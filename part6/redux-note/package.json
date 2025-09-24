@@ -23,6 +23,7 @@
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.2",
+    "deep-freeze": "^0.0.1",
     "eslint": "^9.36.0",
     "eslint-plugin-jest": "^28.14.0",
     "eslint-plugin-react": "^7.37.5",
