@@ -303,6 +303,9 @@ Frontend
 + [Sentry](https://sentry.io/welcome/)
 
 ## Script
++ rm -rf .git
+  - It completely deletes the Git repository information from your project.
+
 + npm init → npm install
   - <code>npm init</code> creates a package.json file
   - <code>npm install</code> installs the dependency and saves it into package.json.
