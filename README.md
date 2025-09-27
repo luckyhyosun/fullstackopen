@@ -1088,7 +1088,7 @@ const App = () => {
 
 export default App
 ```
-One other important thing to know is a **controlled component**.
+One other important thing to know is a **[controlled component](https://goshacmd.com/controlled-vs-uncontrolled-inputs-react/)**.
 ```js
 const [username, setUsername] = useState('')
 
@@ -2741,3 +2741,5 @@ Differences from Flux:
   - **In Redux (single store)**: There’s just one big store, but you can split the reducer into smaller reducers (via combineReducers). Each reducer handles its slice of the state.
 
 + [Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today) is the official recommended approach for writing Redux logic
+
++ [Action creators]()https://redux.js.org/tutorials/essentials/part-1-overview-concepts#action-creators is a function that creates and returns an action object.
