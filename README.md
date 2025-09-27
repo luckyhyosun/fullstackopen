@@ -204,6 +204,40 @@ Frontend
   But one of the main reasons React is often called a “**frontend framework**” is that :
   - React’s efficient UI rendering and state management.
   - It provides the structure for how the UI updates in response to user interactions.
+
+  - [react-dom/client](https://legacy.reactjs.org/docs/react-dom-client.html) is the renderer that connects React to the browser DOM. Compare to **React library** (<code>react</code> package on npm) which is the **core library** and lets you write <code>&lt;App /&gt;</code> to define components and use hooks (<code>useState</code>, <code>useEffect</code>), **react-dom/client** provides the modern APIs like <code>createRoot</code> to **render React App() component to the browser DOM**.
+    ```js
+    import React from 'react'
+    import ReactDOM from 'react-dom/client'
+    import App from './App'
+
+    const root = ReactDOM.createRoot(document.getElementById('root'))
+    root.render(<App />)
+    ```
+
+  + **🔹 Before React 17**
+    - The build tool (Babel, TypeScript, etc.) compiles JSX (<code>&lt;App /&gt;</code>) into normal JS, by using <code>React.createElement(App)</code>.
+    - The developer did not need to write them, **compiler did**.
+    - That means every file using **JSX must import React, even if you don’t reference it directly**. So we should write **import React from 'react'**, to make the compiler works.
+      ```js
+      import React from 'react'
+      import ReactDOM from 'react-dom'
+      import App from './App'
+
+      ReactDOM.render(<App />, document.getElementById('root'))
+      ```
+
+  + **🔹 After React 17+ (New JSX Transform)**
+    - The React team introduced a new transform where **JSX no longer requires React in scope**.
+    - So in React 17+ (with the right Babel config), this works just fine:
+      ```js
+      import ReactDOM from 'react-dom/client'
+      import App from './App'
+
+      const root = ReactDOM.createRoot(document.getElementById('root'))
+      root.render(<App />)
+      ```
+
 + [Redux]() is mostly used with React, but can work elsewhere and is **managing application state**.
 
 ### Backend Only
@@ -1207,7 +1241,7 @@ In this code above:
 + <code>CounterDisplay</code> reads it via props.
 + <code>CounterButton</code> update the parent state via a callback prop.
 
-✴️ **Hook** is a special function that lets you “hook into” React features like state and lifecycle methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
+✴️ **React Hook** is a special function that lets you “hook into” React features like **state and lifecycle** methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
 
 **⚡ Most common hooks**
 + **[useState](https://react.dev/reference/react/useState)** – manage state in a function component
@@ -1325,6 +1359,23 @@ The key concept of <code>ref</code>is:
 The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
 
 To recap, hooks may only be called from the inside of a function body that defines a React component.
+
+✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)** are provided by the React-Redux library, not React itself. They **connect your React components to the Redux store (global state)**. Compare to **react hooks** which manage local state and lifecycle inside **a single component**.
+
++ <code>useSelector</code> → read state from the Redux store.
+  ```js
+  const counter = useSelector((state) => state.counter)
+  ```
+
++ <code>useDispatch</code> → get the dispatch function to send actions.
+  ```js
+  const dispatch = useDispatch()
+  dispatch({ type: "INCREMENT" })
+  ```
+
+**⚡ Key difference**
++ React hooks = manage component’s local state and side effects.
++ React-Redux hooks = bridge between React and Redux, letting components read/write global state.
 
 ✴️ **Event Handling** is how your code responds to user interactions or other events, like click (<code>onClick</code>), typing(<code>change</code>), mouse movements (<code>mousemove</code>), form submissions (<code>submit</code>), and more.
 
@@ -2740,6 +2791,46 @@ Differences from Flux:
   - **In Flux (multi-store)**: Each store manages its own piece of state and its own logic. So every store has its own reducer-like logic.
   - **In Redux (single store)**: There’s just one big store, but you can split the reducer into smaller reducers (via combineReducers). Each reducer handles its slice of the state.
 
-+ [Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today) is the official recommended approach for writing Redux logic
++ [Action creators](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#action-creators) is a function that creates and returns an **action object**. Because React components don't need to know the Redux action types and forms. So, it's nice to separate creating actions into separate functions from <code>&lt;App&gt;</code>.
 
-+ [Action creators]()https://redux.js.org/tutorials/essentials/part-1-overview-concepts#action-creators is a function that creates and returns an action object.
+**✴️ [Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today)** is the official recommended approach for writing Redux logic.
+
+Even thought **Redux (the core library)** is the original and low-level state management library which provides core APIs, like: <code>createStore</code>, <code>combineReducers</code>, <code>applyMiddleware</code>, <code>compose</code>, it’s very **minimal**: you have to **write a lot of boilerplate** (actions, action types, reducers, immutable updates, middleware setup).
+  ```js
+  //Redux code
+
+  // Store
+  import { createStore } from 'redux'
+
+  // Reducer
+  function counterReducer(state = { value: 0 }, action) {
+    switch (action.type) {
+      case 'INCREMENT':
+        return { value: state.value + 1 }
+      default:
+        return state
+    }
+  }
+
+  const store = createStore(counterReducer)
+
+  // Action
+  store.dispatch({ type: 'INCREMENT' })
+  console.log(store.getState()) // { value: 1 }
+  ```
+
+Redux toolkit is the **official and recommended** way to write Redux today. **Built on top of Redux** → you still use Redux under the hood, but with much better developer experience. **Provides helper functions to reduce boilerplate** and enforce good practices, like: <code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>.
+  ```js
+  import { configureStore } from '@reduxjs/toolkit'
+  import todosReducer from '../features/todos/todosSlice'
+  import filtersReducer from '../features/filters/filtersSlice'
+
+  export const store = configureStore({
+    reducer: {
+      todos: todosReducer,
+      filters: filtersReducer
+    }
+  })
+  ```
+
+_But I didn't practice configureStore in this fullstack project._
