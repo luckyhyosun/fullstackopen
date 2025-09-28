@@ -7,7 +7,7 @@ const App = () => {
   const vote = (id) => {
     console.log('vote', id)
   }
-ddd
+
   return (
     <div>
       <h2>Anecdotes</h2>
