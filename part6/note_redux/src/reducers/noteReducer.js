@@ -3,17 +3,12 @@ const noteReducer = (state = [], action) => {
     case 'NEW_NOTE' :
       // using js array spread syntax
       return [...state, action.payload]
-    case 'TOGGLE_IMPORTANCE' : {
-      const id = action.payload.id
-      const noteToChange = state.find(n => n.id === id)
-      const changedNote = {
-        ...noteToChange,
-        important: !noteToChange.important
-      }
+    case 'TOGGLE_IMPORTANCE' :
       return state.map(note =>
-        note.id !== id ? note : changedNote
+        note.id === action.payload.id
+        ? {...note, important: !note.important}
+        : note
       )
-     }
     default:
       return state
   }
