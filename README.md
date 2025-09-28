@@ -1469,6 +1469,48 @@ So, from the code above, when the component gets rendered, no function gets call
 **To pass Event Handlers to Child Components**, we have to make sure that we use the correct attribute names when passing props to the component. (image from [here](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#passing-event-handlers-to-child-components))
 ![eventHandler](https://fullstackopen.com/static/065d96e37774cb6ccb206a39ba9c6cef/5a190/12f.png)
 
+**[presentational]()** & **[container]()** component in React
+
++ <code>Note</code> component, responsible for rendering a single note, is very simple and is not aware that the event handler it gets as props dispatches an action. These kinds of components are called presentational in React terminology.
+
++ <code>Notes</code>, on the other hand, is a container component, as it contains some application logic: it defines what the event handlers of the Note components do and coordinates the configuration of presentational components, that is, the Notes.
+
+  ```jsx
+  import { useDispatch, useSelector } from 'react-redux'
+  import { toggleImportanceOf } from '../reducers/noteReducer'
+
+  const Note = ({ note, handleClick }) => {
+    return(
+      <li onClick={handleClick}>
+        {note.content}
+        <strong> {note.important ? 'important' : ''}</strong>
+      </li>
+    )
+  }
+
+  const Notes = () => {
+
+    const dispatch = useDispatch()
+    const notes = useSelector(state => state)
+
+    return(
+      <ul>
+        {notes.map(note =>
+          <Note
+            key={note.id}
+            note={note}
+            handleClick={() =>
+              dispatch(toggleImportanceOf(note.id))
+            }
+          />
+        )}
+      </ul>
+    )
+  }
+
+  export default Notes
+```
+
 ✴️ **Spread syntax** <code>(...)</code> is a JavaScript operator. It **expands** (=spreads) elements of an array, object, or iterable into another place.
 ```js
 const nums = [1, 2, 3];
