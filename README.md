@@ -509,6 +509,14 @@ Frontend
 + npm install --save-dev deep-freeze
   - add the library _deep-freeze_, which can be used to ensure that the **reducer** has been correctly defined as **an immutable function**.
 
+**To run Redux Apps**,
++ npm install redux
+  - install redux
+
++ npm install @reduxjs/toolkit
+  - [Redux Toolkit](https://redux-toolkit.js.org/) is a library that solves some problems, for example, in the reducer and action creator-related code which has somewhat repetitive boilerplate code.
+
+
 ## Classification
 
 ###  API
@@ -1483,7 +1491,7 @@ So, from the code above, when the component gets rendered, no function gets call
 **To pass Event Handlers to Child Components**, we have to make sure that we use the correct attribute names when passing props to the component. (image from [here](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#passing-event-handlers-to-child-components))
 ![eventHandler](https://fullstackopen.com/static/065d96e37774cb6ccb206a39ba9c6cef/5a190/12f.png)
 
-**[presentational]()** & **[container]()** component in React
+**[presentational & container]((https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0))** component in React
 
 + <code>Note</code> component, responsible for rendering a single note, is very simple and is not aware that the event handler it gets as props dispatches an action. These kinds of components are called presentational in React terminology.
 
@@ -2934,23 +2942,35 @@ Even thought **Redux (the core library)** is the original and low-level state ma
   import { createStore } from 'redux'
 
   // Reducer
-  function counterReducer(state = { value: 0 }, action) {
+  function notesReducer(state = [], action) {
     switch (action.type) {
-      case 'INCREMENT':
-        return { value: state.value + 1 }
+      case 'ADD_NOTE':
+        return [...state, action.payload]
+      case 'TOGGLE_IMPORTANCE':
+        return state.map(…)
       default:
         return state
     }
   }
 
-  const store = createStore(counterReducer)
+  const store = createStore(notesReducer)
 
-  // Action
-  store.dispatch({ type: 'INCREMENT' })
-  console.log(store.getState()) // { value: 1 }
+  // Action Creators
+  const addNote = (content) => ({
+    type: ADD_NOTE,
+    payload: content
+  })
+  const toggleImportance = (id) => ({
+    type: TOGGLE_IMPORTANCE,
+    payload: id
+  })
+
+  // Dispatch
+  store.dispatch(addNote("hello world"))
   ```
 
 Redux toolkit is the **official and recommended** way to write Redux today. **Built on top of Redux** → you still use Redux under the hood, but with much better developer experience. **Provides helper functions to reduce boilerplate** and enforce good practices, like: <code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>.
++ **[configureStore](https://redux-toolkit.js.org/api/configureStore)** allows us to **no need** to use the <code>combineReducers</code> function to create the store's reducer.
   ```js
   import { configureStore } from '@reduxjs/toolkit'
   import todosReducer from '../features/todos/todosSlice'
@@ -2963,8 +2983,103 @@ Redux toolkit is the **official and recommended** way to write Redux today. **Bu
     }
   })
   ```
++ **[createSlice](https://redux-toolkit.js.org/api/createSlice)** allows us to **easily create reducer** and related **action creators**. These are collapsed into one place, which means we can use the <code>createSlice</code> function to **refactor** the _reducer_ and _action creators_.
+  ```js
+  import { createSlice } from '@reduxjs/toolkit'
 
-_But I didn't practice configureStore in this fullstack project._
+  const initialState = [
+    {
+      content: 'reducer defines how redux store works',
+      important: true,
+      id: 1,
+    },
+    {
+      content: 'state of store can contain any data',
+      important: false,
+      id: 2,
+    },
+  ]
+
+  const generateId = () =>
+    Number((Math.random() * 1000000).toFixed(0))
+
+
+  const noteSlice = createSlice({
+    name: 'notes',
+    initialState,
+    reducers: {
+      createNote(state, action) {
+        const content = action.payload
+        state.push({
+          content,
+          important: false,
+          id: generateId(),
+        })
+      },
+      toggleImportanceOf(state, action) {
+        const id = action.payload
+        const noteToChange = state.find(n => n.id === id)
+        const changedNote = {
+          ...noteToChange,
+          important: !noteToChange.important
+        }
+        return state.map(note =>
+          note.id !== id ? note : changedNote
+        )
+      }
+    },
+  })
+  export const {createNote,toggleImportanceOf} = noteSlice.actions
+  export default noteSlice.reducer
+  ```
+  1. **Initial state**: The slice starts with 2 notes. Each note has <code>content</code>, <code>important</code>, and an <code>id</code>.
+      ```js
+      const initialState = [
+        { content: 'reducer defines how redux store works', important: true, id: 1 },
+        { content: 'state of store can contain any data', important: false, id: 2 },
+      ]
+      ```
+  2. **createSlice**: easily creates reducer and related action creators.
+      ```js
+      const noteSlice = createSlice({
+        name: 'notes',
+        initialState,
+        reducers: { ... }
+      })
+      ```
+      The name property <code>name: 'notes'</code> → All actions from this slice will be **prefixed** with **"notes/"**. This prevents collisions with other slices.
+      For example:
+      - <code>notes/createNote</code>
+      - <code>notes/toggleImportanceOf</code>
+
+  3. **Reducers** (state-changing functions): The <code>reducers</code> parameter takes the reducer itself as an object, of which functions handle state changes caused by certain actions.<br />
+  Redux Toolkit utilizes the **[Immer library](https://immerjs.github.io/immer/)** with reducers created by <code>createSlice</code> function, which makes it possible to **mutate the state argument inside the reducer**. So, when we are using <code>state.push()</code>,  Immer uses the **mutated state to produce a new, immutable state** and thus the state changes remain immutable.
+      ```js
+      reducers: {
+        createNote(state, action) {
+          const content = action.payload
+          state.push({
+            content,
+            important: false,
+            id: generateId(),
+          })
+        }
+      }
+      ```
+      Note that the <code>action.payload</code> in the function contains the argument provided by calling the action creator:
+      ```js
+      dispatch(createNote("Hello world"))
+      ```
+      This dispatch call is equivalent to dispatching the following object:
+      ```js
+      dispatch({ type: 'notes/createNote', payload: 'Redux Toolkit is awesome!' })
+      ```
+  4. **Exported actions & reducer**: The <code>createSlice</code> function returns an **object** containing the **reducer** as well as the **action creators** defined by the reducers parameter.
+      ```js
+      export const { createNote, toggleImportanceOf } = noteSlice.actions
+      export default noteSlice.reducer
+      ```
+
 
 **✴️ React-redux [Provider](https://react-redux.js.org/api/provider)** is a component makes the Redux store available to any nested components that need to access the Redux store.
 
