@@ -2829,7 +2829,7 @@ Differences from Flux:
 ---
 
 + **Action**
-  - The general convention of action object is that actions have **exactly two fields**:
+  - The general convention of action **object** is that actions have **exactly two fields**:
     - **type** telling the type
     - **payload** containing the data included with the Action
       ```js
@@ -2844,19 +2844,33 @@ Differences from Flux:
       ```
 
 + **[Dispatch](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#dispatch)**
-  - is the **central hub** that decides which parts of the app get the action.
+  - is a **method** that decides which parts of the app get the action.
   - the messenger that sends actions to the store.
   - The **store** holds **state in memory** (not in the db) while your app is running in the browser, but it doesn’t know by itself that you want to update the state.
   - An **action** is just a **plain object** describing “what happened” (like <code>{ type: 'INCREMENT' }</code>).
   - **Dispatch** is the function you call to tell the store: “Hey store, here’s an action—please **process it using your reducer**.”
     ```js
     store.dispatch({ type: 'INCREMENT' })
+
+    // payload only exists if you explicitly add it in the action creator:
+    store.dispatch({ type: "INCREMENT", payload: { id: 1, name: "Apple" } })
     ```
 
   - Why dispatch is important?
     + Dispatch is like a **Central hub** : In large apps, you may have multiple stores. The dispatcher ensures that all stores receive actions in the correct order.
     + Dispatcher is where **middleware can intercept actions** for logging, analytics, or async tasks, like **Redux Thunk**.
     + **Decoupling** view from store logic: The view only sends an action. It doesn’t need to know how the store updates state.
+
++ **[Store](https://redux.js.org/api/store)**
+  - is just an **object** with a few methods (<code>getState()</code>, <code>dispatch()</code>, <code>subscribe()</code>) on it.
+  -  The store object in Redux is the **central state container** of your application.
+      ```js
+      {
+        user: { id: 1, name: "Alice" },
+        cart: { items: [ ... ] },
+        ui: { theme: "dark" }
+      }
+      ```
 
 + **[Reducer](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**
   - a function that receives the current _state_ and an _action object_, decides how to update the state if necessary, and returns the new state.
@@ -2975,3 +2989,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </Provider>
 )
 ```
+
+**✴️ Redux methods**
++ [combineReducer](https://redux.js.org/api/combinereducers) is combining the two existing reducers.
++ If we write <code>console.log()</code> inside of one of reducers from combineReduces:
+  ```js
+  const filterReducer = (state = 'ALL', action) => {
+    console.log('ACTION: ', action)
+    // ...
+  }
+  ```
++ Then, the console output will be repeated like this
+---
+  ![combineReducer](https://fullstackopen.com/static/823e8c9b9d906019902ce11b2f24db56/5a190/6.png)
+
++ This is because the combined reducer works in such a way that **every action gets handled in every part of the combined reducer**, or in other words, **every reducer "listens" to all of the dispatched actions** and does something with them if it has been instructed to do so.
++ But typically **only one reducer is interested in any given action**.
