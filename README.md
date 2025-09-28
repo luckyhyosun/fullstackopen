@@ -1390,6 +1390,11 @@ To recap, hooks may only be called from the inside of a function body that defin
   }
   ```
 
+  But, usually, **selector functions** are a bit more interesting and **return only selected parts of the contents** of the Redux store. We could for example return only notes marked as important:
+    ```js
+    const importantNotes = useSelector(state => state.filter(note => note.important))
+    ```
+
 + <code>useDispatch</code> → The **useDispatch hook** provides any React component access to the dispatch function of the Redux store defined in _main.jsx_. This allows all components to make changes to the state of the Redux store.
   ```jsx
   import { useSelector, useDispatch } from 'react-redux'
