@@ -1373,7 +1373,7 @@ The useState function (as well as the useEffect function) **must not be called**
 
 To recap, hooks may only be called from the inside of a function body that defines a React component.
 
-✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)** are provided by the React-Redux library, not React itself. They **connect your React components to the Redux store (global state)**. Compare to **react hooks** which manage local state and lifecycle inside **a single component**.
+✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)** are provided by the React-Redux library, not React itself. Compare to **react hooks** which manage local state and lifecycle inside **a single component**, they **connect your React components to the Redux store (global state)**.
 
 + <code>useSelector</code> → The **useSelector hook** receives a function as a parameter. The function either **searches for** or **selects data from the Redux store**. Here we need all of the notes, so our selector function returns the whole state:
   ```jsx
@@ -2807,8 +2807,8 @@ Differences from Flux:
 | Redux Component | Analogy                                     | Job                                                                                                                        |
 | --------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | **Action**      | Letter / request                            | Describes what happened (“Add 1 to counter”)                                                                               |
-| **Dispatcher**  | Postman / delivery system outside city hall | **Delivers the letter** to the correct department (store). Doesn’t read or change anything—just ensures it arrives safely. |
-| **Store**       | Cabinet / official records of city hall          | Holds the **state**. It delegates that job to the reducer you assign and the reducer updates this.
+| **Dispatcher**  | Postman / delivery system outside city hall | **Delivers the letter** to the correct department of _store_. Doesn’t read or change anything—just ensures it arrives safely. |
+| **Store**       | Cabinet / official records of city hall          | Holds the **state**. It delegates that job to the reducer you assign and the **reducer updates** this.
 | **Reducer**     | Worker / clerk inside city hall             | **Reads the letter (action)** and **updates the official records (state)** according to rules.                                          |                                                                  |
 | **View**        | Citizens / notice board                     | Observes changes in records and updates UI accordingly.                                                                    |
 
@@ -2833,8 +2833,11 @@ Differences from Flux:
   - is the **central hub** that decides which parts of the app get the action.
   - the messenger that sends actions to the store.
   - The **store** holds **state in memory** (not in the db) while your app is running in the browser, but it doesn’t know by itself that you want to update the state.
-  - An **action** is just a **plain object** describing “what happened” (like { type: 'INCREMENT' }).
+  - An **action** is just a **plain object** describing “what happened” (like <code>{ type: 'INCREMENT' }</code>).
   - **Dispatch** is the function you call to tell the store: “Hey store, here’s an action—please **process it using your reducer**.”
+    ```js
+    store.dispatch({ type: 'INCREMENT' })
+    ```
 
   - Why dispatch is important?
     + Dispatch is like a **Central hub** : In large apps, you may have multiple stores. The dispatcher ensures that all stores receive actions in the correct order.
