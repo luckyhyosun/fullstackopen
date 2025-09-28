@@ -1,36 +1,19 @@
-import './App.css'
-
-const generateId = () =>
-  Number((Math.random() * 1000000).toFixed(0))
-
-const createNote = () => {
-  return {
-    type: 'NEW_NOTE',
-    payload: {
-      content,
-      important: false,
-      id: generateId()
-    }
-  }
-}
-
-const toggleImportanceOf = (id) => {
-  return {
-      type: 'TOGGLE_IMPORTANCE',
-      payload: { id }
-    }
-}
+import { createNote, toggleImportanceOf } from './reducers/noteReducer'
+import { useSelector, useDispatch } from 'react-redux'
 
 const App = () => {
+  const dispatch = useDispatch()
+  const notes = useSelector(state => state)
+
   const addNote = (event) => {
     event.preventDefault()
     const content = event.target.note.value
     event.target.note.value = ''
-    store.dispatch(createNote(content))
+    dispatch(createNote(content))
   }
 
   const toggleImportance = (id) => {
-    store.dispatch(toggleImportanceOf(id))
+    dispatch(toggleImportanceOf(id))
   }
 
   return (
@@ -40,12 +23,12 @@ const App = () => {
         <button type="submit">add</button>
       </form>
       <ul>
-        {store.getState().map(note =>
+        {notes.map(note =>
           <li
             key={note.id}
             onClick={() => toggleImportance(note.id)}
           >
-            {note.content} <strong>{note.important ? 'important' : ''}</strong>
+            {note.content} {note.important}<strong>{note.important ? 'important' : ''}</strong>
           </li>
         )}
       </ul>

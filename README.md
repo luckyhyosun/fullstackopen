@@ -205,6 +205,8 @@ Frontend
   - React’s efficient UI rendering and state management.
   - It provides the structure for how the UI updates in response to user interactions.
 
+  React library:
+
   - [react-dom/client](https://legacy.reactjs.org/docs/react-dom-client.html) is the renderer that connects React to the browser DOM. Compare to **React library** (<code>react</code> package on npm) which is the **core library** and lets you write <code>&lt;App /&gt;</code> to define components and use hooks (<code>useState</code>, <code>useEffect</code>), **react-dom/client** provides the modern APIs like <code>createRoot</code> to **render React App() component to the browser DOM**.
     ```js
     import React from 'react'
@@ -238,7 +240,9 @@ Frontend
       root.render(<App />)
       ```
 
-+ [Redux]() is mostly used with React, but can work elsewhere and is **managing application state**.
++ [Redux](https://redux.js.org/introduction/getting-started) is mostly used with React, but can work elsewhere and is **managing application state**.
+
++ [React-redux](https://react-redux.js.org/introduction/getting-started) is **a separate library** from both React and Redux, built by the Redux team. This **connects React components to the Redux store**. So, your UI can read global state and dispatch actions in the browser (**frontend**).
 
 ### Backend Only
 + [mongoose](https://mongoosejs.com/) is Object Data Modeling (ODM) library for Node.js
@@ -745,18 +749,28 @@ If the button is not inside a <code>&lt;form&gt;</code>, then there’s no defau
 + Modules communicate via import/export → that’s how components share code.
 + A component itself is not a module, but in React, each file that defines a component is a module.
 ```js
-// Common JS
-const math = require('../address/math')
-
-module.exports = addFunction;     // export a single function
+// Common JS exports
+module.exports = calculation;     // export a single function
 module.exports = { addFunction, multiplyFunction };   // export multiple functions
 
-// ES6
-import math from '../address/math'
-
-exports default addFunction     // export a single function
-export { addFunction, multiplyFunction }    // export multiple functions
+// Common JS imports
+const { calculation, addFunction, multiplyFunction} = require('../address/math')
 ```
+
+```js
+// ES6 exports
+exports default calculation     // export a single function
+export { addFunction, multiplyFunction }    // export multiple functions
+
+// ES6 imports
+import calculation, { addFunction, multiplyFunction } from '../address/math'
+````
+
+**🐬 Pro Tips**
+
+In **ES6**, a module can have **only one default export**, but any number of "normal" named exports.
+
+But, in **CommonJS**, you can export **whatever** you like via <code>module.exports</code>
 
 ✴️ **DOM** is Document Object Model, **a tree of objects** that represents all the HTML elements on the page. Each element is an object you can read or change with JavaScript.
 ```html
@@ -1354,7 +1368,6 @@ The key concept of <code>ref</code>is:
       bulb1Ref.current.turnOff()
       ```
 
-
 **⚡ Rules of Hooks**
 The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
 
@@ -1362,15 +1375,33 @@ To recap, hooks may only be called from the inside of a function body that defin
 
 ✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)** are provided by the React-Redux library, not React itself. They **connect your React components to the Redux store (global state)**. Compare to **react hooks** which manage local state and lifecycle inside **a single component**.
 
-+ <code>useSelector</code> → read state from the Redux store.
-  ```js
-  const counter = useSelector((state) => state.counter)
++ <code>useSelector</code> → The **useSelector hook** receives a function as a parameter. The function either **searches for** or **selects data from the Redux store**. Here we need all of the notes, so our selector function returns the whole state:
+  ```jsx
+  import { useSelector, useDispatch } from 'react-redux'
+
+  const App = () => {
+    // either option 01
+    const notes = useSelector((state) => {return state})
+
+    // or option 02 which is shorter version
+    const notes = useSelector(state => state)
+
+    // ...
+  }
   ```
 
-+ <code>useDispatch</code> → get the dispatch function to send actions.
-  ```js
-  const dispatch = useDispatch()
-  dispatch({ type: "INCREMENT" })
++ <code>useDispatch</code> → The **useDispatch hook** provides any React component access to the dispatch function of the Redux store defined in _main.jsx_. This allows all components to make changes to the state of the Redux store.
+  ```jsx
+  import { useSelector, useDispatch } from 'react-redux'
+
+  const App = () => {
+    const dispatch = useDispatch()
+
+    const toggleImportance = (id) => {
+      dispatch(toggleImportanceOf(id))
+    }
+    // ...
+  }
   ```
 
 **⚡ Key difference**
@@ -2791,7 +2822,29 @@ Differences from Flux:
   - **In Flux (multi-store)**: Each store manages its own piece of state and its own logic. So every store has its own reducer-like logic.
   - **In Redux (single store)**: There’s just one big store, but you can split the reducer into smaller reducers (via combineReducers). Each reducer handles its slice of the state.
 
-+ [Action creators](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#action-creators) is a function that creates and returns an **action object**. Because React components don't need to know the Redux action types and forms. So, it's nice to separate creating actions into separate functions from <code>&lt;App&gt;</code>.
++ [Action creators](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#action-creators) is a function that creates and returns an **action object**. Since React components don't need to know the Redux action types and forms, it's nice to separate creating actions into separate functions from <code>&lt;App&gt;</code>.
+
+  it just gets the right action by calling the creator function:
+
+    ```js
+    // action creator
+    const toggleImportanceOf = (id) => {
+      return {
+        type: 'TOGGLE_IMPORTANCE',
+        payload: { id }
+      }
+    }
+
+    // App component
+    const App = () => {
+      const toggleImportance = (id) => {
+        store.dispatch(toggleImportanceOf(id))
+      }
+
+      ...
+    }
+
+    ```
 
 **✴️ [Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today)** is the official recommended approach for writing Redux logic.
 
@@ -2834,3 +2887,27 @@ Redux toolkit is the **official and recommended** way to write Redux today. **Bu
   ```
 
 _But I didn't practice configureStore in this fullstack project._
+
+**✴️ React-redux [Provider](https://react-redux.js.org/api/provider)** is a component makes the Redux store available to any nested components that need to access the Redux store.
+
+Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **prop drilling**).
+
+Now with the _store_, Provider wrapping the _App_ component, the _store_ is directly accessible to all components within the _App_ component without explicitly being passed as props.
+```jsx
+import ReactDOM from 'react-dom/client'
+import { createStore } from 'redux'
+
+import { Provider } from 'react-redux'
+
+import App from './App'
+import noteReducer from './reducers/noteReducer'
+
+const store = createStore(noteReducer)
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+```
