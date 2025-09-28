@@ -1397,6 +1397,20 @@ To recap, hooks may only be called from the inside of a function body that defin
 
 + <code>useDispatch</code> → The **useDispatch hook** provides any React component access to the dispatch function of the Redux store defined in _main.jsx_. This allows all components to make changes to the state of the Redux store.
   ```jsx
+  // main.js
+  import noteReducer from './reducers/noteReducer'
+
+  const store = createStore(noteReducer)
+
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+  ```
+
+  ```jsx
+  // App.jsx
   import { useSelector, useDispatch } from 'react-redux'
 
   const App = () => {
