@@ -19,8 +19,8 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-export const voteClicked = id => {
-  const foundAnecdot = initialState.find(anec => anec.id === id)
+export const voteClicked = (id, state) => {
+  const foundAnecdot = state.find(anec => anec.id === id)
 
   return {
     type: 'VOTE_CLICKED',
@@ -28,6 +28,17 @@ export const voteClicked = id => {
       content: foundAnecdot.content,
       id: foundAnecdot.id,
       votes: foundAnecdot.votes
+    }
+  }
+}
+
+export const createAnecdot = content => {
+  return {
+    type: 'CREATE_ANECDOT',
+    payload: {
+      content: content,
+      id: getId(),
+      votes: 0
     }
   }
 }
@@ -42,7 +53,8 @@ const reducer = (state = initialState, action) => {
         anec.id !== action.payload.id
           ? anec
           : {...anec, votes: anec.votes + 1})
-
+    case 'CREATE_ANECDOT' :
+        return state.concat(action.payload)
     default :
       return state
   }
