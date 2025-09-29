@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 const noteSlice = createSlice({
   name: 'notes',
@@ -8,17 +8,12 @@ const noteSlice = createSlice({
       state.push(action.payload)
     },
     toggleImportanceOf(state, action) {
-      const id = action.payload
-      const noteToChange = state.find(n => n.id === id)
-      const changedNote = {
-        ...noteToChange,
-        important: !noteToChange.important
-      }
+      const changedNote = action.payload
 
-      console.log(current(state))
+      console.log(changedNote)
 
       return state.map(note =>
-        note.id !== id ? note : changedNote
+        note.id !== action.payload.id ? note : changedNote
       )
     },
     setNotes(state, action) {

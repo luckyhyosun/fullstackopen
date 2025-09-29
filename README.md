@@ -2964,7 +2964,7 @@ Differences from Flux:
 + This is because the combined reducer works in such a way that **every action gets handled in every part of the combined reducer**, or in other words, **every reducer "listens" to all of the dispatched actions** and does something with them if it has been instructed to do so.
 + But typically **only one reducer is interested in any given action**.
 
-**✴️ React-redux [Provider](https://react-redux.js.org/api/provider)** is a component makes the Redux store available to any nested components that need to access the Redux store.
+**✴️ React-redux [Provider](https://react-redux.js.org/api/)** is a component makes the Redux store available to any nested components that need to access the Redux store.
 
 Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **prop drilling**).
 
