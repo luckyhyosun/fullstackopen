@@ -3313,3 +3313,41 @@ Why using <code>createSlice</code> is beneficial?
   - With plain Redux, you’ll have dozens of type constants, dozens of action creators, and multiple giant switch statements.
   - With slices, each feature lives in _one file_: 👉**state + reducers + actions bundled together**👈.
   - using the name prefix (<code>note/createNote</code>) is a good practice to give the parameter a value which is unique among the reducers. This way there won't be **unexpected collisions** between the application's action type values.
+
+**✴️ [Redux Thunk](https://github.com/reduxjs/redux-thunk)** is a library for Redux.
++ When components would dispatch an action **without the need to know about the communication with the server** that happens behind the scenes,
++ Thunk allows, for example:
+  - implementations of **asynchronous action creators**, which first wait for the completion of a certain asynchronous operation
+  - and **after that dispatch some action**, which changes the store's state.
++  The use of the library **doesn't need** any additional configuration or even installation when the **Redux store is created** using the Redux Toolkit's <code>configureStore</code> function.
+
+What is **Thunk**?
++ Thunk is a [middleware](https://redux.js.org/tutorials/fundamentals/part-4-store#middleware) and a **function that wraps some piece of work**, so you can **delay doing it** until later. For example:
+  ```js
+  // instead of doing the work immediately:
+  const value = calculation()
+
+  // we wrap it in a function (a thunk):
+  const thunk = () => calculation()
+
+  // now we can "call" the thunk later:
+  console.log(thunk())  // does the calculation when needed
+  ```
+
+How does it **work**?
++ Normally in Redux, **action creators** return an **object** like this:
+  ```js
+  { type: 'notes/add', payload: 'hello' }
+  ```
++ But with Redux Thunk, an **action creator** can instead return a **function**.That function can:
+  - Wait for something asynchronous (like an API call with <code>axios</code>).
+  - Then, when it’s done, use <code>dispatch</code> to send a normal action to update the store.
+  - the function receives Redux store's <code>dispatch</code> and <code>getState</code> methods as parameters.
+  ```js
+  function fetchNotesThunk() {
+    return async function(dispatch, getState) {
+      const notes = await fetch('/api/notes').then(res => res.json())
+      dispatch({ type: 'notes/set', payload: notes })
+    }
+  }
+  ```
