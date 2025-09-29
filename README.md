@@ -278,7 +278,8 @@ Frontend
 
 ## Extensions
 + [JSONView](https://chromewebstore.google.com/detail/jsonview/gmegofmjomhknnokphhckolhcffdaihd?pli=1)
-+ [React Developr Tool](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
++ [React DeveTool](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
++ [Redux DevTools](https://chromewebstore.google.com/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)
 
 ## Reading Materials
 + [Linear algebra](https://www.csc.kth.se/~weinkauf/teaching/visualization/index.html)
