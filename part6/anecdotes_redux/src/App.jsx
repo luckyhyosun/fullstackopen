@@ -30,7 +30,7 @@ const App = () => {
 
         dispatch(setAnecdotes(setInitialAnecdotes))
       })
-  })
+  }, [])
 
   return (
     <div>
