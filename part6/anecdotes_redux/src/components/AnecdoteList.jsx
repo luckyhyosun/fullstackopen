@@ -2,13 +2,16 @@ import { useSelector, useDispatch } from 'react-redux'
 import { voteClicked } from '../reducers/anecdoteReducer'
 
 const AnecdoteList = () => {
-  const anecdotes = useSelector(({anecdotes, filter}) => {
-    return anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+  // the 'store' parameter can be either:
+  // 'state' OR
+  // {anecdotes, filter} which is distructured format
+  const anecdotes = useSelector(store => {
+    return store.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(store.filter.toLowerCase()))
   })
   const dispatch = useDispatch()
 
   const vote = (id) => {
-    dispatch(voteClicked(id, anecdotes))
+    dispatch(voteClicked(id))
   }
 
   return(

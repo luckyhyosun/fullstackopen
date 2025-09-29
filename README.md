@@ -658,6 +658,21 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
   ```
 
 ## Appendix
+✴️ **Parameter vs Argument**
++ **Parameter** defines what kind of **input the function expects**.
+  ```js
+  function greet(name) {
+    console.log("Hello, " + name)
+  }
+  ```
+  <code>name</code> is the parameter.
+
++ **Argument** is the **actual value you pass into the function** when calling it.
+  ```js
+  greet("Alice")
+  ```
+  <code>"Alice"</code> is the argument.
+
 ✴️ **Function**
 + Function definition
   ```js
@@ -3036,10 +3051,9 @@ Even thought **Redux (the core library)** is the original and low-level state ma
   })
   ```
 + **[createSlice](https://redux-toolkit.js.org/api/createSlice)** allows us to **easily create reducer** and related **action creators**. These are collapsed into one place, which means we can use the <code>createSlice</code> function to **refactor** the _reducer_ and _action creators_.<br />
-And <code>createslice</code> needs **3** things to starts:<br />
-  <code>createSlice({ name, initialState, reducers })</code>
+And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>createSlice({ name, initialState, reducers })</code>
   1. A **name** → the label on the toolbox (<code>"notes"</code>)
-  2. Some **starting material** → the sticky notes already on your board (<code>initialState</code>)
+  2. Some **starting material** → the sticky notes already on your board (<code>initialState</code>). This initialState **defines the shape of the slice of state**.
   3. A set of **instructions** → what to do when someone asks for changes (<code>reducers</code>)
 
   ```js
@@ -3148,11 +3162,11 @@ And <code>createslice</code> needs **3** things to starts:<br />
         }
       }
       ```
-      Note that the <code>action.payload</code> in the function contains the argument provided by calling the action creator:
+    - Note that the <code>action.payload</code> in the function contains the argument provided by calling the action creator:
       ```js
       dispatch(createNote("Hello world"))
       ```
-      This dispatch call is equivalent to dispatching the following object:
+    - This dispatch call is equivalent to dispatching the following object:
       ```js
       dispatch({ type: 'notes/createNote', payload: 'Hello world' })
       ```
@@ -3160,6 +3174,19 @@ And <code>createslice</code> needs **3** things to starts:<br />
       👉 <code>dispatch(createNote("Hello world"))</code> not the action itself, but the act of **sending/calling an action object to the store**.
       - createNote("Hello world") → makes the action object.
       - dispatch(...) → delivers it to the store, so reducers can run.
+    - Since the action creator only deliver "Hello world", nothing else (<code>important</code> and <code>id</code>), You, **the developer, decided what extra fields** (important, id) should be added.
+      ```js
+      createNote(state, action) {
+        const content = action.payload   // "hello world"
+        state.push({
+          content,
+          important: false,
+          id: generateId(),
+        })
+      }
+      ```
+    - The **reducer** is responsible for **building the full object before pushing it into state**.
+
   4. **Exported actions & reducer**: The <code>createSlice</code> function returns an **object** containing the **reducer** as well as the **action creators** which are automatically defined under the hood.<br />
   The **default export** is **only the reducer**, not the action creator.
       ```js
@@ -3250,9 +3277,15 @@ This is the flow:
 **🐬 Pro Tips**
 + Redux only updates the state if you either:
   - **Mutate** the existing state (for **objects/arrays**).
-    - When your slice state is an object or array, you **don’t need to return anything** if you “**mutate**” the state directly, using <code>.push()</code>, <code>.find()</code>...etc.
+    - When your slice state is an object or array, you **don’t need to <code>return</code> anything** if you “**mutate**” the state directly, using <code>.push()</code>, <code>.splice()</code>, <code>.pop()</code> ...etc.
+      ```js
+      filterChange(state, action) {
+        state.push(...)
+      }
+      ```
   - **Return a new state value**.
     - But when your slice state is **primitives** like **string, number, or boolean** → you **must return the new value**.
+    - Also, some function **<code>.map()</code>, <code>.concat()</code>, and <code>.filter()</code>** are creating a brand new array. But not mutates. So we should **return the new value**.
     ```js
     // ❌ not working: state is local variable inside this function.
     // it does not update the actual slice state in the store.
@@ -3265,6 +3298,8 @@ This is the flow:
     ```js
     // ✅ working: Return the new value instead of reassigning state
     filterChange(state, action) {
+      return state.map(...)
+      return state.filter(...)
       return action.payload
     }
     ```
