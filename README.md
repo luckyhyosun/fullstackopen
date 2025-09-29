@@ -3339,15 +3339,29 @@ How does it **work**?
   ```js
   { type: 'notes/add', payload: 'hello' }
   ```
-+ But with Redux Thunk, an **action creator** can instead return a **function**.That function can:
++ But with Redux Thunk, an **action creator** can instead return a **function**. That function can:
   - Wait for something asynchronous (like an API call with <code>axios</code>).
   - Then, when it’s done, use <code>dispatch</code> to send a normal action to update the store.
   - the function receives Redux store's <code>dispatch</code> and <code>getState</code> methods as parameters.
-  ```js
-  function fetchNotesThunk() {
-    return async function(dispatch, getState) {
-      const notes = await fetch('/api/notes').then(res => res.json())
-      dispatch({ type: 'notes/set', payload: notes })
+    ```js
+    function fetchNotesThunk() {
+      return async function(dispatch, getState) {
+        const notes = await fetch('/api/notes').then(res => res.json())
+        dispatch({ type: 'notes/set', payload: notes })
+      }
     }
-  }
-  ```
+    ```
+    OR it's arrow function way. The code above and below are the same.
+    ```js
+    export const initializeStore = () => {
+      return async (dispatch, getState) => {
+        const anecdotes = await anecdotesService.getAll()
+        dispatch(setAnecdotes(anecdotes))
+      }
+    }
+    ```
++ **Redux Thunk middleware** sees you dispatched a **function**, not an object. Then tt automatically calls that function like this:
+    ```js
+    thunkFn(store.dispatch, store.getState)
+    ```
+  - Event though you didn't declare or create <code>dispatch</code> and <code>getState</code> parameter, Redux Thunk injects them for you when it runs your function automatically.
