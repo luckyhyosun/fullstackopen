@@ -1,10 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { voteClicked } from '../reducers/anecdoteReducer'
+import { createNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
-  // the 'store' parameter can be either:
-  // 'state' OR
-  // {anecdotes, filter} which is distructured format
   const anecdotes = useSelector(store => {
     return store.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(store.filter.toLowerCase()))
   })
@@ -12,6 +10,8 @@ const AnecdoteList = () => {
 
   const vote = (id) => {
     dispatch(voteClicked(id))
+    const foundAnecdote = anecdotes.find(anecdote => anecdote.id === id)
+    dispatch(createNotification(`⬆️ ${foundAnecdote.content}⬆️ is voted!`))
   }
 
   return(
