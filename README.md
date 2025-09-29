@@ -2932,6 +2932,46 @@ Differences from Flux:
 
     ```
 
+**✴️ Redux methods**
++ [combineReducer](https://redux.js.org/api/combinereducers) is combining the two existing reducers.
++ If we write <code>console.log()</code> inside of one of reducers from combineReduces:
+  ```js
+  const filterReducer = (state = 'ALL', action) => {
+    console.log('ACTION: ', action)
+    // ...
+  }
+  ```
++ Then, the console output will be repeated like this
+---
+  ![combineReducer](https://fullstackopen.com/static/823e8c9b9d906019902ce11b2f24db56/5a190/6.png)
+
++ This is because the combined reducer works in such a way that **every action gets handled in every part of the combined reducer**, or in other words, **every reducer "listens" to all of the dispatched actions** and does something with them if it has been instructed to do so.
++ But typically **only one reducer is interested in any given action**.
+
+**✴️ React-redux [Provider](https://react-redux.js.org/api/provider)** is a component makes the Redux store available to any nested components that need to access the Redux store.
+
+Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **prop drilling**).
+
+Now with the _store_, Provider wrapping the _App_ component, the _store_ is directly accessible to all components within the _App_ component without explicitly being passed as props.
+```jsx
+import ReactDOM from 'react-dom/client'
+import { createStore } from 'redux'
+
+import { Provider } from 'react-redux'
+
+import App from './App'
+import noteReducer from './reducers/noteReducer'
+
+const store = createStore(noteReducer)
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+```
+
 **✴️ [Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today)** is the official recommended approach for writing Redux logic.
 
 Even thought **Redux (the core library)** is the original and low-level state management library which provides core APIs, like: <code>createStore</code>, <code>combineReducers</code>, <code>applyMiddleware</code>, <code>compose</code>, it’s very **minimal**: you have to **write a lot of boilerplate** (actions, action types, reducers, immutable updates, middleware setup).
@@ -2969,7 +3009,7 @@ Even thought **Redux (the core library)** is the original and low-level state ma
   store.dispatch(addNote("hello world"))
   ```
 
-Redux toolkit is the **official and recommended** way to write Redux today. **Built on top of Redux** → you still use Redux under the hood, but with much better developer experience. **Provides helper functions to reduce boilerplate** and enforce good practices, like: <code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>.
+**Redux toolkit** is the **official and recommended** way to write Redux today. **Built on top of Redux** → you still use Redux under the hood, but with much better developer experience. **Provides helper functions to reduce boilerplate** and enforce good practices, like: <code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>.
 + **[configureStore](https://redux-toolkit.js.org/api/configureStore)** allows us to **no need** to use the <code>combineReducers</code> function to create the store's reducer.
   ```js
   import { configureStore } from '@reduxjs/toolkit'
@@ -2983,7 +3023,13 @@ Redux toolkit is the **official and recommended** way to write Redux today. **Bu
     }
   })
   ```
-+ **[createSlice](https://redux-toolkit.js.org/api/createSlice)** allows us to **easily create reducer** and related **action creators**. These are collapsed into one place, which means we can use the <code>createSlice</code> function to **refactor** the _reducer_ and _action creators_.
++ **[createSlice](https://redux-toolkit.js.org/api/createSlice)** allows us to **easily create reducer** and related **action creators**. These are collapsed into one place, which means we can use the <code>createSlice</code> function to **refactor** the _reducer_ and _action creators_.<br />
+And <code>createslice</code> needs **3** things to starts:<br />
+  <code>createSlice({ name, initialState, reducers })</code>
+  1. A **name** → the label on the toolbox (<code>"notes"</code>)
+  2. Some **starting material** → the sticky notes already on your board (<code>initialState</code>)
+  3. A set of **instructions** → what to do when someone asks for changes (<code>reducers</code>)
+
   ```js
   import { createSlice } from '@reduxjs/toolkit'
 
@@ -3052,8 +3098,32 @@ Redux toolkit is the **official and recommended** way to write Redux today. **Bu
       - <code>notes/createNote</code>
       - <code>notes/toggleImportanceOf</code>
 
-  3. **Reducers** (state-changing functions): The <code>reducers</code> parameter takes the reducer itself as an object, of which functions handle state changes caused by certain actions.<br />
-  Redux Toolkit utilizes the **[Immer library](https://immerjs.github.io/immer/)** with reducers created by <code>createSlice</code> function, which makes it possible to **mutate the state argument inside the reducer**. So, when we are using <code>state.push()</code>,  Immer uses the **mutated state to produce a new, immutable state** and thus the state changes remain immutable.
+  3. **Reducers** (state-changing functions): The <code>reducers</code> parameter takes the reducer itself as an object, of which functions handle state changes caused by certain actions.
+  + The functions inside <code>reducers: {}</code> are **case reducers (state-changing logic)** which is just a small function that **defines how state changes for one specific action type**.
+    ```js
+    createNote(state, action) {
+      const content = action.payload
+      state.push({
+        content,
+        important: false,
+        id: generateId(),
+      })
+    }
+    ```
+  + With Redux Toolkit, instead of **one big reducer**, using <code>switch-case-return</code>, you write smaller functions (case reducers), one for each action. Then createSlice combines them into the full reducer for you.
+    ```js
+    function notesReducer(state, action) {
+      switch (action.type) {
+        case "notes/createNote":
+          return [...state, action.payload]
+        case "notes/toggleImportanceOf":
+          return state.map(…)
+        default:
+          return state
+      }
+    }
+    ```
+  + Redux Toolkit utilizes the **[Immer library](https://immerjs.github.io/immer/)** with reducers created by <code>createSlice</code> function, which makes it possible to **mutate the state argument inside the reducer**. So, when we are using <code>state.push()</code>,  Immer uses the **mutated state to produce a new/ immutable state** and thus the state changes remain immutable.
       ```js
       reducers: {
         createNote(state, action) {
@@ -3072,51 +3142,78 @@ Redux toolkit is the **official and recommended** way to write Redux today. **Bu
       ```
       This dispatch call is equivalent to dispatching the following object:
       ```js
-      dispatch({ type: 'notes/createNote', payload: 'Redux Toolkit is awesome!' })
+      dispatch({ type: 'notes/createNote', payload: 'Hello world' })
       ```
-  4. **Exported actions & reducer**: The <code>createSlice</code> function returns an **object** containing the **reducer** as well as the **action creators** defined by the reducers parameter.
+
+      👉 <code>dispatch(createNote("Hello world"))</code> not the action itself, but the act of **sending/calling an action object to the store**.
+      - createNote("Hello world") → makes the action object.
+      - dispatch(...) → delivers it to the store, so reducers can run.
+  4. **Exported actions & reducer**: The <code>createSlice</code> function returns an **object** containing the **reducer** as well as the **action creators** which are automatically defined under the hood.
       ```js
       export const { createNote, toggleImportanceOf } = noteSlice.actions
       export default noteSlice.reducer
       ```
 
+So, when we are using **createSlice**, Redux Toolkit _automatically_ does **two jobs for every entry in the reducers object**: <br />
+👉 Generate an **action type** and **action creator**<br />
+👉 Combine **action to reducer**
 
-**✴️ React-redux [Provider](https://react-redux.js.org/api/provider)** is a component makes the Redux store available to any nested components that need to access the Redux store.
+This is the flow:
+1. import action creator
+    ```js
+    import { useDispatch } from 'react-redux'
+    import { createNote, toggleImportanceOf } from './noteSlice'
 
-Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **prop drilling**).
+    function NotesApp() {
+      const dispatch = useDispatch()
 
-Now with the _store_, Provider wrapping the _App_ component, the _store_ is directly accessible to all components within the _App_ component without explicitly being passed as props.
-```jsx
-import ReactDOM from 'react-dom/client'
-import { createStore } from 'redux'
+      const addNote = () => {
+        dispatch(createNote("Hello world"))
+      }
 
-import { Provider } from 'react-redux'
+      const toggleNote = (id) => {
+        dispatch(toggleImportanceOf(id))
+      }
 
-import App from './App'
-import noteReducer from './reducers/noteReducer'
+      return (
+        <div>
+          <button onClick={addNote}>Add Note</button>
+          <button onClick={() => toggleNote(1)}>Toggle Note 1</button>
+        </div>
+      )
+    }
+    ```
+2. calling the action creator with a payload argument
+    ```js
+    dispatch(createNote("Hello world"))
+    ```
+3. **action types are auto-prefixed** (<code>notes/createNote</code>)
+    - For <code>createNote</code>, it creates <code>"notes/createNote"</code>
+    - For <code>toggleImportanceOf</code>, it creates <code>"notes/toggleImportanceOf"</code>
 
-const store = createStore(noteReducer)
+4. **auto-generates the action creator function** (<code>createNote()</code> function)
+    ```js
+    function createNote(payload) {
+      return { type: "notes/createNote", payload }
+    }
+    ```
+4. Since this action is dispatched, Redux **hooks up your reducer logic to that action type**. The reducer logic <code>createNote(state, action)</code> function is right there inside the <code>reducers</code> object of <code>createSlice</code>.
+    ```js
+    const noteSlice = createSlice({
+      name: 'notes',
+      initialState,
+      reducers: {
+        createNote(state, action) {...},
+        toggleImportanceOf(state, action) {...}
+      }
+    })
+    ```
+5. That function **mutates the state** (via **Immer** under the hood), adding the new note. **At the very beginning**, the state equals the <code>initialState</code>. After all past actions, it reflects the **latest state**.
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-
-  <Provider store={store}>
-    <App />
-  </Provider>
-)
-```
-
-**✴️ Redux methods**
-+ [combineReducer](https://redux.js.org/api/combinereducers) is combining the two existing reducers.
-+ If we write <code>console.log()</code> inside of one of reducers from combineReduces:
-  ```js
-  const filterReducer = (state = 'ALL', action) => {
-    console.log('ACTION: ', action)
-    // ...
-  }
-  ```
-+ Then, the console output will be repeated like this
----
-  ![combineReducer](https://fullstackopen.com/static/823e8c9b9d906019902ce11b2f24db56/5a190/6.png)
-
-+ This is because the combined reducer works in such a way that **every action gets handled in every part of the combined reducer**, or in other words, **every reducer "listens" to all of the dispatched actions** and does something with them if it has been instructed to do so.
-+ But typically **only one reducer is interested in any given action**.
+Why using <code>createSlice</code> is beneficial?
++ In a small app, the switch-case looks simpler.
++ But in a real project with many features:
+  - Imagine you have <code>notes</code>, <code>users</code>, <code>cart</code>, <code>orders</code>, <code>auth</code> … each with 5–10 actions.
+  - With plain Redux, you’ll have dozens of type constants, dozens of action creators, and multiple giant switch statements.
+  - With slices, each feature lives in _one file_: 👉**state + reducers + actions bundled together**👈.
+  - using the name prefix (<code>note/createNote</code>) is a good practice to give the parameter a value which is unique among the reducers. This way there won't be **unexpected collisions** between the application's action type values.
