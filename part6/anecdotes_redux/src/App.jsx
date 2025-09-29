@@ -11,25 +11,10 @@ import { setAnecdotes } from './reducers/anecdoteReducer'
 const App = () => {
   const dispatch = useDispatch()
 
-  const getId = () => (100000 * Math.random()).toFixed(0)
-
-  const asObject = (anecdote) => {
-    return {
-      ...anecdote,
-      votes: 0,
-      id: getId()
-    }
-  }
-
   useEffect(() => {
     anecdotesService
       .getAll()
-      .then(anecdotes => {
-        const setInitialAnecdotes = anecdotes.map(asObject)
-        console.log(setInitialAnecdotes);
-
-        dispatch(setAnecdotes(setInitialAnecdotes))
-      })
+      .then(anecdotes => dispatch(setAnecdotes(anecdotes)))
   }, [])
 
   return (
