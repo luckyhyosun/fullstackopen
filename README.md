@@ -3160,40 +3160,42 @@ And <code>createslice</code> needs **3** things to starts:<br />
       👉 <code>dispatch(createNote("Hello world"))</code> not the action itself, but the act of **sending/calling an action object to the store**.
       - createNote("Hello world") → makes the action object.
       - dispatch(...) → delivers it to the store, so reducers can run.
-  4. **Exported actions & reducer**: The <code>createSlice</code> function returns an **object** containing the **reducer** as well as the **action creators** which are automatically defined under the hood.
+  4. **Exported actions & reducer**: The <code>createSlice</code> function returns an **object** containing the **reducer** as well as the **action creators** which are automatically defined under the hood.<br />
+  The **default export** is **only the reducer**, not the action creator.
       ```js
       export const { createNote, toggleImportanceOf } = noteSlice.actions
       export default noteSlice.reducer
       ```
+**🐬 Pro Tips**
++ <code>reducers</code> **(plural)** → this is an **object** where each _key_ is a **case reducer function**.
+  - These are the small functions you define for **handling specific actions**.
+  - They are **not the main reducer** themselves.
+    ```js
+    const noteSlice = createSlice({
+      //...
+      reducers: {
+        createNote(state, action) { ... },
+        toggleImportanceOf(state, action) { ... }
+      }
+    })
+    ```
 
-So, when we are using **createSlice**, Redux Toolkit _automatically_ does **two jobs for every entry in the reducers object**: <br />
++ <code>reducer</code> **(singular)** → this is the **combined reducer function for the slice**.
+  - Redux Toolkit **automatically takes all your reducers** and **generates a single reducer function** that can be used in <code>configureStore</code> or <code>combineReducers</code>.
+  - This is what Redux actually needs to **update state**.
+    ```js
+    export default noteSlice.reducer
+    ```
+
+So, when we are using **createSlice**, Redux Toolkit _automatically_ does **important jobs for every entry in the reducers object**, under the hood: <br />
 👉 Generate an **action type** and **action creator**<br />
-👉 Combine **action to reducer**
+👉 Connect **action to reducer**<br />
+👉 Combines all the case reducers into **one reducer function** and puts it in <code>noteSlice.reducer</code>.
 
 This is the flow:
 1. import action creator
     ```js
-    import { useDispatch } from 'react-redux'
     import { createNote, toggleImportanceOf } from './noteSlice'
-
-    function NotesApp() {
-      const dispatch = useDispatch()
-
-      const addNote = () => {
-        dispatch(createNote("Hello world"))
-      }
-
-      const toggleNote = (id) => {
-        dispatch(toggleImportanceOf(id))
-      }
-
-      return (
-        <div>
-          <button onClick={addNote}>Add Note</button>
-          <button onClick={() => toggleNote(1)}>Toggle Note 1</button>
-        </div>
-      )
-    }
     ```
 2. calling the action creator with a payload argument
     ```js
@@ -3203,13 +3205,15 @@ This is the flow:
     - For <code>createNote</code>, it creates <code>"notes/createNote"</code>
     - For <code>toggleImportanceOf</code>, it creates <code>"notes/toggleImportanceOf"</code>
 
-4. **auto-generates the action creator function** (<code>createNote()</code> function)
+4. **the action creator function is auto-generated**, based on action calling
+    - <code>createNote()</code> OR
+    - <code>toggleImportanceOf</code>
     ```js
     function createNote(payload) {
       return { type: "notes/createNote", payload }
     }
     ```
-4. Since this action is dispatched, Redux **hooks up your reducer logic to that action type**. The reducer logic <code>createNote(state, action)</code> function is right there inside the <code>reducers</code> object of <code>createSlice</code>.
+5. Since this action is dispatched, Redux **hooks up your reducer logic to that action type**. The reducer logic <code>createNote(state, action)</code> function is right there inside the <code>reducers</code> object of <code>createSlice</code>.
     ```js
     const noteSlice = createSlice({
       name: 'notes',
@@ -3220,7 +3224,52 @@ This is the flow:
       }
     })
     ```
-5. That function **mutates the state** (via **Immer** under the hood), adding the new note. **At the very beginning**, the state equals the <code>initialState</code>. After all past actions, it reflects the **latest state**.
+6. That function **mutates the state** (via **Immer** under the hood), adding the new note. **At the very beginning**, the state equals the <code>initialState</code>. After all past actions, it reflects the **latest state**. <br /><br />
+  If a **store has multiple slices**,
+    ```js
+    const store = configureStore({
+      reducer: {
+        notes: noteReducer,
+        filter: noteFilter
+      }
+    })
+    ```
+    Since **the store’s state shape** is determined by the **keys** you provide in **reducer**, the **state of the store** would look like this, after update:
+    ```js
+    // using "store.getState()" to console.log
+
+    {
+      notes: [
+        { content: 'reducer defines how redux store works', important: true, id: 1 },
+        { content: 'state of store can contain any data', important: false, id: 2 }
+      ],
+      filter: 'ALL'
+    }
+    ```
+
+**🐬 Pro Tips**
++ Redux only updates the state if you either:
+  - **Mutate** the existing state (for **objects/arrays**).
+    - When your slice state is an object or array, you **don’t need to return anything** if you “**mutate**” the state directly, using <code>.push()</code>, <code>.find()</code>...etc.
+  - **Return a new state value**.
+    - But when your slice state is **primitives** like **string, number, or boolean** → you **must return the new value**.
+    ```js
+    // ❌ not working: state is local variable inside this function.
+    // it does not update the actual slice state in the store.
+    // Redux ignores this reassignment, so the store still has the old value ('').
+    filterChange(state, action) {
+      state = action.payload
+    }
+    ```
+
+    ```js
+    // ✅ working: Return the new value instead of reassigning state
+    filterChange(state, action) {
+      return action.payload
+    }
+    ```
+      - (state, action) => **newState**
+      - Because the return value of the reducer becomes the **new state**.
 
 Why using <code>createSlice</code> is beneficial?
 + In a small app, the switch-case looks simpler.
