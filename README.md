@@ -3283,7 +3283,7 @@ This is the flow:
         state.push(...)
       }
       ```
-  - **Return a new state value**.
+  - **Return a new state value**. And always **only one return value**, either one array, one object or a set of string.
     - But when your slice state is **primitives** like **string, number, or boolean** → you **must return the new value**.
     - Also, some function **<code>.map()</code>, <code>.concat()</code>, and <code>.filter()</code>** are creating a brand new array. But not mutates. So we should **return the new value**.
     ```js

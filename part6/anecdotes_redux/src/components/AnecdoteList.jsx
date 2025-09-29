@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { updateVote } from '../reducers/anecdoteReducer'
+import { createNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(store => {
@@ -14,6 +15,7 @@ const AnecdoteList = () => {
     }
 
     dispatch(updateVote(anecdote.id, updatedObj))
+    dispatch(createNotification(`⬆️ ${updatedObj.content}⬆️ is voted!`, 10))
   }
 
   return(
