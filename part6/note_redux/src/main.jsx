@@ -6,11 +6,20 @@ import App from './App'
 import noteReducer from './reducers/noteReducer'
 import filterReducer from './reducers/filterReducer'
 
+import noteService from './services/notes'
+import noteReducer, { appendNote } from './reducers/noteReducer'
+
 const store = configureStore({
   reducer: {
     notes: noteReducer,
     filter: filterReducer
   }
+})
+
+noteService.getAll().then(notes => {
+  notes.forEach(note => {
+    store.dispatch(appendNote(note))
+  })
 })
 
 ReactDOM.createRoot(document.getElementById('root')).render(
