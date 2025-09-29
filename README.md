@@ -3009,7 +3009,18 @@ Even thought **Redux (the core library)** is the original and low-level state ma
   store.dispatch(addNote("hello world"))
   ```
 
-**Redux toolkit** is the **official and recommended** way to write Redux today. **Built on top of Redux** → you still use Redux under the hood, but with much better developer experience. **Provides helper functions to reduce boilerplate** and enforce good practices, like: <code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>.
+**Redux toolkit** is the **official and recommended** way to write Redux today. **Built on top of Redux** → you still use Redux under the hood, but with much better developer experience. **Provides helper functions to reduce boilerplate** and enforce good practices, like: <code>configureStore</code>, <code>createSlice</code>, <code>createAsyncThunk</code>, <code>current</code>.
++ **[current](https://redux-toolkit.js.org/api/other-exports#current)** prints the current state during debugging.
+  ```js
+  import { createSlice, current } from '@reduxjs/toolkit'
+
+  toggleImportanceOf(state, action) {
+    ///..
+
+    console.log(current(state))
+  }
+  ```
+
 + **[configureStore](https://redux-toolkit.js.org/api/configureStore)** allows us to **no need** to use the <code>combineReducers</code> function to create the store's reducer.
   ```js
   import { configureStore } from '@reduxjs/toolkit'
