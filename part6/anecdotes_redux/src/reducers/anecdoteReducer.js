@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import anecdotesService from '../services/anecdotes'
+import { createNotification } from '../reducers/notificationReducer'
 
 const anecdoteSlice = createSlice({
   name: 'anecdote',
@@ -16,18 +17,26 @@ const anecdoteSlice = createSlice({
         : updatedAnecdote
       )
     },
-    createAnecdote(state, action){
+    appendAnecdote(state, action){
       state.push(action.payload)
     }
   }
 })
 
-export const { setAnecdotes, voteClicked, createAnecdote } = anecdoteSlice.actions
+export const { setAnecdotes, voteClicked, appendAnecdote } = anecdoteSlice.actions
 
 export const initializeStore = () => {
   return async function(dispatch) {
     const anecdotes = await anecdotesService.getAll()
     dispatch(setAnecdotes(anecdotes))
+  }
+}
+
+export const createAnecdote = (newObj) => {
+  return async dispatch => {
+    const newAnecdote = await anecdotesService.create(newObj)
+    dispatch(appendAnecdote(newAnecdote))
+    dispatch(createNotification(`📝 ${newAnecdote.content} 📝 is created!`))
   }
 }
 
