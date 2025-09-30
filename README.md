@@ -3374,6 +3374,23 @@ How does it **work**?
 **✴️ [React Query](https://tanstack.com/query/latest)** is a library to store and manage data retrieved from the server.
 + With React query, the application **retrieves data from the server** and **renders** it on the screen, **without using the React hooks** <code>useState</code> and <code>useEffect</code>.
 + The data on the server is now entirely under the administration of the React Query library, and the application does not need the state defined with React's useState hook at all!
++ React Query can start from <code>QueryClient</code>, which is the **central manager** of React Query.
+  - Stores the **cache** (all queries + mutations).
+  - Provides methods to **interact** with that cache (<code>invalidateQueries</code>, <code>setQueryData</code>, <code>getQueryData</code>, etc.).
+  - Handles things like **garbage collection, refetching rules**, and **global defaults**.
+    ```js
+    import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+    const queryClient = new QueryClient()
+
+    const Root = () => (
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    )
+    ```
+    Now every component inside <code>&lt;QueryClientProvider&gt;</code> can use **React Query hooks** (<code>useQuery</code>, <code>useMutation</code>, etc.), and they **all share the same cache and config**.
+
 + In React Query, there are **two main hooks** for server state:
   - **[useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)** → for fetching (read operations).
   - **[useMutate](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation)** → for changing (write operations, e.g., create, update, delete).
