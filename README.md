@@ -3372,3 +3372,8 @@ How does it **work**?
 **✴️ [React Query](https://tanstack.com/query/latest)** is a library to store and manage data retrieved from the server.
 + With React query, the application **retrieves data from the server** and **renders** it on the screen, **without using the React hooks** <code>useState</code> and <code>useEffect</code>.
 + The data on the server is now entirely under the administration of the React Query library, and the application does not need the state defined with React's useState hook at all!
+  - [Queries](https://tanstack.com/query/latest/docs/framework/react/guides/queries)
+  - [useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)
+  - [useMutate](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation)
+  - [Invalidataion](https://tanstack.com/query/latest/docs/framework/react/guides/invalidations-from-mutations) : React Query automatically update a query with the key notes,
+    +  i.e. fetch the notes from the server or the added note is also rendered.
