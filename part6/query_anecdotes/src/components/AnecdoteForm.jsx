@@ -8,22 +8,29 @@ const AnecdoteForm = () => {
   const queryClient = useQueryClient()
 
   const newAnecMutation = useMutation({
-    mutationFn: createAnecdote,
+    mutationFn: (newAnecdote) => {
+    if (newAnecdote.content.length < 5) {
+      console.log(newAnecdote);
+
+      return Promise.reject(new Error('Too short text, it should be more than 5 characters'))
+    }
+    return createAnecdote(newAnecdote)
+  },
     onSuccess: (response) => {
       const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(['anecdotes']), anecdotes.concat(response)
-    }
+    },
+    onError: (error, variables, context) => {
+      notificationDispatch({ type: 'ERROR', payload: error.message })
+    },
   })
 
   const onCreate = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    if(content.length > 4){
-      newAnecMutation.mutate({content})
-      notificationDispatch({ type: 'ADD', payload: content})
-    }
-    else{ window.alert("the text should be more than 5 words")}
+    newAnecMutation.mutate({content})
+    notificationDispatch({ type: 'ADD', payload: content})
 }
 
   return (
