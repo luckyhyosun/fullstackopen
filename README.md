@@ -1284,6 +1284,54 @@ In this code above:
 + <code>CounterDisplay</code> reads it via props.
 + <code>CounterButton</code> update the parent state via a callback prop.
 
+**✴️ React's [context](https://react.dev/learn/passing-data-deeply-with-context)** is a kind of global state of the application, to which it is possible to give direct access to any component app.
++ [createContext](https://react.dev/reference/react/createContext)
+  ```jsx
+  import CounterContext from './CounterContext'
+
+  const App = () => {
+    const [counter, counterDispatch] = useReducer(counterReducer, 0)
+
+    return (
+      <CounterContext.Provider value={[counter, counterDispatch]}>
+        <Display />
+        <div>
+          <Button type='INC' label='+' />
+          <Button type='DEC' label='-' />
+          <Button type='ZERO' label='0' />
+        </div>
+
+      </CounterContext.Provider>
+    )
+  }
+  ```
+  As can be seen, **providing the context** is done by **wrapping the child components** inside the <code>CounterContext.Provider</code> component and setting a suitable value for the context.
+
+  The context value is now set to be an **array** containing the value of the counter, and the dispatch function.
+
+  Other components now **access** the context using the <code>useContext</code> **hook**:
+
+  ```jsx
+  import { useContext } from 'react'
+  import CounterContext from './CounterContext'
+
+  const Display = () => {
+    const [counter] = useContext(CounterContext)
+    return <div>
+      {counter}
+    </div>
+  }
+
+  const Button = ({ type, label }) => {
+    const [counter, dispatch] = useContext(CounterContext)
+    return (
+      <button onClick={() => dispatch({ type })}>
+        {label}
+      </button>
+    )
+  }
+  ```
+
 ✴️ **React Hook** is a special function that lets you “hook into” React features like **state and lifecycle** methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
 
 **⚡ Most common hooks**
@@ -2974,7 +3022,7 @@ Differences from Flux:
 
 **✴️ React-redux [Provider](https://react-redux.js.org/api/)** is a component makes the Redux store available to any nested components that need to access the Redux store.
 
-Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **prop drilling**).
+Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **[prop drilling](https://react.dev/learn/passing-data-deeply-with-context)**).
 
 Now with the _store_, Provider wrapping the _App_ component, the _store_ is directly accessible to all components within the _App_ component without explicitly being passed as props.
 ```jsx
