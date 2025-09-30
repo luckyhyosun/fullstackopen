@@ -1397,6 +1397,9 @@ The key concept of <code>ref</code>is:
       bulb1Ref.current.turnOff()
       ```
 
++ [useReducer](https://react.dev/reference/react/useReducer) is another React Hook, which is Redux-like state management mechanism.
+
+
 **⚡ Rules of Hooks**
 The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
 
