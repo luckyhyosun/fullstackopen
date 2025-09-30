@@ -105,6 +105,8 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 + Authentication / Security → **backend only**
   - **JWT**
   - Passport.js
++ Server-state
+  - React Query : managing **asynchronous operations between your server and client**. Unlike **Redux**, which is client-state libraries and can be used to **store asynchronous data**, albeit inefficiently when compared to a tool like React Query
 #### APIs:
 + **REST / GraphQL** APIs exposed to clients
 + Third-party APIs: Google Maps API, Stripe API, OpenWeatherMap API
@@ -3372,8 +3374,30 @@ How does it **work**?
 **✴️ [React Query](https://tanstack.com/query/latest)** is a library to store and manage data retrieved from the server.
 + With React query, the application **retrieves data from the server** and **renders** it on the screen, **without using the React hooks** <code>useState</code> and <code>useEffect</code>.
 + The data on the server is now entirely under the administration of the React Query library, and the application does not need the state defined with React's useState hook at all!
-  - [Queries](https://tanstack.com/query/latest/docs/framework/react/guides/queries)
-  - [useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)
-  - [useMutate](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation)
-  - [Invalidataion](https://tanstack.com/query/latest/docs/framework/react/guides/invalidations-from-mutations) : React Query automatically update a query with the key notes,
-    +  i.e. fetch the notes from the server or the added note is also rendered.
++ In React Query, there are **two main hooks** for server state:
+  - **[useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)** → for fetching (read operations).
+  - **[useMutate](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation)** → for changing (write operations, e.g., create, update, delete).
+    + It ensures React Query knows **when data has changed**
+    + gives you a structured way to **handle success/error/loading states**
+    + and integrates seamlessly with **cache updates**, which means keeping React Query’s internal data store (**cache = in-memory JavaScript object**) in sync with the backend.
+
+  - [Queries](https://tanstack.com/query/latest/docs/framework/react/guides/queries) & [Invalidataion](https://tanstack.com/query/latest/docs/framework/react/guides/invalidations-from-mutations) : React Query automatically update a query with the key notes,
+    +  React Query keeps a **local copy** of your server data in memory, indexed by its queryKey.
+        ```js
+        const result = useQuery({
+          queryKey: ['notes'],
+          queryFn: getNotes
+        })
+        ```
+        Here, React Query stores the result of <code>getNotes()</code> in its cache under the key <code>['notes']</code>. <br />
+        So the next time a component asks for <code>['notes']</code>, React Query can serve it from cache instantly (no need to re-fetch unless the data is considered stale).
+    + So, when you run a **mutation** (<code>createNote</code>, <code>updateNote</code>), the server’s data changes — but your React Query cache still has the old data.
+    + Then React Query updates the cache by using **Invalidate + Refetch**
+    + <code>invalidateQueries</code> is a method on the queryClient that tells React Query:
+        ```js
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['notes'] })
+        }
+        ```
+        It says: “The data for this query key(<code>['notes']</code>) might be outdated (stale). Please **mark it stale**, and if something is actively using it, **re-fetch** it.”
+    + And since your component is using <code>useQuery(['notes'], getNotes)</code>, React Query **automatically triggers a re-fetch** of <code>getNotes</code>.
