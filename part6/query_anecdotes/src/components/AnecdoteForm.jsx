@@ -1,7 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createAnecdote } from '../requests'
+import { useNotifiDispatch } from '../NotificationContext'
 
 const AnecdoteForm = () => {
+  const notificationDispatch = useNotifiDispatch()
+
   const queryClient = useQueryClient()
 
   const newAnecMutation = useMutation({
@@ -16,7 +19,10 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    if(content.length > 4){newAnecMutation.mutate({content})}
+    if(content.length > 4){
+      newAnecMutation.mutate({content})
+      notificationDispatch({ type: 'ADD', payload: content})
+    }
     else{ window.alert("the text should be more than 5 words")}
 }
 
