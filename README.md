@@ -3256,30 +3256,79 @@ And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>crea
         }
       }
       ```
-    - Note that the <code>action.payload</code> in the function contains the argument provided by calling the action creator:
-      ```js
-      dispatch(createNote("Hello world"))
-      ```
-    - This dispatch call is equivalent to dispatching the following object:
-      ```js
-      dispatch({ type: 'notes/createNote', payload: 'Hello world' })
-      ```
+     Note that the <code>action.payload</code> in the function contains the argument provided by calling the action creator.
 
-      👉 <code>dispatch(createNote("Hello world"))</code> not the action itself, but the act of **sending/calling an action object to the store**.
-      - createNote("Hello world") → makes the action object.
-      - dispatch(...) → delivers it to the store, so reducers can run.
-    - Since the action creator only deliver "Hello world", nothing else (<code>important</code> and <code>id</code>), You, **the developer, decided what extra fields** (important, id) should be added.
-      ```js
-      createNote(state, action) {
-        const content = action.payload   // "hello world"
-        state.push({
-          content,
-          important: false,
-          id: generateId(),
-        })
-      }
-      ```
-    - The **reducer** is responsible for **building the full object before pushing it into state**.
+  + Code <code>dispatch()</code> is calling the action creator:
+    ```js
+    dispatch(createNote("Hello world"))
+    ```
+     This dispatch call is equivalent to dispatching the following object:
+    ```js
+    dispatch({ type: 'notes/createNote', payload: 'Hello world' })
+    ```
+    👉 Important:
+    - The <code>dispatch(createNote("Hello world"))</code> not the action itself, but it **sends the action object to the Redux store**.
+      1. **action types are auto-prefixed** (<code>notes</code>) by Redux
+          - For <code>createNote</code>, it creates <code>"notes/createNote"</code>
+          - For <code>toggleImportanceOf</code>, it creates <code>"notes/toggleImportanceOf"</code>
+      2. **the action creator function is auto-generated** by Redux
+          - <code>createNote()</code> OR
+          - <code>toggleImportanceOf</code>
+      3. The <code>createNote("Hello world")</code> is **calling the action creator function** that ❗️Redux Toolkit automatically generates, like this:
+          ```js
+          const createNote = (content) => {
+            return {
+              type: 'notes/createNote',
+              payload: content
+            }
+          }
+          ```
+
+      4. The **action creator function** that **returns the action object** to <code>dispatch()</code>.
+          ```js
+          {
+            type: 'notes/createNote', // <slice name>/<reducer name>
+            payload: "Hello world"
+          }
+          ```
+      5. The <code>dispatch(...)</code> → delivers the object to the store, and Redux **calls the reducer** you defined in the slice.
+          ```js
+          createNote(state, action)
+          ```
+      - Since the action creator only deliver "Hello world", nothing else (<code>important</code> and <code>id</code>), You, **the developer, decided what extra fields** (important, id) should be added.
+        ```js
+        createNote(state, action) {
+          const content = action.payload   // "hello world"
+          state.push({
+            content,
+            important: false,
+            id: generateId(),
+          })
+        }
+        ```
+      - Because **reducer** is responsible for **building the full object before pushing it into state**.
+      6. This **updates** the slice of **state** (<code>notes</code>) immutably under the hood (Redux Toolkit uses Immer). <br />
+      👉Important: **if store has multiple slices**,
+          ```js
+          const store = configureStore({
+            reducer: {
+              notes: noteReducer,
+              filter: noteFilter
+            }
+          })
+          ```
+          Since **the store’s state shape** is determined by the **keys** you provide in **reducer**, the **state of the store** would look like this, after update:
+          ```js
+          // using "store.getState()" to console.log
+
+          {
+            notes: [
+              { content: 'reducer defines how redux store works', important: true, id: 1 },
+              { content: 'state of store can contain any data', important: false, id: 2 }
+            ],
+            filter: 'ALL'
+          }
+          ```
 
   4. **Exported actions & reducer**: The <code>createSlice</code> function returns an **object** containing the **reducer** as well as the **action creators** which are automatically defined under the hood.<br />
   The **default export** is **only the reducer**, not the action creator.
@@ -3287,6 +3336,8 @@ And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>crea
       export const { createNote, toggleImportanceOf } = noteSlice.actions
       export default noteSlice.reducer
       ```
+      Even though **the names of** <code>createNote</code> and <code>toggleImportanceOf</code> **are the same** as your ❗️reducer functions of slice, these are now ❗️action creator functions, not the reducers themselves.
+
 **🐬 Pro Tips**
 + <code>reducers</code> **(plural)** → this is an **object** where each _key_ is a **case reducer function**.
   - These are the small functions you define for **handling specific actions**.
@@ -3303,69 +3354,34 @@ And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>crea
 
 + <code>reducer</code> **(singular)** → this is the **combined reducer function for the slice**.
   - Redux Toolkit **automatically takes all your reducers** and **generates a single reducer function** that can be used in <code>configureStore</code> or <code>combineReducers</code>.
+  - And the signle reducer function generated by Redux looks like this:
+    ```js
+    function noteReducer(state = initialState, action) {
+      switch (action.type) {
+        case 'notes/createNote':
+          return produce(state, draft => {   // RTK uses Immer internally
+            draft.push({
+              content: action.payload,
+              important: false,
+              id: generateId()
+            })
+          })
+
+        case 'notes/toggleImportanceOf':
+          return state.map(note =>
+            note.id !== action.payload
+              ? note
+              : { ...note, important: !note.important }
+          )
+
+        default:
+          return state
+      }
+    }
+    ```
   - This is what Redux actually needs to **update state**.
     ```js
     export default noteSlice.reducer
-    ```
-
-So, when we are using **createSlice**, Redux Toolkit _automatically_ does **important jobs for every entry in the reducers object**, under the hood: <br />
-👉 Generate an **action type** and **action creator**<br />
-👉 Connect **action to reducer**<br />
-👉 Combines all the case reducers into **one reducer function** and puts it in <code>noteSlice.reducer</code>.
-
-This is the flow:
-1. import action creator
-    ```js
-    import { createNote, toggleImportanceOf } from './noteSlice'
-    ```
-2. calling the action creator with a payload argument
-    ```js
-    dispatch(createNote("Hello world"))
-    ```
-3. **action types are auto-prefixed** (<code>notes/createNote</code>)
-    - For <code>createNote</code>, it creates <code>"notes/createNote"</code>
-    - For <code>toggleImportanceOf</code>, it creates <code>"notes/toggleImportanceOf"</code>
-
-4. **the action creator function is auto-generated**, based on action calling
-    - <code>createNote()</code> OR
-    - <code>toggleImportanceOf</code>
-    ```js
-    function createNote(payload) {
-      return { type: "notes/createNote", payload }
-    }
-    ```
-5. Since this action is dispatched, Redux **hooks up your reducer logic to that action type**. The reducer logic <code>createNote(state, action)</code> function is right there inside the <code>reducers</code> object of <code>createSlice</code>.
-    ```js
-    const noteSlice = createSlice({
-      name: 'notes',
-      initialState,
-      reducers: {
-        createNote(state, action) {...},
-        toggleImportanceOf(state, action) {...}
-      }
-    })
-    ```
-6. That function **mutates the state** (via **Immer** under the hood), adding the new note. **At the very beginning**, the state equals the <code>initialState</code>. After all past actions, it reflects the **latest state**. <br /><br />
-  If a **store has multiple slices**,
-    ```js
-    const store = configureStore({
-      reducer: {
-        notes: noteReducer,
-        filter: noteFilter
-      }
-    })
-    ```
-    Since **the store’s state shape** is determined by the **keys** you provide in **reducer**, the **state of the store** would look like this, after update:
-    ```js
-    // using "store.getState()" to console.log
-
-    {
-      notes: [
-        { content: 'reducer defines how redux store works', important: true, id: 1 },
-        { content: 'state of store can contain any data', important: false, id: 2 }
-      ],
-      filter: 'ALL'
-    }
     ```
 
 **🐬 Pro Tips**

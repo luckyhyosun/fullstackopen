@@ -10,15 +10,11 @@ const Notes = () => {
     : state.notes.filter(note => !note.important)
   })
 
-  const toggleImportance = id => {
-    dispatch(toggleImportanceOf(id))
-  }
-
   return <ul>
   {notes.map(note=>
     <li key={note.id}>
       {note.content}
-      <button onClick={() => toggleImportance(note.id)}>
+      <button onClick={() => dispatch(toggleImportanceOf(note.id))}>
         {note.important ? 'important' : 'Not important'}
       </button>
     </li>
