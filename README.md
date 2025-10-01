@@ -1468,9 +1468,11 @@ The key concept of <code>ref</code>is:
 
 
 **⚡ Rules of Hooks**
-The useState function (as well as the useEffect function) **must not be called** from inside of a loop, a conditional expression, or any place that is not a function defining a component. This must be done to ensure that the hooks are always called in the same order, and if this isn't the case the application will behave erratically.
+React hooks (like <code>useState</code>, <code>useEffect</code>, <code>useQuery,</code> <code>useMutation</code>, etc.) **must only be called**:
++ At the **top level** of a React function component
++ Or inside **another custom hook**
 
-To recap, hooks may only be called from the inside of a function body that defines a React component.
+React needs to know the **order of hook calls** to correctly **keep track of their state** between renders. So, to recap, hooks may only be called from the inside of a function body that defines a React component.
 
 ✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)**
 + are provided by the React-Redux library, not React itself.
@@ -3501,11 +3503,33 @@ How does it **work**?
     Now every component inside <code>&lt;QueryClientProvider&gt;</code> can use **React Query hooks** (<code>useQuery</code>, <code>useMutation</code>, etc.), and they **all share the same cache and config**.
 
 + In React Query, there are **two main hooks** for server state:
-  - **[useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)** → for fetching (read operations).
   - **[useMutate](https://tanstack.com/query/latest/docs/framework/react/reference/useMutation)** → for changing (write operations, e.g., create, update, delete).
     + It ensures React Query knows **when data has changed**
     + gives you a structured way to **handle success/error/loading states**
+      ```js
+      const newNoteMutation = useMutation({ mutationFn: createNote })
+      ```
+      The <code>useMutation</code> gives you back an **object** (the mutation result object). That object includes things like:
+        - <code>mutate</code> → function to trigger the mutation
+        - <code>isLoading</code> → true while the request is happening
+        - <code>isError</code> → true if it fails
+        - <code>isSuccess</code> → true if it succeeds
+        - <code>data</code> → the response data returned by your mutation function
+
+      So, that I can use <code>mutate</code>:
+        ```js
+        newNoteMutation.mutate({ content, important: true })
+        ```
     + and integrates seamlessly with **cache updates**, which means keeping React Query’s internal data store (**cache = in-memory JavaScript object**) in sync with the backend.
+  - **[useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)** → for fetching (read operations).
+    + When the mutation was done, adding a data to the database is working, but the updated note is not shown on the browser UI.
+    + So after your mutation succeeds, we use <code>useQuery</code>:
+      ```js
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['notes'] })
+      }
+      ```
+      It is saying “The cached <code>['notes']</code> list is stale (**invalid**), so **refetch** it from the server.”.
 
   - [Queries](https://tanstack.com/query/latest/docs/framework/react/guides/queries) & [Invalidataion](https://tanstack.com/query/latest/docs/framework/react/guides/invalidations-from-mutations) : React Query automatically update a query with the key notes,
     +  React Query keeps a **local copy** of your server data in memory, indexed by its queryKey.

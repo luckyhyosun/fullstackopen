@@ -1,26 +1,22 @@
-import { useDispatch } from 'react-redux'
-import { filterChange } from '../reducers/filterReducer'
+import { useContext } from 'react'
+import FilterContext from '../FilterContext'
 
 const VisibilityFilter = () => {
-  const dispatch = useDispatch()
-
-  const filterSelected = (value) => {
-    dispatch(filterChange(value))
-  }
+  const [filter, dispatch] = useContext(FilterContext)
 
   return <div>
     all<input
       type="radio"
       name="filter"
-      onChange={() => filterSelected('ALL')} />
+      onChange={() => dispatch({ type: 'SET_FILTER', payload:'ALL'})} />
     important<input
       type="radio"
       name="filter"
-      onChange={() => filterSelected('IMPORTANT')} />
+      onChange={() => dispatch({ type: 'SET_FILTER',  payload:'IMPORTANT' })} />
     nonimportant<input
       type="radio"
       name="filter"
-      onChange={() => filterSelected('NONIMPORTANT')} />
+      onChange={() => dispatch({ type: 'SET_FILTER', payload:'NONIMPORTANT' })} />
   </div>
 }
 

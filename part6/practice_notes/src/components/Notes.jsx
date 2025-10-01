@@ -1,20 +1,23 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { toggleImportanceOf} from '../reducers/noteReducer'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { updateNote } from '../requests'
 
-const Notes = () => {
-  const dispatch = useDispatch()
-  const notes = useSelector(state => {
-    if(state.filter === 'ALL') return state.notes
-    return state.filter === 'IMPORTANT'
-    ? state.notes.filter(note => note.important)
-    : state.notes.filter(note => !note.important)
+const Notes = ({ notes }) => {
+  const queryClient = useQueryClient()
+  const updateNoteMutation = useMutation({
+    mutationFn: updateNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] })
+    },
   })
+  const toggleImportance = (note) => {
+    updateNoteMutation.mutate({...note, important: !note.important })
+  }
 
   return <ul>
   {notes.map(note=>
     <li key={note.id}>
       {note.content}
-      <button onClick={() => dispatch(toggleImportanceOf(note.id))}>
+      <button onClick={() => toggleImportance(note)}>
         {note.important ? 'important' : 'Not important'}
       </button>
     </li>
