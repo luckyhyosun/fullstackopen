@@ -3478,7 +3478,11 @@ How does it **work**?
 
 ✴️ **[React Query](https://tanstack.com/query/latest)** is a library to store and manage data retrieved from the server.
 + With React query, the application **retrieves data from the server** and **renders** it on the screen, **without using the React hooks** <code>useState</code> and <code>useEffect</code>.
-+ The data on the server is now entirely under the administration of the React Query library, and the application does not need the state defined with React's useState hook at all!
++ In React, if you fetch data with <code>useEffect</code> + <code>axios</code> + <code>get/post/delete/put</code>, and that’s a lot of boilerplate.
++ With React Query, we only need to use:
+  - <code>useQuery</code> → for reading/fetching data
+  - <code>useMutation</code> → for creating/updating/deleting data
++ The data on the server is now entirely under the administration of the React Query library, and the application does not need the state, which is defined with React's useState hook at all!
 + React Query can start from <code>QueryClient</code>, which is the **central manager** of React Query.
   - Stores the **cache** (all queries + mutations).
   - Provides methods to **interact** with that cache (<code>invalidateQueries</code>, <code>setQueryData</code>, <code>getQueryData</code>, etc.).
