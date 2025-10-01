@@ -66,7 +66,8 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 + state management → **frontend only**
   - **React**
   - **Redux** (implementing **Flux** pattern)
-  - MobX
+  - [MobX](https://mobx.js.org/README.html)
+  - [Recoil](https://recoiljs.org/)
   - Pinia (state management)
 + HTTP / API calls
   - **Axios**
@@ -192,7 +193,7 @@ Frontend
   - Frontend frameworks/libraries like React, Vue, or Angular run in the browser, which cannot execute server-side Node.js code.
 
 ### Both
-+ [Next.js](https://nextjs.org/) is a React framewor, which means Next.js is built on top of React, so you still write React components for your UI. And it provides extra features React alone doesn’t have, like:
++ [Next.js](https://nextjs.org/) is a React framework, which means Next.js is built on top of React, so you still write React components for your UI. And it provides extra features React alone doesn’t have, like:
   + Server-side rendering (SSR)
   + Static site generation (SSG)
   + API routes (backend endpoints)
@@ -2861,12 +2862,20 @@ Flux offers a standard way for how and where the application's state is kept and
 
 **MVC vs Flux**
 + **MVC (Model–View–Controller)** flow is **bidirectional**
-  - Model – holds the data and business logic.
+  - which means **data can flow in both directions between components**.
+    ```
+    View ↔ Controller ↔ Model
+    ```
   - View – displays data (UI).
   - Controller – handles user input, updates the model, and decides what view to render.
+  - Model – holds the data and business logic.
   - **As apps grow**, the bidirectional links between models, views, and controllers can create complex tangled dependencies ("**spaghetti code**").
 
 + **Flux** flow is **unidirectional**
+  - which means **data flows in one direction only**, which simplifies state changes.
+    ```
+    View → Dispatch Action → Store → View.
+    ```
   - [Action](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#actions) – plain objects describing “what happened” (e.g., ADD_TODO).
   - Dispatcher – central hub that sends actions to stores.
   - [Store](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#store) – holds application state and logic; updates itself when receiving actions.
@@ -2875,7 +2884,7 @@ Flux offers a standard way for how and where the application's state is kept and
 
 ✴️ **Redux**
 
-Redux is also **unidirectional** (like Flux).
+Redux is **global state management** and also **unidirectional** (like Flux).
 Differences from Flux:
   + **One single store** (= one big object) for the whole app (not many stores).
   + Store is just **a big JavaScript object** holding the entire state tree.
