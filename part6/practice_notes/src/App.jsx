@@ -3,12 +3,12 @@ import Notes from './components/Notes'
 import VisibilityFilter from './components/VisibilityFilter'
 
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { getNotes } from './requests'
 
 const App = () => {
   const result = useQuery({
     queryKey: ['notes'],
-    queryFn: () => axios.get('http://localhost:3001/notes').then(res => res.data)
+    queryFn: getNotes
   })
 
   console.log(JSON.parse(JSON.stringify(result)))
