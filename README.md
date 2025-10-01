@@ -2909,11 +2909,11 @@ Differences from Flux:
 
 | Redux Component | Analogy                                     | Job                                                                                                                        |
 | --------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| **Action**      | Letter / request                            | Describes what happened (“Add 1 to counter”)                                                                               |
-| **Dispatcher**  | Postman / delivery system outside city hall | **Delivers the letter** to the correct department of _store_. Doesn’t read or change anything—just ensures it arrives safely. |
+| **Action**      | Letter / request                            | A formal **request** describing what should happen (“Add 1 to counter”)                                                                               |
+| **Dispatcher**  | Receptionist | The one who **takes the letter and makes sure it gets to the right department**. They don’t read or modify the letter, just route it correctly. |
 | **Store**       | Cabinet / official records of city hall          | Holds the **state**. It delegates that job to the reducer you assign and the **reducer updates** this.
-| **Reducer**     | Worker / clerk inside city hall             | **Reads the letter (action)** and **updates the official records (state)** according to rules.                                          |                                                                  |
-| **View**        | Citizens / notice board                     | Observes changes in records and updates UI accordingly.                                                                    |
+| **Reducer**     | Clerk / Department Worker             | The actual person who **reads the letter and updates the records** in the official log, following strict rules. They don’t do anything outside what the letter and the rules allow.                                          |                                                                  |
+| **View**        | Citizens                     | Citizens (UI) can **see the updated information** once the records are changed.                                                                    |
 
 ---
 
@@ -2963,7 +2963,7 @@ Differences from Flux:
 
 + **[Reducer](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**
   - a function that receives the current _state_ and an _action object_, decides how to update the state if necessary, and returns the new state.
-  - Reducers must be **[pure functions](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**, which menas they _do not cause any side effects_ and they must always return the same response when called with the same parameters.
+  - Reducers must be **[pure functions](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**, which menas they _do not cause any side effects_ and awlays returns the same output for the same input. (**≠ Idempotency**)
   - It’s the same idea as React’s **[immutability](https://en.wikipedia.org/wiki/Immutable_object) rule**.
   - The term comes from functional programming, specifically **Array.reduce** in JavaScript:
     ```js
@@ -3014,7 +3014,12 @@ Differences from Flux:
     ```
 
 **✴️ Redux methods**
-+ [combineReducer](https://redux.js.org/api/combinereducers) is combining the two existing reducers.
++ [getState()](https://redux.js.org/api/store)
++ [subscribe()](https://redux.js.org/api/store#subscribelistener) is a change listener, which is used to create callback functions that the store calls whenever an action is dispatched to the store.
++ [render()](https://redux.js.org/usage/configuring-your-store) is a bridge between Redux and React.
+  - It Reads the latest state from the **store** (<code>store.getState()</code>)
+  - Passes that state into your root **React component**
++ [combineReducer()](https://redux.js.org/api/combinereducers) is combining the two existing reducers.
 + If we write <code>console.log()</code> inside of one of reducers from combineReduces:
   ```js
   const filterReducer = (state = 'ALL', action) => {
