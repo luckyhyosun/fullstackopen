@@ -1472,7 +1472,13 @@ The useState function (as well as the useEffect function) **must not be called**
 
 To recap, hooks may only be called from the inside of a function body that defines a React component.
 
-✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)** are provided by the React-Redux library, not React itself. Compare to **react hooks** which manage local state and lifecycle inside **a single component**, they **connect your React components to the Redux store (global state)**.
+✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)**
++ are provided by the React-Redux library, not React itself.
++ Compare to **react hooks** which manage local state and lifecycle inside **a single component**, they **connect your React components to the Redux store (global state)**.
++ React-Redux hooks (<code>useSelector</code>, <code>useDispatch</code>, <code>useStore</code>) **rely entirely on React Context** under the hood.
+  - <code>&lt;Provider store={store}&gt;</code> **creates a React Context** and puts your **Redux store** inside it.
+  - So, **React-redux hooks are only usable inside** a component tree wrapped in <code>&lt;Provider store={store}&gt;</code>.
+  - Also, they allows all components to make changes to the state of the Redux store.
 
 + <code>useSelector</code> → The **useSelector hook** receives a function as a parameter. The function either **searches for** or **selects data from the Redux store**. Here we need all of the notes, so our selector function returns the whole state:
   ```jsx
