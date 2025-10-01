@@ -643,7 +643,7 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
   - Stateless: The server does not store session data.
 
 ## Higher Order Functions
-✴️ **Concat**
+✴️ **concat()**
 + Combines two or more arrays (or add elements) and return a **new array**.
 + **Not modify** the original array
   ```js
@@ -655,13 +655,31 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
   ```
 + if you want mutation, you could use <code>.push()</code>
 
-✴️ **Push**
+✴️ **push()**
 + Add one or more elements to the end of an array.
 + **NOT return the array**.
 + **Modifies the original array** in place.
   ```js
   user.notes.push(savedNote._id)
   ```
+
+✴️ **find()**
++ Returns the **first element in the array** that matches the condition.
++ You get **a single object** (or undefined).
+  ```js
+  // in Redux app
+  const foundNote = state.find(note => note.id === id)
+  ```
+  The <code>foundNote</code> is one note object with the matching id
+
+✴️ **filter()**
++ Returns **a new array containing all elements** that match the condition.
++ If nothing matches, you get **an empty array**
+  ```js
+  // in Redux app
+  const matchingNotes = state.filter(note => note.id === id)
+  ```
+  The <code>matchingNotes</code> isan array (probably with just one note inside), not the note object itself.
 
 ## Appendix
 ✴️ **Parameter vs Argument**
@@ -1285,7 +1303,7 @@ In this code above:
 + <code>CounterDisplay</code> reads it via props.
 + <code>CounterButton</code> update the parent state via a callback prop.
 
-**✴️ React's [context](https://react.dev/learn/passing-data-deeply-with-context)** is a kind of global state of the application, to which it is possible to give direct access to any component app.
+✴️ **React's [context](https://react.dev/learn/passing-data-deeply-with-context)** is a kind of global state of the application, to which it is possible to give direct access to any component app.
 + [createContext](https://react.dev/reference/react/createContext)
   ```jsx
   import CounterContext from './CounterContext'
@@ -3013,7 +3031,7 @@ Differences from Flux:
 
     ```
 
-**✴️ Redux methods**
+✴️ **Redux methods**
 + [getState()](https://redux.js.org/api/store)
 + [subscribe()](https://redux.js.org/api/store#subscribelistener) is a change listener, which is used to create callback functions that the store calls whenever an action is dispatched to the store.
 + [render()](https://redux.js.org/usage/configuring-your-store) is a bridge between Redux and React.
@@ -3034,7 +3052,7 @@ Differences from Flux:
 + This is because the combined reducer works in such a way that **every action gets handled in every part of the combined reducer**, or in other words, **every reducer "listens" to all of the dispatched actions** and does something with them if it has been instructed to do so.
 + But typically **only one reducer is interested in any given action**.
 
-**✴️ React-redux [Provider](https://react-redux.js.org/api/)** is a component makes the Redux store available to any nested components that need to access the Redux store.
+✴️ **React-redux [Provider](https://react-redux.js.org/api/)** is a component makes the Redux store available to any nested components that need to access the Redux store.
 
 Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **[prop drilling](https://react.dev/learn/passing-data-deeply-with-context)**).
 
@@ -3058,7 +3076,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 )
 ```
 
-**✴️ [Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today)** is the official recommended approach for writing Redux logic.
+✴️ **[Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today)** is the official recommended approach for writing Redux logic.
 
 Even thought **Redux (the core library)** is the original and low-level state management library which provides core APIs, like: <code>createStore</code>, <code>combineReducers</code>, <code>applyMiddleware</code>, <code>compose</code>, it’s very **minimal**: you have to **write a lot of boilerplate** (actions, action types, reducers, immutable updates, middleware setup).
   ```js
@@ -3384,7 +3402,7 @@ Why using <code>createSlice</code> is beneficial?
   - With slices, each feature lives in _one file_: 👉**state + reducers + actions bundled together**👈.
   - using the name prefix (<code>note/createNote</code>) is a good practice to give the parameter a value which is unique among the reducers. This way there won't be **unexpected collisions** between the application's action type values.
 
-**✴️ [Redux Thunk](https://github.com/reduxjs/redux-thunk)** is a library for Redux.
+✴️ **[Redux Thunk](https://github.com/reduxjs/redux-thunk)** is a library for Redux.
 + When components would dispatch an action **without the need to know about the communication with the server** that happens behind the scenes,
 + Thunk allows, for example:
   - implementations of **asynchronous action creators**, which first wait for the completion of a certain asynchronous operation
@@ -3436,7 +3454,7 @@ How does it **work**?
     ```
   - Event though you didn't declare or create <code>dispatch</code> and <code>getState</code> parameter, Redux Thunk injects them for you when it runs your function automatically.
 
-**✴️ [React Query](https://tanstack.com/query/latest)** is a library to store and manage data retrieved from the server.
+✴️ **[React Query](https://tanstack.com/query/latest)** is a library to store and manage data retrieved from the server.
 + With React query, the application **retrieves data from the server** and **renders** it on the screen, **without using the React hooks** <code>useState</code> and <code>useEffect</code>.
 + The data on the server is now entirely under the administration of the React Query library, and the application does not need the state defined with React's useState hook at all!
 + React Query can start from <code>QueryClient</code>, which is the **central manager** of React Query.
