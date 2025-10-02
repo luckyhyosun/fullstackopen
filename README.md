@@ -78,6 +78,8 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
   - Vuetify
   - Angular Material
   - Tailwind CSS
++ Naviation
+  - [React Router](https://reactrouter.com/)
 #### Architecture
 +  **Flux**
 #### APIs:
@@ -332,17 +334,18 @@ Frontend
 + [Designing Sound](https://mitpress.mit.edu/9780262014410/designing-sound/)
 
 ## Future Plan
-+ Typescript
-+ Next.js
-+ Vue.js
-+ Redux.js
-+ Axio
-+ [WebGL](https://thespatialstudio.de/en/xr-glossary/webgl)
-+ [Three.js](https://threejs.org/)
-+ Event-driven / Data-driven
-+ Algorithm
-+ [CSS preprocessor](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor)
-+ [Sentry](https://sentry.io/welcome/)
+- [ ] Typescript
+- [ ] Next.js
+- [ ] Vue.js
+- [ ] GraphQL
+- [x] Redux.js
+- [x] Axio
+- [ ] [WebGL](https://thespatialstudio.de/en/xr-glossary/webgl)
+- [ ] [Three.js](https://threejs.org/)
+- [ ] Event-driven / Data-driven
+- [ ] Algorithm
+- [ ] CSS preprocessor](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor)
+- [ ] [Sentry](https://sentry.io/welcome/)
 
 ## Script
 + rm -rf .git
@@ -352,10 +355,41 @@ Frontend
   - <code>npm init</code> creates a package.json file
   - <code>npm install</code> installs the dependency and saves it into package.json.
 
++ --watch
+  - Automatic Change Tracking
+  - Use this command: <code>"node --watch index.js"</code>
+
++ --inspect
+  - Debugging with the Chrome developer console
+  - Use this command: <code>"node --inspect index.js"</code>
+
+**To run React App**,
 + npm create vite@latest introdemo -- --template react
-  - Create an application called introdemo, with vite
+  - Create a React App called introdemo, with vite
   - Don't need to do <code>npm init</code> with vite
 
++ npm install react react-dom
+  - Create a React App without Vite or Next.js
+
++ npm install axios
+  - install axio as a **runtime dependency**
+  - Needed when the app is actually running in **production**.
+  - Witout runtime dependency, the program can’t execute.
+  - **Analogy**
+    + **Runtime dependency**: the ingredients you need to actually cook the meal (rice, vegetables).
+    + **Dev dependency**: the tools you use in the kitchen but don’t serve with the meal (knife, chopping board).
+
++ npm install react-router-dom
+  - a library for managing navigation in a React application
+
+**To run Redux App**,
++ npm install redux
+  - install redux
+
++ npm install @reduxjs/toolkit
+  - [Redux Toolkit](https://redux-toolkit.js.org/) is a library that solves some problems, for example, in the reducer and action creator-related code which has somewhat repetitive boilerplate code.
+
+**To run Json Server**,
 + npx json-server --port 3001 db.json
   - Serve the notes we wrote to the file in JSON format (db.json)
   - start the JSON Server on port 3001
@@ -385,24 +419,9 @@ Frontend
       npm run server
       ```
 
+**To run Mongo Server (Development evn)**,
 + sudo lsof -i :3001
   - find out which process is using port 3001
-
-+ npm install axios
-  - install axio as a **runtime dependency**
-  - Needed when the app is actually running in **production**.
-  - Witout runtime dependency, the program can’t execute.
-  - **Analogy**
-    + **Runtime dependency**: the ingredients you need to actually cook the meal (rice, vegetables).
-    + **Dev dependency**: the tools you use in the kitchen but don’t serve with the meal (knife, chopping board).
-
-+ --watch
-  - Automatic Change Tracking
-  - Use this command: "node --watch index.js"
-
-+ --inspect
-  - Debugging with the Chrome developer console
-  - Use this command: "node --inspect index.js"
 
 + node mongo.js myPassword
   - Connects to Atlas and run all the code of mongo.js
@@ -420,6 +439,15 @@ Frontend
   - Run in backend
   - Since the backend is not expected to be visible to the public in the production environment, it may make more sense to only enable cors from a specific origin (e.g. the front end).
 
++ npm install bcrypt
+  - Generating the password hashes
+  - Run in backend
+
++ npm install jsonwebtoken
+  - Generate JSON web tokens
+  - Run in backend
+
+**To run Production evn**,
 + npm run build
   - A production build for applications created with Vite
   - Run in frontend
@@ -430,6 +458,8 @@ Frontend
   - Copy the production build (the dist directory) to the root of the backend directory
   - Configure the backend to show the frontend's main page (the file dist/index.html) as its main page, by using <code>app.use(express.static('dist'))</code> in backend
 
+
+**To run eslint**,
 + npm install eslint @eslint/js --save-dev
   - A static code analysis tool (linter) for JavaScript and TypeScript
   - Analyzes the code without running it.
@@ -455,13 +485,26 @@ Frontend
 	- Running the Linter
 	- When using scipt from package.json: <code>npm run lint</code>
 
-+ npm install bcrypt
-  - Generating the password hashes
-  - Run in backend
+**To test React Apps**,
++ npm install --save-dev vitest jsdom
+  - Use [vitest](https://vitest.dev/) testing tools from Vite
+  - [jsdom](https://github.com/jsdom/jsdom) library simulating a web browser
 
-+ npm install jsonwebtoken
-  - Generate JSON web tokens
-  - Run in backend
++ npm install --save-dev @testing-library/react @testing-library/jest-dom
+  - [react-testing-library](https://github.com/testing-library/react-testing-library) help us render components for testing purposes
+  - Use another test library [jest-dom](https://github.com/testing-library/jest-dom)
+
++ npm install --save-dev @testing-library/user-event
+  - [user-even](https://testing-library.com/docs/user-event/intro/) dispatches the events that would happen if the interaction took place in a browser
+  - The event handler is a [mock](https://vitest.dev/api/mock) function defined with Vitest (<code>const mockHandler = vi.fn()</code>)
+
++ npm install --save-dev @vitest/coverage-v8
+  - [coverage](https://vitest.dev/guide/coverage.html#coverage) is a library to generate A HTML report to the coverage directory.
+
++ npm test -- --coverage
+  - Make a 'coverage' directory in the root directory.
+  - The report will tell us the lines of untested code in each component.
+  - After making 'coverage' directory, add _coverage/_ to _.gitignore_ file to exclude the file from version control.
 
 + npm init playwright@latest
   - Install Playwright by running in **the new project directory**
@@ -488,40 +531,12 @@ Frontend
   - class [Page](https://playwright.dev/docs/api/class-page)
   - class [Locater](https://playwright.dev/docs/api/class-locator)
 
-**To test React Apps**,
-+ npm install --save-dev vitest jsdom
-  - Use [vitest](https://vitest.dev/) testing tools from Vite
-  - [jsdom](https://github.com/jsdom/jsdom) library simulating a web browser
-
-+ npm install --save-dev @testing-library/react @testing-library/jest-dom
-  - [react-testing-library](https://github.com/testing-library/react-testing-library) help us render components for testing purposes
-  - Use another test library [jest-dom](https://github.com/testing-library/jest-dom)
-
-+ npm install --save-dev @testing-library/user-event
-  - [user-even](https://testing-library.com/docs/user-event/intro/) dispatches the events that would happen if the interaction took place in a browser
-  - The event handler is a [mock](https://vitest.dev/api/mock) function defined with Vitest (<code>const mockHandler = vi.fn()</code>)
-
-+ npm install --save-dev @vitest/coverage-v8
-  - [coverage](https://vitest.dev/guide/coverage.html#coverage) is a library to generate A HTML report to the coverage directory.
-
-+ npm test -- --coverage
-  - Make a 'coverage' directory in the root directory.
-  - The report will tell us the lines of untested code in each component.
-  - After making 'coverage' directory, add _coverage/_ to _.gitignore_ file to exclude the file from version control.
-
 + npm install --save-dev jest @babel/preset-env @babel/preset-react eslint-plugin-jest
   - Create Vite application first
   - This configures the **Jest** testing library
 
 + npm install --save-dev deep-freeze
   - add the library _deep-freeze_, which can be used to ensure that the **reducer** has been correctly defined as **an immutable function**.
-
-**To run Redux Apps**,
-+ npm install redux
-  - install redux
-
-+ npm install @reduxjs/toolkit
-  - [Redux Toolkit](https://redux-toolkit.js.org/) is a library that solves some problems, for example, in the reducer and action creator-related code which has somewhat repetitive boilerplate code.
 
 
 ## Classification
@@ -3551,3 +3566,97 @@ How does it **work**?
         ```
         It says: “The data for this query key(<code>['notes']</code>) might be outdated (stale). Please **mark it stale**, and if something is actively using it, **re-fetch** it.”
     + And since your component is using <code>useQuery(['notes'], getNotes)</code>, React Query **automatically triggers a re-fetch** of <code>getNotes</code>.
+
+✴️ **React Router**
+
+Routing is the conditional rendering of components **based on the URL** in the browser. [React Router](https://reactrouter.com/) is a library which provides an excellent solution for managing navigation in a React application. So, React Router updates the UI dynamically and changes views/pages **without reloading the browser**.
+
++ It maps **URLs (paths)** → React **components**.
+  ```js
+  <Route path="/about" element={<About />} />
+  ```
+
++ **[Browser Router](https://api.reactrouter.com/v7/functions/react_router.BrowserRouter.html)** is a wrapper component which wrap your entire app so that routing works. Typically, you use it once in your root file (like <code>main.js</code> or <code>App.js</code>).
+  ```js
+  // main.js
+
+  import { BrowserRouter } from "react-router-dom";
+  import App from "./App";
+
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+  ```
+
+  OR use **_BrowserRouter_** as a **_[Router](https://v5.reactrouter.com/core/api/Router)_**, according to the [v5 docs](https://v5.reactrouter.com/web/api/BrowserRouter):
+
+  ```js
+  // App.js
+
+  import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+  } from 'react-router-dom'
+
+  const Home = () => (
+    <div> <h2>KTH notes app</h2> </div>
+  )
+
+  const Notes = () => (
+    <div> <h2>Notes</h2> </div>
+  )
+
+  const App = () => {
+    return (
+      <Router>
+        <div>
+          <Link style={padding} to="/">home</Link>
+          <Link style={padding} to="/notes">notes</Link>
+        </div>
+
+        <Routes>
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
+
+        <div>
+          <i>Note app, Department of Computer Science 2024</i>
+        </div>
+      </Router>
+    )
+  }
+  ```
+  Normally the browser loads a new page when the URL in the address bar changes. However, with the help of the [HTML5 history API](https://css-tricks.com/using-the-html5-history-api/), <code>BrowserRouter</code> enables us to use the URL in the address bar of the browser for **internal "routing"** in a React application. <br />
+  So, even if the URL in the address bar changes, the content of the page is only **manipulated using Javascript**, and the **browser will not load new content from the server**. Using the back and forward actions, as well as making bookmarks, is still logical like on a traditional web page. <br />
+  **Before HTML5’s History API** (and _modern JS-driven routing_), web pages were manipulated in much more “**heavy**” ways:
+    + Full Page Reloads (Traditional Web Navigation)
+    + Every time you clicked a link (<code>&lt;a href="/about"&gt;</code>), the browser would make a **full HTTP request to the server**, download an entirely new HTML document, and redraw the page.
+    - The server decided what content to send for <code>/about</code>, <code>/contact</code>, etc.
+    - This meant **slower transitions, loss of in-memory state** (like form input), and flashing reloads.
+
++ **Router tags/components** are the building blocks you use inside <code>BrowserRouter</code> to define routes:
+  1. <code>&lt;Link&gt;</code> (or <code>&lt;NavLink&gt;</code>):
+      - Used to **[navigate](https://api.reactrouter.com/v7/functions/react_router.Link.html) without refreshing** the page
+        ```js
+        <Link to="/about">Go to About</Link>
+        ```
+      - This code **creates a link** in the application with the text "Go To About", which when clicked **changes the URL in the address bar** to _/about_. <br />
+      - It uses the **History API** under the hood (<code>pushState</code>) to update the address bar.
+  2. <code>&lt;Route&gt;</code>:
+      - This is **React Router** which is **constantly listens to the current URL**
+      - Defines a **mapping** between a **path (URL)** and a React **component**.
+      - Which means, when the URL matches a path in one of your <code>&lt;Route&gt;</code> definitions, it renders the corresponding component.
+        - <code>path="/"</code> → route URL
+        - <code>element={&lt;Component /&gt;}</code> → what to show
+  3. <code>&lt;Routes&gt;</code>:
+      - A container for all your routes.
+      - **Only one matching** <code>&lt;Route&gt;</code> inside will render.
+      ```js
+      import { Routes, Route } from "react-router-dom";
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+      ```
