@@ -3660,3 +3660,16 @@ Routing is the conditional rendering of components **based on the URL** in the b
         <Route path="/about" element={<About />} />
       </Routes>
       ```
++ Other important Hooks:
+  - A **hook** in React is just a **special function** that lets you “hook into” React (or another library’s) internals in a function component.
+  - By convention, **hooks must start with** <code>use*</code> and can **only be called at the top level of a component or another hook**.
+  - They **don’t have to** _manage state_ — they can provide access to context, side effects, or other integration points. For example:
+    - <code>useState</code> → gives you state.
+    - <code>useEffect</code> → gives you side-effect handling.
+    - <code>useContext</code> → lets you consume React Context values.
+    - <code>[usePramas](https://api.reactrouter.com/v7/functions/react_router.useParams.html)</code> → gives you access to the current URL’s dynamic parameters
+    - [<code>useNavigate](https://api.reactrouter.com/v7/functions/react_router.useNavigate.html)</code> → gives you a function to programmatically change the route
+
+    Even though <code>useParams</code> and <code>useNavigate</code> **don’t store component state**, they’re still **hooks** because they:
+    - Follow React’s hook rules (must be called in components).
+    - Give you access to React Router’s internal context and lifecycle.
