@@ -919,6 +919,32 @@ If the button is not inside a <code>&lt;form&gt;</code>, then there’s no defau
 
 ✴️ **Module** is basically a **self-contained piece of code** that has its own variables, functions, or classes.
 + Each file is a module → can export anything (<code>export default</code>, <code>export const</code>, etc.).
++ The module can be **any JavaScript value**: _function, object, number, string, array_, etc.
+  - **Named exports**
+    ```js
+    export const increase = () => {
+      //...
+    }
+    export const decrease = () => {
+      //...
+    }
+
+    import { increase } from './fils'
+    ```
+    - The braces are required because it’s **one of possibly many exports** from that file.
+    - Can export **multiple things** from the file
+
+  - **Default exports**
+    ```js
+      const calculate = () => {
+        //...
+      }
+
+      export default calculate
+      ```
+      - The **main export** of the file
+      - Can export only **one default thing** from the file
+
 + Modules have their own scope → variables inside one file don’t automatically exist in another.
 + Modules communicate via import/export → that’s how components share code.
 + A component itself is not a module, but in React, each file that defines a component is a module.
@@ -1604,6 +1630,22 @@ The key concept of <code>ref</code>is:
 **⚡️ Custom React Hooks**: the primary purpose of [custom hooks](https://react.dev/learn/reusing-logic-with-custom-hooks) is to facilitate the **reuse of the logic** used in components.
   - Custom hooks are **regular JavaScript functions** that can use any other hooks, as long as they adhere to the [rules of hooks](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#rules-of-hooks).
   - The name of custom hooks must start with the word `use`.
+
+  - Most of the mistake when using Hooks
+    ```js
+    <button onClick={counter.zero()}> // ❌ WRONG
+    ```
+    This **calls the function immediately during render**, instead of waiting for click.
+    ```js
+    <button onClick={counter.zero}> // ✅ Works
+    <button onClick={() => counter.zero()}> // ✅ Works
+    ```
+    First one, **directly passes function** reference.
+    And the second one, **creates new function** that calls `counter.zero()` function.
+
+**💡 Rule of thumb:**
++ Use `onClick={counter.zero}` when the function takes **no arguments**.
++ Use `onClick={() => counter.zero(arg)}` if you need to **pass arguments**.
 
 ✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)**
 + are provided by the React-Redux library, not React itself.
