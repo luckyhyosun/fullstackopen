@@ -9,25 +9,13 @@ const App = () => {
     <div>
       <form>
         name:
-        <input
-          type={name.type}
-          value={name.value}
-          onChange={name.onChange}
-        />
+        <input {...name}/>
         <br/>
         birthdate:
-        <input
-          type={bday.type}
-          value={bday.value}
-          onChange={bday.onChange}
-        />
+        <input {...bday}/>
         <br />
         height:
-        <input
-          type={height.type}
-          value={height.value}
-          onChange={height.onChange}
-        />
+        <input {...height}/>
       </form>
       <h3>
           {name.value} <br />
