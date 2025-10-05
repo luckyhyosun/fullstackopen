@@ -1643,6 +1643,27 @@ The key concept of <code>ref</code>is:
     First one, **directly passes function** reference.
     And the second one, **creates new function** that calls `counter.zero()` function.
 
+  - **Spread Attribute**
+    + is to pass the props to the element using the **spread syntax** in the following way:
+      ```js
+      <input {...name} />
+      ```
+    + this is the same with the code below:
+      ```js
+      <Greeting firstName='Arto' lastName='Hellas' />
+
+      const person = {
+        firstName: 'Arto',
+        lastName: 'Hellas'
+      }
+
+      <Greeting {...person} />
+      ```
+  - Good to read about custom hooks:
+    + [Awesome React Hooks Resources](https://github.com/rehooks/awesome-react-hooks)
+    + [Easy to understand React Hook recipes by Gabe Ragland](https://usehooks.com/)
+    + [Why Do React Hooks Rely on Call Order?](https://overreacted.io/why-do-hooks-rely-on-call-order/)
+
 **💡 Rule of thumb:**
 + Use `onClick={counter.zero}` when the function takes **no arguments**.
 + Use `onClick={() => counter.zero(arg)}` if you need to **pass arguments**.
