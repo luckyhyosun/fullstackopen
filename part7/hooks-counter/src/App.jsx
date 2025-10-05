@@ -1,19 +1,39 @@
-import useCounter from './hooks'
+import useField from './hooks'
 
 const App = () => {
-  const left = useCounter()
-  const right = useCounter()
+  const name = useField('text')
+  const bday = useField('date')
+  const height = useField('number')
 
   return (
     <div>
-      {left.value}
-      <button onClick={left.increase}>
-        left
-      </button>
-      <button onClick={right.increase}>
-        right
-      </button>
-      {right.value}
+      <form>
+        name:
+        <input
+          type={name.type}
+          value={name.value}
+          onChange={name.onChange}
+        />
+        <br/>
+        birthdate:
+        <input
+          type={bday.type}
+          value={bday.value}
+          onChange={bday.onChange}
+        />
+        <br />
+        height:
+        <input
+          type={height.type}
+          value={height.value}
+          onChange={height.onChange}
+        />
+      </form>
+      <h3>
+          {name.value} <br />
+          {bday.value} <br />
+          {height.value}
+      </h3>
     </div>
   )
 }

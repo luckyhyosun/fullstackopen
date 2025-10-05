@@ -1,26 +1,17 @@
 import { useState } from 'react'
 
-const useCounter = () => {
-  const [value, setValue] = useState(0)
+const useField = (type) => {
+  const [value, setValue] = useState('')
 
-  const increase = () => {
-    setValue(value + 1)
-  }
-
-  const decrease = () => {
-    setValue(value - 1)
-  }
-
-  const zero = () => {
-    setValue(0)
+  const onChange = (event) => {
+    setValue(event.target.value)
   }
 
   return {
+    type,
     value,
-    increase,
-    decrease,
-    zero
+    onChange
   }
 }
 
-export default useCounter
+export default useField
