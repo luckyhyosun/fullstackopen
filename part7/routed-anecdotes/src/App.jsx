@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
 import { useField } from './hooks/index'
+import { use } from 'react'
 
 const Menu = ({ anecdotes, addNew, notification }) => {
   const padding = {
@@ -79,6 +80,7 @@ const CreateNew = (props) => {
   const content = useField('content')
   const author = useField('author')
   const info = useField('info')
+  const reset = useField()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -93,7 +95,7 @@ const CreateNew = (props) => {
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           content
           <input {...content} />
@@ -106,7 +108,8 @@ const CreateNew = (props) => {
           url for more info
           <input {...info}/>
         </div>
-        <button>create</button>
+        <button onClick={handleSubmit}>create</button>
+        <button onClick={reset.onReset}>reset</button>
       </form>
       {content.value}
       <br/>
