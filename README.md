@@ -459,7 +459,7 @@ Frontend
   - Configure the backend to show the frontend's main page (the file dist/index.html) as its main page, by using <code>app.use(express.static('dist'))</code> in backend
 
 
-**To run eslint**,
+**To run eslint or a Code foramt tool**,
 + npm install eslint @eslint/js --save-dev
   - A static code analysis tool (linter) for JavaScript and TypeScript
   - Analyzes the code without running it.
@@ -484,6 +484,9 @@ Frontend
 + npx eslint index.js
 	- Running the Linter
 	- When using scipt from package.json: <code>npm run lint</code>
+
++ + npx prettier --write --single-quote --no-semi .
+  - Run prettier with some configuration
 
 **To test React Apps**,
 + npm install --save-dev vitest jsdom
@@ -656,6 +659,114 @@ To handle requests from different ports (from back/frontend) we can use **CORS /
     + No database access needed → no memory lookups, no network calls
     + Even for thousands of requests, this is much less load than querying a session store for each request
   - Stateless: The server does not store session data.
+
+**🐥 Why is the difference between full reload vs client-side navigation?**
+
+🐓 **Full reload** replaces the whole page from the server. On the other hands, **Client-side navigation** only updates what’s needed inside the browser. So for example,
+
+🧩 What normally happens in a "**full reload**":
+1. When you click a normal link (like <code>&lt;a href="/about"&gt;</code>):
+2. The browser sends a full HTTP request to the server.
+3. The server responds with a complete HTML document.
+4. The browser destroys the current page and rebuilds it from scratch.
+5. JavaScript re-runs, React reinitializes, all components mount again.
+6. So it’s like throwing away your whole app and reopening it.
++ ⏳ Slow, not smooth, and you lose client state.
+
+⚙️ What happens with **client-side navigation** (<code>router.push()</code> or Next.js <code>&lt;Link&gt;</code>):
+```js
+router.push('/profile?tab=purchases');
+```
+1. Next.js intercepts the navigation — it does NOT let the browser reload. **The browser stays on the same page**.
+2. URL changes in the address bar (so it still looks like a new page).
+3. Next.js checks:
+    - Next.js checks **what actually changed**, like: "Do I already have this page’s React components in memory?"
+    - If not, download the JavaScript bundle for that page (a small <code>.js</code> file).
+    - If the page or components require server data, Next.js may make a fetch request to get only the needed JSON data (not HTML).
+4. And if there is a change:
+    - React updates **only the parts of the UI that changed**, keeping the rest of the page intact.
+    - Everything else on the screen (like headers, layout, global state) stays the same.
+
++ 🧠 So it’s not that no server calls happen at all — it’s that Next.js:
+  - avoids reloading HTML,
+  - only fetches what’s necessary (JS + data),
+  - and updates the UI dynamically inside the browser.
+  - no full reload, no lost state, **no flicker**.
+
+| Term                          | Meaning                                                                | Example                    |
+| ----------------------------- | ---------------------------------------------------------------------- | -------------------------- |
+| **Query string**              | The part of the URL after `?`                                          | `/profile?tab=user&page=2` |
+| **Query parameter**           | Each key–value pair inside the query string                            | `tab=user`, `page=2`       |
+| **Router query** (older term) | In the **Pages Router**, `useRouter().query` used to hold query params | (e.g. `router.query.tab`)  |
+
+
+```jsx
+// next.js file
+
+'use client';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import { UserType } from './users';
+import User from './ProfileComponents/User';
+import Galaxy from './ProfileComponents/Galaxy';
+import Purchases from './ProfileComponents/Purchases';
+import Friends from './ProfileComponents/Friends';
+
+interface ProfileTabProps {
+  user: UserType;
+}
+
+type Tab = 'user' | 'purchases' | 'galaxy' | 'friends';
+
+const ProfileTab = ({ user }: ProfileTabProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentTab = (searchParams.get('tab') as Tab) || 'user';
+  const [activeTab, setActiveTab] = useState<Tab>(currentTab);
+
+  useEffect(() => {
+    setActiveTab(currentTab);
+  }, [currentTab]);
+
+  const handleNavigation = (tab: Tab) => {
+    setActiveTab(tab);
+    const newUrl = `/profile?tab=${tab}`;
+    router.push(newUrl);
+  };
+
+  return (
+    <div>
+      {/* Tab Buttons */}
+      <div>
+        {(['user', 'purchases', 'galaxy', 'friends'] as Tab[]).map(tab => (
+          <button
+            key={tab}
+            onClick={() => handleNavigation(tab)}
+            className={`px-4 py-3 text-sm sm:px-6 sm:py-2 sm:text-base font-bold rounded shadow cursor-pointer ${
+              activeTab === tab
+                ? 'bg-gray-300'
+                : 'bg-gray-200 hover:bg-gray-300'
+            }`}
+          >
+            {tab.toUpperCase()}
+          </button>
+        ))}
+      </div>
+
+      {/* Content Panel */}
+      <div>
+        {activeTab === 'user' && <User user={user} />}
+        {activeTab === 'purchases' && <Purchases user={user} />}
+        {activeTab === 'galaxy' && <Galaxy />}
+        {activeTab === 'friends' && <Friends />}
+      </div>
+    </div>
+  );
+};
+
+export default ProfileTab;
+```
 
 ## Higher Order Functions
 ✴️ **concat()**
@@ -1368,6 +1479,13 @@ In this code above:
 
 ✴️ **React Hook** is a special function that lets you “hook into” React features like **state and lifecycle** methods from functional components. Before hooks, only class components could have state or lifecycle logic. But hooks let you do the same things with functions, which are simpler and easier to reuse.
 
+**⚡ Rules of Hooks**
+React hooks (like <code>useState</code>, <code>useEffect</code>, <code>useQuery,</code> <code>useMutation</code>, etc.) **must only be called**:
++ At the **top level** of a React function component
++ Or inside **another custom hook**
+
+React needs to know the **order of hook calls** to correctly **keep track of their state** between renders. So, to recap, hooks may only be called from the inside of a function body that defines a React component.
+
 **⚡ Most common hooks**
 + **[useState](https://react.dev/reference/react/useState)** – manage state in a function component
 + **[useEffect](https://fullstackopen.com/en/part2/getting_data_from_server#effect-hooks)** – run side effects, that something changes state outside of the function/request itself(like data fetching, subscriptions, or DOM updates). And it takes two parameters - a function, the effect itself. The principle is that the effect is:
@@ -1411,54 +1529,54 @@ In this code above:
   noteFormRef.current.toggleVisibility()
   ```
 + [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle) - decides what functions the parent can call.
-```jsx
-// Child component = LightBulb
-const LightBulb = ((props) => {
-  const [on, setOn] = useState(false);
+  ```jsx
+  // Child component = LightBulb
+  const LightBulb = ((props) => {
+    const [on, setOn] = useState(false);
 
-  // Expose functions to parent through ref
-  useImperativeHandle(ref, () => ({
-    turnOn: () => setOn(true),
-    turnOff: () => setOn(false),
-  }));
+    // Expose functions to parent through ref
+    useImperativeHandle(ref, () => ({
+      turnOn: () => setOn(true),
+      turnOff: () => setOn(false),
+    }));
 
-  return (
-    <div style={{ margin: "10px" }}>
-      <p>{props.label}: {on ? "💡 ON" : "⚫ OFF"}</p>
-      <button onClick={() => setOn(prev => !prev)}>Switch</button>
-    </div>
-  );
-});
+    return (
+      <div style={{ margin: "10px" }}>
+        <p>{props.label}: {on ? "💡 ON" : "⚫ OFF"}</p>
+        <button onClick={() => setOn(prev => !prev)}>Switch</button>
+      </div>
+    );
+  });
 
-// Parent component
-const App = () => {
-  const bulb1Ref = useRef();
-  const bulb2Ref = useRef();
+  // Parent component
+  const App = () => {
+    const bulb1Ref = useRef();
+    const bulb2Ref = useRef();
 
-  const turnAllOff = () => {
-    bulb1Ref.current.turnOff();
-    bulb2Ref.current.turnOff();
+    const turnAllOff = () => {
+      bulb1Ref.current.turnOff();
+      bulb2Ref.current.turnOff();
+    };
+
+    const turnOnOff = () => {
+      bulb1Ref.current.turnOn();    // turn on bulb 1
+      bulb2Ref.current.turnOff();   // turn off bulb 2
+    };
+
+    return (
+      <div>
+        <h1>Light Bulb Example 💡</h1>
+
+        <LightBulb label="Bulb 1" ref={bulb1Ref} />
+        <LightBulb label="Bulb 2" ref={bulb2Ref} />
+
+        <hr />
+        <button onClick={turnAllOff}>Turn All OFF</button>
+        <button onClick={turnOnOff}>Toggle All</button>
+      </div>
+    );
   };
-
-  const turnOnOff = () => {
-    bulb1Ref.current.turnOn();    // turn on bulb 1
-    bulb2Ref.current.turnOff();   // turn off bulb 2
-  };
-
-  return (
-    <div>
-      <h1>Light Bulb Example 💡</h1>
-
-      <LightBulb label="Bulb 1" ref={bulb1Ref} />
-      <LightBulb label="Bulb 2" ref={bulb2Ref} />
-
-      <hr />
-      <button onClick={turnAllOff}>Turn All OFF</button>
-      <button onClick={turnOnOff}>Toggle All</button>
-    </div>
-  );
-};
-```
+  ```
 The <code>useImperativeHandle</code> hook to make its <code>sayHello</code> function available outside of the component. Since imperative means giving you step-by-step commands (how to do something), it **lets the parent directly command the child component to run specific actions, instead of just passing data through props**.
 
 The key concept of <code>ref</code>is:
@@ -1481,13 +1599,11 @@ The key concept of <code>ref</code>is:
 
 + [useReducer](https://react.dev/reference/react/useReducer) is another React Hook, which is Redux-like state management mechanism.
 
+**⚡️ Other React Hooks**: React offers 15 different [built-in hooks](https://react.dev/reference/react/hooks).
 
-**⚡ Rules of Hooks**
-React hooks (like <code>useState</code>, <code>useEffect</code>, <code>useQuery,</code> <code>useMutation</code>, etc.) **must only be called**:
-+ At the **top level** of a React function component
-+ Or inside **another custom hook**
-
-React needs to know the **order of hook calls** to correctly **keep track of their state** between renders. So, to recap, hooks may only be called from the inside of a function body that defines a React component.
+**⚡️ Custom React Hooks**: the primary purpose of [custom hooks](https://react.dev/learn/reusing-logic-with-custom-hooks) is to facilitate the **reuse of the logic** used in components.
+  - Custom hooks are **regular JavaScript functions** that can use any other hooks, as long as they adhere to the [rules of hooks](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#rules-of-hooks).
+  - The name of custom hooks must start with the word `use`.
 
 ✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)**
 + are provided by the React-Redux library, not React itself.
@@ -3531,20 +3647,34 @@ How does it **work**?
         - <code>isSuccess</code> → true if it succeeds
         - <code>data</code> → the response data returned by your mutation function
 
-      So, that I can use <code>mutate</code>:
+      So, when you call <code>.mutate()</code>:
         ```js
         newNoteMutation.mutate({ content, important: true })
         ```
+      React Query runs your <code>mutationFn</code>:
+        ```js
+        const newNoteMutation = useMutation({
+          mutationFn: createNote
+          //...
+        })
+        ```
     + and integrates seamlessly with **cache updates**, which means keeping React Query’s internal data store (**cache = in-memory JavaScript object**) in sync with the backend.
   - **[useQuery](https://tanstack.com/query/latest/docs/framework/react/reference/useQuery)** → for fetching (read operations).
-    + When the mutation was done, adding a data to the database is working, but the updated note is not shown on the browser UI.
-    + So after your mutation succeeds, we use <code>useQuery</code>:
+    + So when you want to **fetch data** at the beginning
+
       ```js
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['notes'] })
-      }
+      const result = useQuery({
+        queryKey: ['notes'],
+        queryFn: getNotes,
+        refetchOnWindowFocus: false
+      })
       ```
-      It is saying “The cached <code>['notes']</code> list is stale (**invalid**), so **refetch** it from the server.”.
+      - <code>queryFn</code> (your <code>getNotes</code> function) is the function that fetches data
+      - React Query automatically calls <code>queryFn</code> for you the first time this component runs.
+      - It stores (caches) the result using the <code>queryKey</code> (<code>['notes']</code> in this case).
+      - The returned result object lets you access things like <code>data</code>, <code>isLoading</code>, <code>error</code>, etc.
+    + Or **after your mutation** succeeds, we use <code>useQuery + Invalidation</code>
+    + Because when the mutation was done, adding a data to the database is working, the updated note is not shown on the browser UI.
 
   - [Queries](https://tanstack.com/query/latest/docs/framework/react/guides/queries) & [Invalidataion](https://tanstack.com/query/latest/docs/framework/react/guides/invalidations-from-mutations) : React Query automatically update a query with the key notes,
     +  React Query keeps a **local copy** of your server data in memory, indexed by its queryKey.
@@ -3674,6 +3804,30 @@ Routing is the conditional rendering of components **based on the URL** in the b
     Even though <code>useParams</code> and <code>useNavigate</code> **don’t store component state**, they’re still **hooks** because they:
     - Follow React’s hook rules (must be called in components).
     - Give you access to React Router’s internal context and lifecycle.
+
+    **🐬 Pro Tips**
+    ```js
+    const navigate = useNavigate();
+
+    const onSubmit = (event) => {
+      event.preventDefault();
+      props.onLogin('mluukkai'); // login logic
+      navigate('/'); // navigate to home after login
+    }
+    ```
+    In this code, i can't use <code>useNavigate('/')</code> directly. Because:
+    - <code>useNavigate()</code> → returns <code>navigate()</code> function.
+    - <code>navigate('/')</code>  → actually changes the URL to `/`.
+    - So, `navigate` is a function, not a simple value in the code below.
+      ```js
+      const navigate = useNavigate();
+      ```
+      - `useNavigate()` **does not take a path**.
+      - It **returns a function** that knows how to navigate.
+      - You are expected to call that **returned function with a path**, like this:
+        ```js
+        navigate('/');
+        ```
 
 + Other important methods:
   - [Navigate](https://api.reactrouter.com/v7/functions/react_router.Navigate.html)
