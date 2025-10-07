@@ -4041,4 +4041,4 @@ Routing is the conditional rendering of components **based on the URL** in the b
 + [Bootstrap](https://getbootstrap.com/)
 + [reactstrap](https://reactstrap.github.io/?path=/story/home-installation--page)
 + [react-bootstrap](https://react-bootstrap.github.io/)
-+ [Material UI](https://mui.com/)
++ [Material UI](https://mui.com/) : which implements the [Material Design](https://m3.material.io/) visual language developed by Google
