@@ -1336,17 +1336,68 @@ const App = () => {
 
 export default App
 ```
-One other important thing to know is a **[controlled component](https://goshacmd.com/controlled-vs-uncontrolled-inputs-react/)**.
-```js
-const [username, setUsername] = useState('')
 
-<input
-  type="text"
-  value={username}
-  onChange={({ target }) => setUsername(target.value)}
-/>
-```
-In this code,
+✴️ **[Controlled component](https://goshacmd.com/controlled-vs-uncontrolled-inputs-react/)** is a form element (like <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, or <code>&lt;select&gt;</code>) whose value is controlled by React state.
+
+This means:
++ The **source of truth** for the input’s value is in **React**, not in the DOM.
++ You cannot type in the input without updating **React state**.
+  ```js
+  const [value, setValue] = useState('');
+
+  <input value={value} onChange={e => setValue(e.target.value)} />
+
+  ```
+  - <code>value={value}</code> → the input’s displayed value comes from the React state <code>value</code>.
+  - <code>onChange={...}</code> → every time the user types, the state updates with <code>setValue</code>.
+
+Why it matters? Because your input is controlled:
+  1. The displayed value always **matches the state** (`value`).
+  2. React controls the input, so your app’s state and the UI are always in sync.
+  3. You can **reset the input** by changing the state:
+      ```js
+      const useField = (type) => {
+        const [value, setValue] = useState('');
+
+        const onChange = (event) => setValue(event.target.value);
+        const reset = () => setValue('');
+
+        return {
+          type,
+          value,
+          onChange,
+          reset,
+        };
+      };
+
+      const content = useField('text');
+
+      <input {...content} />
+      ```
+      this code above and below are the same:
+      ```js
+      <input {
+        type: 'text',
+        value: content.value,
+        onChange: content.onChange
+      } />
+      ```
+      So this is how to reset by using:
+      ```js
+      content.reset();
+      ```
+
+**⚡️ Destructuring property** of controlled components
+  ```js
+  const [username, setUsername] = useState('')
+
+  <input
+    type="text"
+    value={username}
+    onChange={({ target }) => setUsername(target.value)}
+  />
+  ```
+  In this code,
 + <code>value={username}</code> → this makes the <code>&lt;input&gt;</code> a **controlled component**. The value shown inside the text box is tied to the React state variable <code>username</code>.
 + <code>{ target }</code> is **object destructuring**: it takes the target property from the event object.
   ```js

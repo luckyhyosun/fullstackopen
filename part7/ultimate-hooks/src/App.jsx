@@ -8,14 +8,18 @@ const useField = (type) => {
     setValue(event.target.value)
   }
 
+  const onReset = () => setValue('')
+
   return {
     type,
     value,
-    onChange
+    onChange,
+    onReset
   }
 }
 
 const useResource = (baseUrl) => {
+  //update notes and persons resource at once, wow!
   const [resources, setResources] = useState([])
 
   useEffect(() => {
@@ -46,11 +50,14 @@ const App = () => {
   const handleNoteSubmit = (event) => {
     event.preventDefault()
     noteService.create({ content: content.value })
+    content.onReset()
   }
 
   const handlePersonSubmit = (event) => {
     event.preventDefault()
     personService.create({ name: name.value, number: number.value})
+    name.onReset()
+    number.onReset()
   }
 
   return (
