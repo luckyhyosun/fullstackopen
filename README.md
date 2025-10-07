@@ -4042,3 +4042,31 @@ Routing is the conditional rendering of components **based on the URL** in the b
 + [reactstrap](https://reactstrap.github.io/?path=/story/home-installation--page)
 + [react-bootstrap](https://react-bootstrap.github.io/)
 + [Material UI](https://mui.com/) : which implements the [Material Design](https://m3.material.io/) visual language developed by Google
++ [Semantic UI React](https://react.semantic-ui.com/): is an official React integration library
+
+✴️ **Other UI frameworks**
++ [https://bulma.io/](https://bulma.io/)
++ [https://ant.design/](https://ant.design/)
++ [https://get.foundation/](https://get.foundation/)
++ [https://chakra-ui.com/](https://chakra-ui.com/)
++ [https://tailwindcss.com/](https://tailwindcss.com/)
++ [https://semantic-ui.com/](https://semantic-ui.com/)
++ [https://mantine.dev/](https://mantine.dev/)
++ [https://react.fluentui.dev/](https://react.fluentui.dev/)
++ [https://storybook.js.org](https://storybook.js.org)
++ [https://www.primefaces.org/primereact/](https://www.primefaces.org/primereact/)
++ [https://v2.grommet.io](https://v2.grommet.io)
++ [https://blueprintjs.com](https://blueprintjs.com)
++ [https://evergreen.segment.com](https://evergreen.segment.com)
++ [https://www.radix-ui.com/](https://www.radix-ui.com/)
++ [https://react-spectrum.adobe.com/react-aria/index.html](https://react-spectrum.adobe.com/react-aria/index.html)
++ [https://master.co/](https://master.co/)
++ [https://nextui.org/](https://nextui.org/)
++ [https://daisyui.com/](https://daisyui.com/)
++ [https://ui.shadcn.com/](https://ui.shadcn.com/)
++ [https://www.tremor.so/](https://www.tremor.so/)
++ [https://headlessui.com/](https://headlessui.com/)
+
+✴️ **Styling Component**
++ [Other ways](https://blog.bitsrc.io/5-ways-to-style-react-components-in-2019-30f1ccc2b5b) of styling React applications
++ [Styled Components](https://styled-components.com/) library: defining styles through [tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates)
