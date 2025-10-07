@@ -4036,3 +4036,9 @@ Routing is the conditional rendering of components **based on the URL** in the b
 
 + Other important methods:
   - [Navigate](https://api.reactrouter.com/v7/functions/react_router.Navigate.html)
+
+✴️ **Ready-made UI libraries** are defining styles for an application is to use a ready-made "UI framework".
++ [Bootstrap](https://getbootstrap.com/)
++ [reactstrap](https://reactstrap.github.io/?path=/story/home-installation--page)
++ [react-bootstrap](https://react-bootstrap.github.io/)
++ [Material UI](https://mui.com/)
