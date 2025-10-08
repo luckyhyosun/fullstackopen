@@ -385,12 +385,22 @@ Frontend
 **To run React Webpack**,
 + npm install --save-dev webpack webpack-cli
   - install webpack
+
 + npm install @babel/core babel-loader  --save-dev
   - install [babel-loader](https://github.com/babel/babel-loader) and its required packages as a development dependency
+
 + npm install @babel/preset-env @babel/preset-react --save-dev
   - install the presets
+
 + npm install style-loader css-loader --save-dev
   - install style-loader and css-loader
+
++ npm install core-js regenerator-runtime
+  - install [core-js](https://www.npmjs.com/package/core-js) and [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime)
+  - If your React (or JavaScript) code uses `async / await`, some older browsers don’t understand that syntax. Then these dependencies solve the problem.
+
++ npm install --save-dev webpack-dev-server
+  - install webpack-dev-server
 
 **To run Redux App**,
 + npm install redux
@@ -4141,6 +4151,14 @@ Just like, we performed the _bundling of our application* with the `npm run buil
   - [css-loader](https://webpack.js.org/loaders/css-loader/)
   - [style-loader](https://webpack.js.org/loaders/style-loader/)
 
++ [Webpack-dev-server](https://webpack.js.org/guides/development/#using-webpack-dev-server) provides web server and use live reloading.
+  - When we make changes to the code, the browser will automatically refresh the page.
+  - Webpack still bundles your code, it keeps the bundled result in your computer’s **memory (RAM)**, not into a a physical file like `main.js`.
+  - **How does it work?**
+    1. The dev server reads your `index.html` file from disk.
+    2. It serves that HTML file to the browser (the same way any web server would).
+    3. Inside that HTML, there’s a `<script src="/main.js"></script>` tag.
+    4. When the browser requests `/main.js`, the dev server intercepts that request and sends the JavaScript code from memory instead of from disk.
 
 ✴️ **Transpiling** is to compile source code by transforming it from one language to another. Which means, transpilation is the process of taking modern JavaScript (or JSX) and converting it into older JavaScript that all browsers can understand.
 

@@ -4,7 +4,12 @@ const config = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'main.js'
+    filename: 'main.js',
+  },
+  devServer: {
+    static: path.resolve(__dirname, 'build'),
+    compress: true,
+    port: 3000,
   },
   module: {
     rules: [
