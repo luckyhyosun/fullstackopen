@@ -382,6 +382,12 @@ Frontend
 + npm install react-router-dom
   - a library for managing navigation in a React application
 
+**To run React Webpack**,
++ npm install --save-dev webpack webpack-cli
+  - [Create React App](https://github.com/facebook/create-react-app) eliminates configuration-related problems
+  - Vite has recently replaced Create React App
+  - Both Vite and Create React App use **bundlers**, which is calld **[Webpack](https://webpack.js.org/)** or **[esbuild](https://esbuild.github.io/)**, to do the actual work
+
 **To run Redux App**,
 + npm install redux
   - install redux
@@ -4070,3 +4076,20 @@ Routing is the conditional rendering of components **based on the URL** in the b
 ✴️ **Styling Component**
 + [Other ways](https://blog.bitsrc.io/5-ways-to-style-react-components-in-2019-30f1ccc2b5b) of styling React applications
 + [Styled Components](https://styled-components.com/) library: defining styles through [tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates)
+
+
+✴️ **Bundler** is a tool that takes all your project’s files and dependencies (JavaScript, CSS, images, etc.) and combines them into **optimized bundles** that the browser can load efficiently.
+
+In the course, We have implemented our applications by dividing our code into separate modules that have been imported to places that require them. Even though ES6 modules are defined in the ECMAScript standard, the older browsers do not know how to handle code that is divided into modules.
+
+For this reason, code that is divided into modules must be bundled for browsers, meaning that all of the source code files are transformed into a single file that contains all of the application code.
+
+Just like, we performed the _bundling of our application* with the `npm run build command`. Under the hood, the npm script **bundles** the source, and this produces the following collection of files in the `dist` directory:
+```
+├── assets
+│   ├── index-d526a0c5.css
+│   ├── index-e92ae01e.js
+│   └── react-35ef61ed.svg
+├── index.html
+└── vite.svg
+```
