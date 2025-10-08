@@ -384,9 +384,9 @@ Frontend
 
 **To run React Webpack**,
 + npm install --save-dev webpack webpack-cli
-  - [Create React App](https://github.com/facebook/create-react-app) eliminates configuration-related problems
-  - Vite has recently replaced Create React App
-  - Both Vite and Create React App use **bundlers**, which is calld **[Webpack](https://webpack.js.org/)** or **[esbuild](https://esbuild.github.io/)**, to do the actual work
+  - install webpack
++ npm install @babel/core babel-loader @babel/preset-react --save-dev
+  - install [babel-loader](https://github.com/babel/babel-loader) and its required packages as a development dependency
 
 **To run Redux App**,
 + npm install redux
@@ -1001,11 +1001,12 @@ document.querySelector('h1').textContent = 'Hi';
   3. React diffs the old VDOM vs new VDOM to see what changed.
   4. React updates only the changed parts of the real DOM.
 
-✴️ **JSX** is JavaScript XML, which is a syntax extension for JavaScript that looks like HTML but runs inside JavaScript code. It’s most commonly used with **React**.
+✴️ **JSX** is JavaScript XML, which is a syntax extension for JavaScript that looks like HTML. But you write JSX inside a JavaScript file. JSX is part of your JavaScript code, even though it looks like HTML. It’s most commonly used with **React**.
 ```jsx
 // jsx
 const element = <h1>Hello, world!</h1>
 ```
+But under the hood, it **gets compiled** (or “**transpiled**”) into regular JavaScript — something like:
 ```js
 // js
 const element = React.createElement("h1", null, "Hello, world!");
@@ -4078,9 +4079,24 @@ Routing is the conditional rendering of components **based on the URL** in the b
 + [Styled Components](https://styled-components.com/) library: defining styles through [tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates)
 
 
-✴️ **Bundler** is a tool that takes all your project’s files and dependencies (JavaScript, CSS, images, etc.) and combines them into **optimized bundles** that the browser can load efficiently.
+✴️ **Bundler** is a tool that takes all your project’s files and dependencies (JavaScript, CSS, images, etc.) and combines them into **optimized bundles** that the browser can load efficiently. So, before Create React App (CRA) existed, to run a React project you had to **manually configure several tools**, including:
+  + Webpack – to bundle your JavaScript files.
+  + Decide the entry point, output location, loaders, plugins, etc.
+  + Babel – to transpile modern JavaScript and JSX into code that browsers can understand.
+  + Set up presets like `@babel/preset-env` and `@babel/preset-react`.
+  + ESLint / Prettier – for code linting and formatting.
+  + Development server – to reload your app automatically during development.
 
-In the course, We have implemented our applications by dividing our code into separate modules that have been imported to places that require them. Even though ES6 modules are defined in the ECMAScript standard, the older browsers do not know how to handle code that is divided into modules.
+All of this required writing config files (like `webpack.config.js`, `.babelrc`, etc.) and understanding how they worked together. If any part was **misconfigured, your app wouldn’t compile**, and debugging could be frustrating.
+
+To make the situation easier, [Create React App](https://github.com/facebook/create-react-app) was developed.
+  - Create React App eliminates configuration-related problems above.
+  - Letting you start a new project with just one command (`npx create-react-app my-app`).
+  - Handling Webpack, Babel, ESLint, and the dev server **automatically behind the scenes**.
+  - Vite has recently replaced Create React App
+  - Both Vite and Create React App use **bundlers**, which is calld [Webpack](https://webpack.js.org/) or [esbuild](https://esbuild.github.io/), to do the actual work
+
+In the course, we have implemented our applications by dividing our code into separate modules that have been imported to places that require them. Even though ES6 modules are defined in the ECMAScript standard, the older browsers do not know how to handle code that is divided into modules.
 
 For this reason, code that is divided into modules must be bundled for browsers, meaning that all of the source code files are transformed into a single file that contains all of the application code.
 
@@ -4093,3 +4109,28 @@ Just like, we performed the _bundling of our application* with the `npm run buil
 ├── index.html
 └── vite.svg
 ```
+
+✴️ **Webpack**
++ Configuration:
+  ```js
+  const path = require('path')
+
+  const config = () => {
+    return {
+      entry: './src/index.js',
+      output: {
+        path: path.resolve(__dirname, 'build'),
+        filename: 'main.js'
+      }
+    }
+  }
+
+  module.exports = config
+  ```
+  - [entry](https://webpack.js.org/concepts/#entry) property of the configuration object tells Webpack **which file to start from**.
+  - [output](https://webpack.js.org/concepts/#output) property tells Webpack **where to save the bundled code**. The target directory must be defined as an **absolute path**.
+    + which is easy to create with the [path.resolve](https://nodejs.org/docs/latest-v8.x/api/path.html#path_path_resolve_paths) method.
+    + We also use [__dirname](https://nodejs.org/docs/latest/api/modules.html#__dirname) which is a variable in Node that stores the **current directory path** of the project.
+
++ [Loader](https://webpack.js.org/concepts/loaders/) informs webpack of the files that need to be processed before they are bundled.
+  - [babel-loader](https://github.com/babel/babel-loader)
