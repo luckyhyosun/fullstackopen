@@ -389,6 +389,8 @@ Frontend
   - install [babel-loader](https://github.com/babel/babel-loader) and its required packages as a development dependency
 + npm install @babel/preset-env @babel/preset-react --save-dev
   - install the presets
++ npm install style-loader css-loader --save-dev
+  - install style-loader and css-loader
 
 **To run Redux App**,
 + npm install redux
@@ -4136,6 +4138,8 @@ Just like, we performed the _bundling of our application* with the `npm run buil
 
 + [Loader](https://webpack.js.org/concepts/loaders/) informs webpack of the files that need to be processed before they are bundled.
   - [babel-loader](https://github.com/babel/babel-loader)
+  - [css-loader](https://webpack.js.org/loaders/css-loader/)
+  - [style-loader](https://webpack.js.org/loaders/style-loader/)
 
 
 ✴️ **Transpiling** is to compile source code by transforming it from one language to another. Which means, transpilation is the process of taking modern JavaScript (or JSX) and converting it into older JavaScript that all browsers can understand.
@@ -4179,5 +4183,5 @@ In practice, most developers use ready-made **presets** that are groups of **pre
       "presets": ["@babel/preset-env", "@babel/preset-react"]
     }
     ```
-
-+ [@babel/preset-react](https://babeljs.io/docs/babel-preset-react/)
+  + [@babel/preset-env](https://babeljs.io/docs/babel-preset-env)
+  + [@babel/preset-react](https://babeljs.io/docs/babel-preset-react/)
