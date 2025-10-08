@@ -385,8 +385,10 @@ Frontend
 **To run React Webpack**,
 + npm install --save-dev webpack webpack-cli
   - install webpack
-+ npm install @babel/core babel-loader @babel/preset-react --save-dev
++ npm install @babel/core babel-loader  --save-dev
   - install [babel-loader](https://github.com/babel/babel-loader) and its required packages as a development dependency
++ npm install @babel/preset-env @babel/preset-react --save-dev
+  - install the presets
 
 **To run Redux App**,
 + npm install redux
@@ -4134,3 +4136,48 @@ Just like, we performed the _bundling of our application* with the `npm run buil
 
 + [Loader](https://webpack.js.org/concepts/loaders/) informs webpack of the files that need to be processed before they are bundled.
   - [babel-loader](https://github.com/babel/babel-loader)
+
+
+✴️ **Transpiling** is to compile source code by transforming it from one language to another. Which means, transpilation is the process of taking modern JavaScript (or JSX) and converting it into older JavaScript that all browsers can understand.
+
+By using the configuration below, we are transpiling the code containing JSX into regular JavaScript with the help of babel, which is currently the most popular tool for the job.
+```js
+const path = require('path')
+
+const config = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'build'),
+    filename: 'main.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-react'],
+        },
+      },
+    ],
+  },
+}
+
+module.exports = config
+```
+In practice, most developers use ready-made **presets** that are groups of **pre-configured plugins**.
++ [Plugins](https://babeljs.io/docs/plugins/)
+  - Babel does this transpilation process by defining plugins.
+  - Each plugin knows how to convert a specific language feature.
+    + For example, there’s a plugin to convert JSX, another plugin to convert arrow functions, etc.
+    + Without plugins, Babel wouldn’t know what transformations to apply.
++ [Preset](https://babeljs.io/docs/presets)
+  - a collection of plugins that are already configured
+  - Instead of adding each plugin manually, you can use a preset like `@babel/preset-env` (for modern JS) or `@babel/preset-react` (for JSX).
+    ```js
+    {
+      "presets": ["@babel/preset-env", "@babel/preset-react"]
+    }
+    ```
+
++ [@babel/preset-react](https://babeljs.io/docs/babel-preset-react/)
