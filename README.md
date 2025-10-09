@@ -4266,3 +4266,8 @@ In practice, most developers use ready-made **presets** that are groups of **pre
     ```
   + [@babel/preset-env](https://babeljs.io/docs/babel-preset-env)
   + [@babel/preset-react](https://babeljs.io/docs/babel-preset-react/)
+
++ Alternative is [Polyfill](https://remysharp.com/2010/10/08/what-is-a-polyfill) to make the application to be **IE-compatible**. Polyfills can be added with the help of _webpack and Babel_ or by installing one of many existing polyfill libraries.
+  - [HTML5 Cross Browser Polyfills](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills) is a list of existing polyfills.
+
++ The browser compatibility of different APIs: ["Can I Use"](https://caniuse.com) or [mozilla](https://developer.mozilla.org/en-US/)
