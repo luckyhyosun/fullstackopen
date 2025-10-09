@@ -4160,6 +4160,8 @@ Just like, we performed the _bundling of our application* with the `npm run buil
     3. Inside that HTML, there’s a `<script src="/main.js"></script>` tag.
     4. When the browser requests `/main.js`, the dev server intercepts that request and sends the JavaScript code from memory instead of from disk.
 
++ [devtool](https://webpack.js.org/configuration/devtool/) will ask webpack to generate a so-called **source map** for the bundle, which makes it possible to **map errors**, that occur during the execution of the bundle, to the **corresponding part in the original source code**.
+
 ✴️ **Transpiling** is to compile source code by transforming it from one language to another. Which means, transpilation is the process of taking modern JavaScript (or JSX) and converting it into older JavaScript that all browsers can understand.
 
 By using the configuration below, we are transpiling the code containing JSX into regular JavaScript with the help of babel, which is currently the most popular tool for the job.
