@@ -828,6 +828,37 @@ export default ProfileTab;
   The <code>matchingNotes</code> isan array (probably with just one note inside), not the note object itself.
 
 ## Appendix
+✴️ **MVC/ MVP/ MVVM** : according to how “dumb” (**passive**) the **View** is, the table would look like this:
+
+| Feature                            | MVP                                           | MVC                                         | MVVM                                                            |
+| ---------------------------------- | --------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------- |
+| **View**                           | Passive; renders only what Presenter tells it | Renders UI, may observe Model               | Binds to ViewModel; reactive                                    |
+| **Controller/Presenter/ViewModel** | Presenter handles UI logic and updates View   | Controller handles input & updates Model    | ViewModel holds state, app logic, and coordinates with Model    |
+| **Model**                          | Holds data & business logic                                   | Same as MVP                 | Same as MVP                                                    |
+| **Communication**                  | View ↔ Presenter ↔ Model                      | View ↔ Controller ↔ Model                   | View ↔ ViewModel ↔ Model                                        |
+| **Binding**                        | Presenter updates View                        | Manual updates                              | Automatic / reactive                                            |
+| **Best for**                       | Apps needing more separation of UI logic      | Simple apps, or where input is event-driven | Apps with reactive UI frameworks (React, Vue, Angular, SwiftUI) |
+
+
+✴️ **Concerns** are a key idea in software architecture.
+A concern simply means **a specific kind of responsibility or purpose** within your program.
+Each part (or “layer”) of your app has its own concern — something it’s in charge of doing. So for example, When we say “**separation of concerns**”, we mean dividing the program so that each piece handles one clear job, instead of mixing everything together.
+
+| **Layer**     | **Main Concern**                                         | **Example in a Note App**                                                                                                                                                                                                       | **Typical Tools / Technologies**                                                                                                                                                                                    |
+| ------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Model**     | Managing **data** and **business (domain) logic**        | `NoteModel.ts` → defines data types (`Note`, `User`), handles CRUD operations (`createNote()`, `updateNote()`, `deleteNote()`), validates notes (e.g., “title cannot be empty”), and communicates with the database or API.     | 🧠 **axios / fetch** → for API requests<br>🗄️ **Database** (e.g., Firebase, Supabase, MongoDB, SQL)<br>🔧 **ORM / API layer** (e.g., Prisma, Mongoose)<br>📦 **Utility modules** for data validation or formatting |
+| **ViewModel** | Managing **application state** and **interaction logic** | `NoteViewModel.ts` → **Redux store / slices** live here and they handles the app’s current state (e.g., `notes`, `loading`, `error`), defines actions (`fetchNotes()`, `addNote()`, `togglePin()`), and decides when to call Model functions or show errors/loading states. | ⚙️ **Zustand**, **MobX**, **Redux**, or **Vuex** (state management)<br>🔁 **RxJS** (for reactivity/streams, optional)<br>🧩 **Custom hooks / stores** that bridge Model and View                                    |
+| **View**      | Handling **UI rendering** and **user interaction**       | React components → display notes in list/grid, render loading spinners or error messages, and call ViewModel actions (like `addNote()` or `togglePin()`) when users click or type.                                              | 🎨 **React**, **Next.js**, **Vue**, **Angular**<br>💅 **Tailwind CSS**, **MUI**, or **Styled Components** for UI styling<br>🎛️ **React Hooks** (`useEffect`, `useState`) for lifecycle & user interactions         |
+
+
+✴️ **Business logic** is the rules and operations that define **how your app’s core domain actually works**.
+
+| **Layer**     | **Type of Logic**                                                                                  | **Examples**                                                                                                                                                                                                                                                                                                                               |
+| ------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Model**     | **Domain / business logic** – defines the rules and meaning of notes themselves.                   | - How to **create**, **edit**, and **delete** a note.<br>- A note must have a **title** and **content**.<br>- Auto-generate a **timestamp** when a note is created.<br>- Business rule: a **“pinned”** note always appears before unpinned ones.<br>- Syncing rules with backend (e.g., conflict resolution, version control).             |
+| **ViewModel** | **Application / presentation logic** – defines how the app behaves and interacts with the user/UI. | - Show a **loading spinner** while fetching notes.<br>- **Handle errors** if saving fails (“Could not save your note”).<br>- **Sort notes by date** before displaying them.<br>- Decide **when** to refresh notes (e.g., after user logs in).<br>- **Toggle between list and grid view**.<br>- **Trigger modals** for editing or deleting. |
+
+
 ✴️ **Parameter vs Argument**
 + **Parameter** defines what kind of **input the function expects**.
   ```js
@@ -3632,7 +3663,7 @@ And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>crea
           - For <code>toggleImportanceOf</code>, it creates <code>"notes/toggleImportanceOf"</code>
       2. **the action creator function is auto-generated** by Redux
           - <code>createNote()</code> OR
-          - <code>toggleImportanceOf</code>
+          - <code>toggleImportanceOf()</code>
       3. The <code>createNote("Hello world")</code> is **calling the action creator function** that ❗️Redux Toolkit automatically generates, like this:
           ```js
           const createNote = (content) => {
@@ -3695,7 +3726,7 @@ And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>crea
       export const { createNote, toggleImportanceOf } = noteSlice.actions
       export default noteSlice.reducer
       ```
-      Even though **the names of** <code>createNote</code> and <code>toggleImportanceOf</code> **are the same** as your ❗️reducer functions of slice, these are now ❗️action creator functions, not the reducers themselves.
+      Even though **the names of** <code>createNote</code> and <code>toggleImportanceOf</code> **are the same** as your reducer functions of slice, these are ❗️action creator functions, not the ❗️reducers themselves.
 
 **🐬 Pro Tips**
 + <code>reducers</code> **(plural)** → this is an **object** where each _key_ is a **case reducer function**.
@@ -4208,6 +4239,23 @@ In practice, most developers use ready-made **presets** that are groups of **pre
   - Each plugin knows how to convert a specific language feature.
     + For example, there’s a plugin to convert JSX, another plugin to convert arrow functions, etc.
     + Without plugins, Babel wouldn’t know what transformations to apply.
+  - [define-plugin](https://webpack.js.org/plugins/define-plugin/) defines **global default constants** that can be used in the bundled code. It doesn’t create a normal variable that exists at _runtime_—it replaces every instance of the constant with the value you specify, **before your code even runs**.
+    + Imagine your code has this line:
+      ```js
+      console.log(API_URL);
+      ```
+    + If you use `DefinePlugin` like this:
+      ```js
+      new webpack.DefinePlugin({
+        API_URL: '"http://localhost:3000"'
+      })
+      ```
+    + Webpack will replace `API_URL` with `"http://localhost:3000"` in your final bundle. So after building, the code actually looks like this:
+      ```js
+      console.log("http://localhost:3000");
+      ```
+    + So, the value is baked into the code during the build process.
+
 + [Preset](https://babeljs.io/docs/presets)
   - a collection of plugins that are already configured
   - Instead of adding each plugin manually, you can use a preset like `@babel/preset-env` (for modern JS) or `@babel/preset-react` (for JSX).
