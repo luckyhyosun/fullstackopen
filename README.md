@@ -4162,6 +4162,19 @@ Just like, we performed the _bundling of our application* with the `npm run buil
 
 + [devtool](https://webpack.js.org/configuration/devtool/) will ask webpack to generate a so-called **source map** for the bundle, which makes it possible to **map errors**, that occur during the execution of the bundle, to the **corresponding part in the original source code**.
 
++ [UglifyJS](https://github.com/mishoo/UglifyJS/) is the minification tool
+  - is minifying the code
+  - The size of the bundle files (`main.js`) is large because the bundle also contains the source code for the **entire React library**.
+  -  optimizing in terms of file size by **removing all of the comments**.
+  - UglifyJS does not require additional configuration to be used
+  - execute the bundling of the code in production mode, in `package.json`
+    ```js
+    "scripts": {
+      "build": "webpack --mode=production",
+      //...
+    },
+    ```
+
 ✴️ **Transpiling** is to compile source code by transforming it from one language to another. Which means, transpilation is the process of taking modern JavaScript (or JSX) and converting it into older JavaScript that all browsers can understand.
 
 By using the configuration below, we are transpiling the code containing JSX into regular JavaScript with the help of babel, which is currently the most popular tool for the job.
