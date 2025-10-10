@@ -1633,7 +1633,8 @@ React needs to know the **order of hook calls** to correctly **keep track of the
 **⚡ Most common hooks**
 + **[useState](https://react.dev/reference/react/useState)** – manage state in a function component
 + **[useEffect](https://fullstackopen.com/en/part2/getting_data_from_server#effect-hooks)** – run side effects, that something changes state outside of the function/request itself(like data fetching, subscriptions, or DOM updates). And it takes two parameters - a function, the effect itself. The principle is that the effect is:
-  1. always executed **after the first render** of the component
+  1. always executed **after the first render** of the component, which means `useEffect` runs once per **mount** — not once per page load.
+    👉 If your component ever unmounts and mounts again, the effect will run again.
   2. and when **the value of the [second parameter changes](https://react.dev/reference/react/useEffect#parameters)**.
 
     **🐬 Pro Tips**
@@ -4273,3 +4274,38 @@ In practice, most developers use ready-made **presets** that are groups of **pre
 + The browser compatibility of different APIs: ["Can I Use"](https://caniuse.com) or [mozilla](https://developer.mozilla.org/en-US/)
 
 ✴️ **Class** Before, when defining a component that uses state, one had to define it using Javascript's [Class](https://legacy.reactjs.org/docs/state-and-lifecycle.html#converting-a-function-to-a-class) syntax. But, in contrast to when using the useState hook, Class Components only **contain one state**.
+
++ **Component state** is in the instance variable `this.state`.
+  ```js
+  class App extends React.Component {
+    constructor(props) {
+      super(props)
+
+      this.state = {
+        anecdotes: [],
+        current: 0
+      }
+    }
+
+    render() {
+      if (this.state.anecdotes.length === 0) {
+        return <div>no anecdotes...</div>
+      }
+
+      return (
+        <div>
+          <h1>anecdote of the day</h1>
+
+          <div>
+            {this.state.anecdotes[this.state.current].content}
+          </div>
+          <button>next</button>
+        </div>
+      )
+    }
+  }
+  ```
+
++ **[Lifecycle Methods](https://react.dev/reference/react/Component#adding-lifecycle-methods-to-a-class-component)** of Class Components offer corresponding functionality.
+  - [componentDidMount](https://react.dev/reference/react/Component#componentdidmount): The correct place to trigger the **fetching of data** from a server is inside this method componentDidMount, which is executed once right after the first time a component renders.
+  - [setState](https://react.dev/reference/react/Component#setstate). And it always triggers the **re-render of the Class Component**.
