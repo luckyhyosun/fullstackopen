@@ -4309,3 +4309,79 @@ In practice, most developers use ready-made **presets** that are groups of **pre
 + **[Lifecycle Methods](https://react.dev/reference/react/Component#adding-lifecycle-methods-to-a-class-component)** of Class Components offer corresponding functionality.
   - [componentDidMount](https://react.dev/reference/react/Component#componentdidmount): The correct place to trigger the **fetching of data** from a server is inside this method componentDidMount, which is executed once right after the first time a component renders.
   - [setState](https://react.dev/reference/react/Component#setstate). And it always triggers the **re-render of the Class Component**.
+
++ The biggest difference between **Functional components** and **Class components** is mainly that the state of a Class component is a single object, and that the state is updated using the method `setState`, while in Functional components the state can consist of multiple different variables, with all of them having their own update function.
+  ```js
+  //Class components
+  class App extends React.Component {
+    constructor(props) {
+      super(props)
+
+      this.state = {
+        anecdotes: [],
+        current: 0
+      }
+    }
+
+    componentDidMount = () => {
+      axios.get('http://localhost:3001/anecdotes').then(response => {
+        this.setState({ anecdotes: response.data })
+      })
+    }
+
+
+    handleClick = () => {
+      const current = Math.floor(
+        Math.random() * this.state.anecdotes.length
+      )
+      this.setState({ current })
+    }
+
+    render() {
+      if (this.state.anecdotes.length === 0 ) {
+        return <div>no anecdotes...</div>
+      }
+
+      return (
+        <div>
+          <h1>anecdote of the day</h1>
+          <div>{this.state.anecdotes[this.state.current].content}</div>
+
+          <button onClick={this.handleClick}>next</button>
+        </div>
+      )
+    }
+  }
+  ```
+
+  ```js
+  //Functional components
+  const App = () => {
+    const [anecdotes, setAnecdotes] = useState([])
+    const [current, setCurrent] = useState(0)
+
+    useEffect(() =>{
+      axios.get('http://localhost:3001/anecdotes').then(response => {
+        setAnecdotes(response.data)
+      })
+    },[])
+
+    const handleClick = () => {
+      setCurrent(Math.round(Math.random() * (anecdotes.length - 1)))
+    }
+
+    if (anecdotes.length === 0) {
+      return <div>no anecdotes...</div>
+    }
+
+    return (
+      <div>
+        <h1>anecdote of the day</h1>
+        <div>{anecdotes[current].content}</div>
+        <button onClick={handleClick}>next</button>
+      </div>
+    )
+  }
+  ```
+  + A notable benefit of using Functional components is not having to deal with the **self-referencing** `this` reference of the Javascript class.
++ [Error boundary](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary) is a benefit of Class Components, Functional components isn't yet in use it.
