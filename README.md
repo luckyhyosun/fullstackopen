@@ -4271,3 +4271,5 @@ In practice, most developers use ready-made **presets** that are groups of **pre
   - [HTML5 Cross Browser Polyfills](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills) is a list of existing polyfills.
 
 + The browser compatibility of different APIs: ["Can I Use"](https://caniuse.com) or [mozilla](https://developer.mozilla.org/en-US/)
+
+✴️ **Class** Before, when defining a component that uses state, one had to define it using Javascript's [Class](https://legacy.reactjs.org/docs/state-and-lifecycle.html#converting-a-function-to-a-class) syntax. But, in contrast to when using the useState hook, Class Components only **contain one state**.
