@@ -20,6 +20,7 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 + **State**
 + **Templates / Rendering**
 + **[Routing](https://expressjs.com/en/starter/basic-routing.html)**
++ HTTP requests
 + Event Handling
 + Error Handling
 + API / Backend Communication
@@ -27,6 +28,16 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 + [Conditional Rendering](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#conditional-rendering) / Logic
 + Componentization (Breaking UI into reusable pieces)
 + Performance Optimization (Efficient updates and minimizing resource usage)
+
+**🐬 Pro Tips**
+When people talk about **state management**:
++ They manage state **across the whole app**, shared between multiple components.
++ They can:
+  - Persist state
+  - Sync state across pages
+  - Handle complex updates and side effects
+  - Connect to external APIs easily
++ Even though React has `useState` and `useReducer`, which allows a component to store and update its own state. So this is **component-level state**. React alone doesn’t provide a built-in solution for these tasks above. So they have to use another libraries like **Redux, MobX, Zustand, Recoil**.
 
 ### Functional Programming
 [Functional programming](https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84) is a programming paradigm in which we try to bind everything in pure mathematical functions. It is a declarative style. Its main focus is on “what to solve,” in contrast to an imperative style, where the main focus is on “how to solve.” It uses expressions instead of statements. An expression is evaluated to produce a value, whereas a statement is executed to assign variables.
@@ -65,6 +76,7 @@ In a modern dynamic web app **State + Templates + Routing** is the core concepts
 #### Libraries:
 + state management → **frontend only**
   - **React**
+  - [React Native](https://reactnative.dev/)
   - **Redux** (implementing **Flux** pattern)
   - [MobX](https://mobx.js.org/README.html)
   - [Recoil](https://recoiljs.org/)
@@ -323,6 +335,17 @@ Frontend
 + [Cross Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)
 + [React Sanitization](https://legacy.reactjs.org/docs/introducing-jsx.html#jsx-prevents-injection-attacks)
 + [Minimize the rist of XSS](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)
++ [The 100% correct way to structure a React app (or why there’s no such thing)](https://david-gilbertson.medium.com/the-100-correct-way-to-structure-a-react-app-or-why-theres-no-such-thing-3ede534ef1ed)
++ [Annual list of the most common security risks in Web applications](https://owasp.org/Top10/)
++ [SQL injection](https://stackoverflow.com/questions/332365/how-does-the-sql-injection-from-the-bobby-tables-xkcd-comic-work)
++ [SQL injections are prevented by](https://security.stackexchange.com/questions/230211/why-are-stored-procedures-and-prepared-statements-the-preferred-modern-methods-f)
++ [NoSQL Injection in MongoDB](https://zanon.io/posts/nosql-injection-in-mongodb/)
++ [Hacking NodeJS and MongoDB](https://web.archive.org/web/20220901024441/https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html)
++ [Exploiting Script Injection Flaws in ReactJS Apps](https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1)
++ [Website security from Mozila's MDN](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Website_security)
++ [Production Best Practices: Security](https://expressjs.com/en/advanced/best-practice-security.html)
++ [Static type checking (Typescript)](https://en.wikipedia.org/wiki/Type_system#Static_type_checking)
+
 
 ## Someone/things to know
 + [John Mccarthy](https://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist))
@@ -332,6 +355,7 @@ Frontend
 + [Data Driven Graphics](https://dribbble.com/tags/data-driven)
 + [The Psychophysics of Human Sound Localization](https://direct.mit.edu/books/oa-monograph/4885/Spatial-HearingThe-Psychophysics-of-Human-Sound)
 + [Designing Sound](https://mitpress.mit.edu/9780262014410/designing-sound/)
++ [Useful libraries and interesting links](https://fullstackopen.com/en/part7/class_components_miscellaneous#useful-libraries-and-interesting-links): lodash/ ramda/ date-fns/ React Hook Form/ recharts/ highcharts/ Immer/ Redux-saga/ react-ga4/
 
 ## Future Plan
 - [ ] Typescript
@@ -346,6 +370,9 @@ Frontend
 - [ ] Algorithm
 - [ ] CSS preprocessor](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor)
 - [ ] [Sentry](https://sentry.io/welcome/)
+- [ ] [Securing Software](https://cybersecuritybase.mooc.fi/module-2.1)
+- [ ] [Helmet](https://helmetjs.github.io/) : a security library of backend in Express applications.
+- [ ] [eslint-plugin-security](https://github.com/eslint-community/eslint-plugin-security) : a security library
 
 ## Script
 + rm -rf .git
@@ -354,6 +381,28 @@ Frontend
 + npm init → npm install
   - <code>npm init</code> creates a package.json file
   - <code>npm install</code> installs the dependency and saves it into package.json.
+
++ npm outdated --depth 0
+  - check how up-to-date your dependencies are using
+
++ npm install -g npm-check-updates
+  - update dependencies up to date
+  - be installed globally with `-g`
+
++ npm audit
+  - check the security of dependencies
+
++ npm audit fix
+  - address the issues from `npm audit`
+  - but it does **not update dependencies** if their **major version** number has increased
+  - beacuse updating these dependencies could lead to the whole application breaking down.
+
++ npm audit fix --force
+  - would upgrade the library version but would also upgrade the library `react-scripts` and that would **potentially break down** the development environment.
+
++ ncu -u
+  - The file `package.json` is brought up to date
+  - and then, running the command `npm install`
 
 + --watch
   - Automatic Change Tracking
@@ -788,6 +837,13 @@ const ProfileTab = ({ user }: ProfileTabProps) => {
 export default ProfileTab;
 ```
 
+**🐥 What is the file structure convention?**
+
+🐓 If there may be a situation where the entire application is to be put into a single repository:
+
++ a common approach is to put the `package.json` and `webpack.config.js` in the **root directory**
++ place the frontend and backend code into their **own directories**, e.g. `client` and `server`.
+
 ## Higher Order Functions
 ✴️ **concat()**
 + Combines two or more arrays (or add elements) and return a **new array**.
@@ -828,7 +884,7 @@ export default ProfileTab;
   The <code>matchingNotes</code> isan array (probably with just one note inside), not the note object itself.
 
 ## Appendix
-✴️ **MVC/ MVP/ MVVM** : according to how “dumb” (**passive**) the **View** is, the table would look like this:
+✴️ **MVP/ [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)/ MVVM pattern**: according to how “dumb” (**passive**) the **View** is, the table would look like this:
 
 | Feature                            | MVP                                           | MVC                                         | MVVM                                                            |
 | ---------------------------------- | --------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------- |
@@ -1046,6 +1102,20 @@ document.querySelector('h1').textContent = 'Hi';
   3. React diffs the old VDOM vs new VDOM to see what changed.
   4. React updates only the changed parts of the real DOM.
 
+Browsers provide a [DOM API](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) through which the JavaScript running in the browser can modify the elements defining the appearance of the page.
+
+When a software developer uses React, they rarely or never directly manipulate the DOM. The function defining the React component returns a set of [React elements](https://legacy.reactjs.org/docs/glossary.html#elements). Although some of the elements look like normal HTML elements
+```jsx
+const element = <h1>Hello, world</h1>
+```
+
+The React elements defining the appearance of the components of the application make up the [Virtual DOM](https://legacy.reactjs.org/docs/faq-internals.html#what-is-the-virtual-dom), which is stored in system memory during runtime.
+
+With the help of the [ReactDOM](https://react.dev/reference/react-dom) library, the virtual DOM defined by the components is rendered to a real DOM that can be shown by the browser using the DOM API:
+```js
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+```
+
 ✴️ **JSX** is JavaScript XML, which is a syntax extension for JavaScript that looks like HTML. But you write JSX inside a JavaScript file. JSX is part of your JavaScript code, even though it looks like HTML. It’s most commonly used with **React**.
 ```jsx
 // jsx
@@ -1210,6 +1280,8 @@ function Greeting(props) {
     3. Create new instance & Reset state
     4. Render (component function runs, JSX returned, UI updated)
     5. Runs effect-hook (<code>useEffect</code>)after every render, based on **dependency array**.
+
+✴️ **React** is a JavaScript library for building user interfaces (UIs). [React Patterns](https://reactpatterns.com/) and [React bits](https://vasanthk.gitbooks.io/react-bits/content/) provide a concise list of best practices for React. And [Reactiflux](https://www.reactiflux.com/) is a big chat community of React developers on Discord
 
 ✴️ **Component** is a UI building block in React, and so called "functional component". React lets you combine your markup, CSS, and JavaScript into custom “components”, reusable UI elements for your app. So basically, this functional component **takes** <code>props</code> **as input** and **returns JSX** (what UI should look like).
 ```jsx
@@ -3956,7 +4028,6 @@ How does it **work**?
     + And since your component is using <code>useQuery(['notes'], getNotes)</code>, React Query **automatically triggers a re-fetch** of <code>getNotes</code>.
 
 ✴️ **React Router**
-
 Routing is the conditional rendering of components **based on the URL** in the browser. [React Router](https://reactrouter.com/) is a library which provides an excellent solution for managing navigation in a React application. So, React Router updates the UI dynamically and changes views/pages **without reloading the browser**.
 
 + It maps **URLs (paths)** → React **components**.
@@ -4385,3 +4456,104 @@ In practice, most developers use ready-made **presets** that are groups of **pre
   ```
   + A notable benefit of using Functional components is not having to deal with the **self-referencing** `this` reference of the Javascript class.
 + [Error boundary](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary) is a benefit of Class Components, Functional components isn't yet in use it.
+
+✴️ **[Polling](https://en.wikipedia.org/wiki/Polling_(computer_science))** means your frontend repeatedly asks the server for new data at regular time intervals. In other words, instead of waiting for the server to tell you that something changed (like in real-time systems), your app keeps asking, every few seconds (or minutes):
+>“Hey server, has anything changed yet?”
+
+✴️ **[WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)** is a type of web API or communication protocol. It allow for establishing a **two-way communication** channel between the browser and the server.
+
+In this case, the browser does not need to poll the backend, and instead only has to define callback functions for situations when the server sends data about updating state using a WebSocket.
+
+Instead of directly using the WebSocket API, it is advisable to use:
++ [Socket.io]() library, which provides various fallback (backup) options in case the browser does not have full support for WebSockets
+
+✴️ **Server-side rendering** is the way of rendering which can be done on the [server](https://react.dev/reference/react-dom/server), unlike **Client-side rendering**.
+
+This kind of approach is increasingly being used, such that, when accessing the application for the first time, **the server serves a pre-rendered page made with React**. From here onwards, the operation of the application continues, as usual, meaning the browser executes React, which manipulates the DOM shown by the browser.
+
+One motivation for server-side rendering is Search Engine Optimization (SEO). Search engines have traditionally been very bad at recognizing JavaScript-rendered content. It benefits these:
++ [Googlebot crawling](https://www.javascriptstuff.com/react-seo/)
++ [SEO vs. React](https://www.freecodecamp.org/news/seo-vs-react-is-it-neccessary-to-render-react-pages-in-the-backend-74ce5015c0c9)
+
+Along with server-side rendering, there has been talk of so-called
++ [isomorphic applications and universal code](https://medium.com/@ghengeveld/isomorphism-vs-universal-javascript-4b47fb481beb)
++ Although there has been some debate about their definitions,
++ **an isomorphic web application** performs rendering on both frontend and backend.
++ On the other hand, **universal code** is code that can be executed in most environments, meaning both frontend and backend.
++ Writing universal code directly using React is currently still pretty cumbersome. Lately, a library called **Next.js**, which is implemented on top of React, has garnered much attention and is a good option for making **universal applications**.
+
+✴️ **Progressive Web Application** ([PWA]((https://web.dev/explore/progressive-web-apps))) is the web applications working as well as possible on every platform and taking advantage of the best parts of those platforms. Other advantages of PWA are:
++ PWAs should also work flawlessly in offline mode or with a slow internet connection.
++  On mobile devices, they must be installable just like any other application.
++ All the network traffic in a PWA should be encrypted
+
+✴️ **Monolithic backend** means one application making up a whole and running on a single server, serving only a few API endpoints.
+
+As the application grows, the monolithic backend approach starts turning problematic both in terms of performance and maintainability.
+
+A [microservice architecture](https://martinfowler.com/articles/microservices.html) (microservices) is a way of composing the backend of an application from many separate, independent services, which communicate with each other over the network. An individual microservice's purpose is to take care of a particular logical functional whole. In a pure microservice architecture, the services do not use a shared database.
+
+Implement an [API gateway](https://microservices.io/patterns/apigateway) that is the single entry point for all clients. The API gateway handles requests in one of two ways. Some requests are simply proxied/routed to the appropriate service. It handles other requests by fanning out to multiple services.
+![api gateway](https://microservices.io/i/apigateway.jpg)
+(image from [microservices.io](https://microservices.io/patterns/¡apigateway))
+
+Microservice architectures emerged and evolved for the needs of **large internet-scale applications**. For example, [A Netflix Guide to Microservices](https://www.infoq.com/presentations/netflix-chaos-microservices/)
+
+The use of microservices has steadily been gaining hype to be kind of a [silver bullet](https://en.wikipedia.org/wiki/No_Silver_Bullet) of today, which is being offered as a solution to almost every kind of problem. However, there are several challenges when it comes to applying a microservice architecture, and it might make sense to go [monolith first](https://martinfowler.com/bliki/MonolithFirst.html) by initially making a traditional all-encompassing backend. Or maybe [not](https://martinfowler.com/articles/dont-start-monolith.html).
+
+✴️ **Serverless** is a new trend started to emerge in web application development, [AWS Lambda](https://www.serverless.com/).
+
+The main thing about lambda, and nowadays also [Google's Cloud](https://cloud.google.com/functions) functions as well as similar functionality in [Azure](https://azure.microsoft.com/en-us/products/functions/), is that it enables the **execution of individual functions** in the cloud. Before, the smallest executable unit in the cloud was a single process, e.g. a runtime environment running a Node backend.
+
+Traditionally, to run code **in the cloud**, You had to **run/ deploy a whole server** (like a Node.js app or Python backend).
+```js
+// A Node.js server with Express
+import express from "express";
+const app = express();
+
+app.get("/hello", (req, res) => res.send("Hello world"));
+
+app.listen(3000);
+```
++ ☁️ “In the cloud” means: your program or data is not on your personal computer — it’s on a computer owned by a cloud company like:
+  - Amazon (AWS)
+  - Google Cloud
+  - Microsoft Azure
+  - etc.
+
+  Those companies have huge **data centers** filled with thousands of powerful computers (called **servers**).
+
+  When you “run code in the cloud,” you are **renting** a small part of **one of those servers** to execute your code.
+
++ ☁️ the procedure of runing code in the cloud is:
+1. Rent a virtual server (e.g., an EC2 instance from AWS).
+2. Install everything you needed — Node.js, dependencies, frameworks.
+3. Upload your backend code (like an Express app).
+4. Keep that server running 24/7, even when no one was using it.
+
+However, with **Lambda** (and similar services), you can now deploy and run just one function — not an entire server. You upload a small function like:
+```js
+// serverless functions
+exports.handler = (event) => {
+  return { statusCode: 200, body: "Hello world" };
+};
+```
++ The cloud provider automatically runs it on demand when triggered by an event (e.g., HTTP request, file upload, etc.).
++ You don’t manage servers, ports, or scaling — it’s automatic.
+
+E.g. Using Amazon's [API gateway](https://aws.amazon.com/api-gateway/) it is possible to make serverless applications where the requests to the defined HTTP API get responses directly from cloud functions. Usually, the functions already operate using stored data in the databases of the cloud service.
+
+With the **Serverless**, the “server” is abstracted away — the cloud automatically creates and destroys servers as needed. You still use servers, but you just don’t see or manage them. Just use a simple function like:
+```js
+exports.handler = async (event) => {
+  return { statusCode: 200, body: "Hello World" };
+};
+```
+
+So, Software developers can shift their programming efforts to a **higher level of abstraction**, which means you can focus on **your logic**, not infrastructure details. No need to configure HTTP routes, load balancing, database pools, etc, with serverless.
+
+Because the cloud provider provides **ready-made integrations** for HTTP routes, load balancing, database pools, etc:
++ Automatically connects your function to an API endpoint (no Express setup).
++ Connects to databases via managed services.
+
+All of this happens automatically through the infrastructure and there is no need to initiate new servers, etc.
