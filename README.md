@@ -4557,3 +4557,16 @@ Because the cloud provider provides **ready-made integrations** for HTTP routes,
 + Connects to databases via managed services.
 
 All of this happens automatically through the infrastructure and there is no need to initiate new servers, etc.
+
+✴️ **ES Lint and Prettier**
++ ESLint
+  - Type: Linter
+  - Purpose: Ensures your code follows best practices and avoids errors.
+  - Focus on: **Code quality** and **potential errors**
+  - ESLint analyzes your code for potential bugs, bad patterns, or violations of coding standards.
+
++ Prettier
+  - Type: Code formatter
+  - Focus on: **Code formatting** and **style**
+  - Purpose: Ensures your code is consistently formatted.
+  - Prettier automatically formats your code to a consistent style — spacing, indentation, quotes, line width, etc.
