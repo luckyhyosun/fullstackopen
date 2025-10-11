@@ -13,8 +13,8 @@ import {
   Route,
   Link,
   Navigate,
-  useMatch,
 } from "react-router-dom"
+
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -25,6 +25,7 @@ const App = () => {
     noteService.getAll().then(notes => {
       setNotes(notes)
     })
+
   }, [])
 
   const login = (user) => {
@@ -39,11 +40,6 @@ const App = () => {
     padding: 5
   }
 
-  const match = useMatch('/notes/:id')
-  const note = match
-    ? notes.find(note => note.id === Number(match.params.id))
-    : null
-
   return (
     <div className="container">
       <Link style={padding} to="/">home</Link>
@@ -55,7 +51,7 @@ const App = () => {
       }
 
       <Routes>
-        <Route path="/notes/:id" element={<Note note={note} />} />
+        <Route path="/notes/:id" element={<Note notes={notes} />} />
         <Route path="/notes" element={<Notes notes={notes} />} />
         <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
         <Route path="/login" element={<Login onLogin={login} />} />
