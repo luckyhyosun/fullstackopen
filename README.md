@@ -363,7 +363,7 @@ Frontend
 - [ ] Vue.js
 - [ ] GraphQL
 - [x] Redux.js
-- [x] Axio
+- [x] Axios
 - [ ] [WebGL](https://thespatialstudio.de/en/xr-glossary/webgl)
 - [ ] [Three.js](https://threejs.org/)
 - [ ] Event-driven / Data-driven
@@ -1050,7 +1050,33 @@ If the button is not inside a <code>&lt;form&gt;</code>, then there’s no defau
       export default calculate
       ```
       - The **main export** of the file
-      - Can export only **one default thing** from the file
+      - Can export only **one default value** from the file
+      - Can also export **one object with many values insde**, because it is a single object.
+        ```js
+        // export an object
+        import axios from 'axios'
+
+        const getAll = async () => {
+          // ...
+          return response.data
+        }
+
+        const createNew = async (content) => {
+          // ...
+          return response.data
+        }
+
+        const update = async (id, updatedObj) => {
+          // ...
+          return response.data
+        }
+
+        export default { getAll, createNew, update }
+        ```
+        ```js
+        // import the object
+        import { getAll, createNew, update } from './services/notes'
+        ```
 
 + Modules have their own scope → variables inside one file don’t automatically exist in another.
 + Modules communicate via import/export → that’s how components share code.
@@ -3450,7 +3476,7 @@ Differences from Flux:
 
 + **[Reducer](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**
   - a function that receives the current _state_ and an _action object_, decides how to update the state if necessary, and returns the new state.
-  - Reducers must be **[pure functions](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**, which menas they _do not cause any side effects_ and awlays returns the same output for the same input. (**≠ Idempotency**)
+  - Reducers must be **[pure functions](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#reducers)**, which means they _do not cause any side effects_ and awlays returns the same output for the same input. (**≠ Idempotency**)
   - It’s the same idea as React’s **[immutability](https://en.wikipedia.org/wiki/Immutable_object) rule**.
   - The term comes from functional programming, specifically **Array.reduce** in JavaScript:
     ```js
@@ -4028,7 +4054,7 @@ How does it **work**?
     + And since your component is using <code>useQuery(['notes'], getNotes)</code>, React Query **automatically triggers a re-fetch** of <code>getNotes</code>.
 
 ✴️ **React Router**
-Routing is the conditional rendering of components **based on the URL** in the browser. [React Router](https://reactrouter.com/) is a library which provides an excellent solution for managing navigation in a React application. So, React Router updates the UI dynamically and changes views/pages **without reloading the browser**.
+Routing is the conditional rendering of components **based on the URL** in the browser. [React Router](https://reactrouter.com/) is a library which provides an excellent solution for managing navigation in a React application. So, React Router updates the UI dynamically and changes views/pages **[without reloading the browser](https://scientyficworld.org/how-to-use-query-parameters-with-react-router/)**.
 
 + It maps **URLs (paths)** → React **components**.
   ```js

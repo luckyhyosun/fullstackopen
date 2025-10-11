@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Home from './components/Home'
 import Note from './components/Note'
@@ -6,6 +6,7 @@ import Notes from './components/Notes'
 import Users from './components/Users'
 import Login from './components/Login'
 import Footer from './components/Footer'
+import noteService from './services/notes'
 
 import {
   Routes,
@@ -19,6 +20,12 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
+
+  useEffect(() => {
+    noteService.getAll().then(notes => {
+      setNotes(notes)
+    })
+  }, [])
 
   const login = (user) => {
     setUser(user)
