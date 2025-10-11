@@ -6,6 +6,7 @@ import Notes from './components/Notes'
 import Users from './components/Users'
 import Login from './components/Login'
 import Footer from './components/Footer'
+import Notification from './components/Notification'
 import noteService from './services/notes'
 
 import {
@@ -49,7 +50,7 @@ const App = () => {
         ? <em>{user} logged in</em>
         : <Link style={padding} to="/login">login</Link>
       }
-
+      <Notification message={message}/>
       <Routes>
         <Route path="/notes/:id" element={<Note notes={notes} />} />
         <Route path="/notes" element={<Notes notes={notes} />} />
