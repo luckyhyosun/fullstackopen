@@ -2117,7 +2117,7 @@ So, from the code above, when the component gets rendered, no function gets call
   }
 
   export default Notes
-```
+  ```
 
 ✴️ **Spread syntax** <code>(...)</code> is a JavaScript operator. It **expands** (=spreads) elements of an array, object, or iterable into another place.
 ```js
@@ -3393,7 +3393,7 @@ Flux offers a standard way for how and where the application's state is kept and
   - Dispatcher – central hub that sends actions to stores.
   - [Store](https://redux.js.org/tutorials/essentials/part-1-overview-concepts#store) – holds application state and logic; updates itself when receiving actions.
   - View (React components) – renders based on store data and can trigger actions via user events.
-  - Much easier to reason about **state changes in large apps**, avoids circular updates
+  - Much easier to reason about **state changes in large apps**, avoids circular updates.
 
 ✴️ **Redux**
 
@@ -4156,10 +4156,6 @@ Routing is the conditional rendering of components **based on the URL** in the b
     - [useNavigate](https://api.reactrouter.com/v7/functions/react_router.useNavigate.html) → gives you a function to programmatically change the route
     - [useMatch](https://api.reactrouter.com/v7/functions/react_router.useMatch.html) → checks if the current URL matches a given path pattern. But tt is **not possible to use** the useMatch hook in the component which defines the **routed** part of the application
 
-    Even though <code>useParams</code> and <code>useNavigate</code> **don’t store component state**, they’re still **hooks** because they:
-    - Follow React’s hook rules (must be called in components).
-    - Give you access to React Router’s internal context and lifecycle.
-
     **🐬 Pro Tips**
     ```js
     const navigate = useNavigate();
@@ -4172,14 +4168,12 @@ Routing is the conditional rendering of components **based on the URL** in the b
     ```
     In this code, i can't use <code>useNavigate('/')</code> directly. Because:
     - <code>useNavigate()</code> → returns <code>navigate()</code> function.
-    - <code>navigate('/')</code>  → actually changes the URL to `/`.
-    - So, `navigate` is a function, not a simple value in the code below.
       ```js
       const navigate = useNavigate();
       ```
       - `useNavigate()` **does not take a path**.
       - It **returns a function** that knows how to navigate.
-      - You are expected to call that **returned function with a path**, like this:
+      - So, `navigate` is a function, not a simple value in the code below.
         ```js
         navigate('/');
         ```
