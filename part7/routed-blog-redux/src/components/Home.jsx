@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addNote } from '../reducers/noteReducer'
+import { createNotification } from '../reducers/notificationReducer'
+import { resetNotiAction } from '../reducers/notificationReducer'
 
 const Home = () => {
   const [newNote, setNewNote] = useState('');
@@ -10,6 +12,8 @@ const Home = () => {
     console.log(newNote);
 
     dispatch(addNote(newNote))
+    dispatch(createNotification(`Successfully Create New note: ${newNote}`))
+    setTimeout(() => {dispatch(resetNotiAction())}, 2000)
   }
 
   return (

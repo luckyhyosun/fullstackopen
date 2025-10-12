@@ -20,20 +20,11 @@ import {
 
 const App = () => {
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchNotes())
   }, [])
-
-  const login = (user) => {
-    setUser(user)
-    setMessage(`welcom, ${user} !`)
-    setTimeout(() => {
-      setMessage(null)
-    },5000)
-  }
 
   const padding = {
     padding: 5
@@ -48,12 +39,12 @@ const App = () => {
         ? <em>{user} logged in</em>
         : <Link style={padding} to="/login">login</Link>
       }
-      <Notification message={message}/>
+      <Notification />
       <Routes>
         <Route path="/notes/:id" element={<Note />} />
         <Route path="/notes" element={<Notes />} />
         <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
-        <Route path="/login" element={<Login onLogin={login} />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
       </Routes>
 
