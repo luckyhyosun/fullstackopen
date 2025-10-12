@@ -1,19 +1,19 @@
 {
   "notes": [
     {
-      "id": 1,
+      "id": "1",
       "content": "HTML is easy",
       "important": true,
       "user": "Kim Luukkainen"
     },
     {
-      "id": 2,
+      "id": "2",
       "content": "Browser can execute only JavaScript",
       "important": false,
       "user": "Lind Luukkainen"
     },
     {
-      "id": 3,
+      "id": "3",
       "content": "Most important methods of HTTP-protocol are GET and POST",
       "important": true,
       "user": "Aalto Hellas"

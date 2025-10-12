@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from "react-router-dom"
 import { addNote } from '../reducers/noteReducer'
 import { createNotification } from '../reducers/notificationReducer'
 import { resetNotiAction } from '../reducers/notificationReducer'
@@ -7,6 +8,7 @@ import { resetNotiAction } from '../reducers/notificationReducer'
 const Home = () => {
   const [newNote, setNewNote] = useState('');
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const addNewNotefnc = () => {
     console.log(newNote);
@@ -14,6 +16,8 @@ const Home = () => {
     dispatch(addNote(newNote))
     dispatch(createNotification(`Successfully Create New note: ${newNote}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 2000)
+
+    navigate('/notes')
   }
 
   return (
