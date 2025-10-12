@@ -1,19 +1,22 @@
-const noteReducer = (state = [], action) => {
-  switch(action.type){
-    case 'ADD_NOTE':
-      return [...state, action.payload]
-    default:
-      return state
-  }
-}
+import { createSlice } from '@reduxjs/toolkit'
 
-export const addNoteAction = (content) => ({
-  type: 'ADD_NOTE',
-  payload: {
-    id: Math.floor(Math.random()*100),
-    content,
-    important: true
+const noteSlice = createSlice({
+  name: 'notes',
+  initialState: [],
+  reducers: {
+    addNote(state, action){
+      const newNote = {
+        id: Math.floor(Math.random()*100),
+        content: action.payload,
+        important: true
+      }
+      state.push(newNote)
+    },
+    initNotes(state, action){
+      return action.payload
+    }
   }
 })
 
-export default noteReducer
+export const { addNote, initNotes } = noteSlice.actions
+export default noteSlice.reducer

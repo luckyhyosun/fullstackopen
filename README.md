@@ -3697,14 +3697,7 @@ And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>crea
   export const {createNote,toggleImportanceOf} = noteSlice.actions
   export default noteSlice.reducer
   ```
-  1. **Initial state**: The slice starts with 2 notes. Each note has <code>content</code>, <code>important</code>, and an <code>id</code>.
-      ```js
-      const initialState = [
-        { content: 'reducer defines how redux store works', important: true, id: 1 },
-        { content: 'state of store can contain any data', important: false, id: 2 },
-      ]
-      ```
-  2. **createSlice**: easily creates reducer and related action creators.
+  1. **createSlice**: easily creates reducer and related action creators.
       ```js
       const noteSlice = createSlice({
         name: 'notes',
@@ -3716,6 +3709,14 @@ And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>crea
       For example:
       - <code>notes/createNote</code>
       - <code>notes/toggleImportanceOf</code>
+
+  2. **Initial state**: The slice starts with 2 notes. Each note has <code>content</code>, <code>important</code>, and an <code>id</code>.
+      ```js
+      const initialState = [
+        { content: 'reducer defines how redux store works', important: true, id: 1 },
+        { content: 'state of store can contain any data', important: false, id: 2 },
+      ]
+      ```
 
   3. **Reducers** (state-changing functions): The <code>reducers</code> parameter takes the reducer itself as an object, of which functions handle state changes caused by certain actions.
   + The functions inside <code>reducers: {}</code> are **case reducers (state-changing logic)** which is just a small function that **defines how state changes for one specific action type**.

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addNoteAction } from '../reducers/noteReducer'
+import { addNote } from '../reducers/noteReducer'
 
 const Home = () => {
   const [newNote, setNewNote] = useState('');
@@ -9,7 +9,7 @@ const Home = () => {
   const addNewNotefnc = () => {
     console.log(newNote);
 
-    dispatch(addNoteAction(newNote))
+    dispatch(addNote(newNote))
   }
 
   return (
