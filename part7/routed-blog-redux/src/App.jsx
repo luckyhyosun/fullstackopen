@@ -22,7 +22,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
 
-  const notes = useSelector(state => state.notes)
+  const notes = useSelector(state => state)
 
   const login = (user) => {
     setUser(user)

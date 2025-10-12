@@ -7,4 +7,13 @@ const noteReducer = (state = [], action) => {
   }
 }
 
+export const addNoteAction = (content) => ({
+  type: 'ADD_NOTE',
+  payload: {
+    id: Math.floor(Math.random()*100),
+    content,
+    important: true
+  }
+})
+
 export default noteReducer

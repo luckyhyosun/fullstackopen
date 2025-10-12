@@ -1960,6 +1960,9 @@ The key concept of <code>ref</code>is:
       - They **update the component** when the data arrives.
       - They **handle states** of loading, errors, and reactivity.
 
+✴️ **React-redux**
++ is a library that lets React components easily read data from the Redux store
++ and dispatch actions to update the store — without having to manually pass props through every layer.
 
 ✴️ **[React-redux Hooks](https://react-redux.js.org/api/hooks)**
 + are provided by the React-Redux library, not React itself.
@@ -2020,6 +2023,37 @@ The key concept of <code>ref</code>is:
 **⚡ Key difference**
 + React hooks = manage component’s local state and side effects.
 + React-Redux hooks = bridge between React and Redux, letting components read/write global state.
+
+
+✴️ **React-redux Component**
+
+[Provider]((https://react-redux.js.org/api/)), a component from `react-redux` libary, makes the Redux store available to any nested components that need to access the Redux store.
+
+Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **[prop drilling](https://react.dev/learn/passing-data-deeply-with-context)**).
+
+Now with the _store_, Provider wrapping the _App_ component, the _store_ is directly accessible to all components within the _App_ component without explicitly being passed as props.
+```jsx
+import ReactDOM from 'react-dom/client'
+import { createStore } from 'redux'
+
+import { Provider } from 'react-redux'
+
+import App from './App'
+import noteReducer from './reducers/noteReducer'
+
+const store = createStore(noteReducer)
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+```
+This `store` object contains:
++ the **current state** tree (store.getState())
++ the **dispatch** method (store.dispatch(action))
++ a **subscribe** method to listen for changes
 
 ✴️ **Event Handling** is how your code responds to user interactions or other events, like click (<code>onClick</code>), typing(<code>change</code>), mouse movements (<code>mousemove</code>), form submissions (<code>submit</code>), and more.
 
@@ -3546,30 +3580,6 @@ Differences from Flux:
 
 + This is because the combined reducer works in such a way that **every action gets handled in every part of the combined reducer**, or in other words, **every reducer "listens" to all of the dispatched actions** and does something with them if it has been instructed to do so.
 + But typically **only one reducer is interested in any given action**.
-
-✴️ **React-redux [Provider](https://react-redux.js.org/api/)** is a component makes the Redux store available to any nested components that need to access the Redux store.
-
-Previously, if the application had many components which needed the store, the App component had to pass _store_ as props to all of those components (known as **[prop drilling](https://react.dev/learn/passing-data-deeply-with-context)**).
-
-Now with the _store_, Provider wrapping the _App_ component, the _store_ is directly accessible to all components within the _App_ component without explicitly being passed as props.
-```jsx
-import ReactDOM from 'react-dom/client'
-import { createStore } from 'redux'
-
-import { Provider } from 'react-redux'
-
-import App from './App'
-import noteReducer from './reducers/noteReducer'
-
-const store = createStore(noteReducer)
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-
-  <Provider store={store}>
-    <App />
-  </Provider>
-)
-```
 
 ✴️ **[Redux toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today)** is the official recommended approach for writing Redux logic.
 

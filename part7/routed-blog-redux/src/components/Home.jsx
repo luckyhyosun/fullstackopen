@@ -1,7 +1,16 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addNoteAction } from '../reducers/noteReducer'
 
 const Home = () => {
   const [newNote, setNewNote] = useState('');
+  const dispatch = useDispatch()
+
+  const addNewNotefnc = () => {
+    console.log(newNote);
+
+    dispatch(addNoteAction(newNote))
+  }
 
   return (
     <div>
@@ -10,7 +19,7 @@ const Home = () => {
 
     <h2>Add new Note</h2>
     <input type="text" value={newNote} onChange={(e) => {setNewNote(e.target.value)}}/>
-    <button>submit</button>
+    <button onClick={addNewNotefnc}>submit</button>
   </div>
   )
 }
