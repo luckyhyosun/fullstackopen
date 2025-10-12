@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Home from './components/Home'
 import Note from './components/Note'
@@ -19,8 +19,8 @@ import {
 
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     dispatch(fetchNotes())
