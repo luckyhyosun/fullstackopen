@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import Home from './components/Home'
 import Note from './components/Note'
@@ -7,7 +8,6 @@ import Users from './components/Users'
 import Login from './components/Login'
 import Footer from './components/Footer'
 import Notification from './components/Notification'
-import noteService from './services/notes'
 
 import {
   Routes,
@@ -18,16 +18,11 @@ import {
 
 
 const App = () => {
-  const [notes, setNotes] = useState([])
+  // const [notes, setNotes] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
 
-  useEffect(() => {
-    noteService.getAll().then(notes => {
-      setNotes(notes)
-    })
-
-  }, [])
+  const notes = useSelector(state => state.notes)
 
   const login = (user) => {
     setUser(user)

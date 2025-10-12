@@ -7,7 +7,7 @@ const store = configureStore({
 })
 
 noteService.getAll().then(notes => notes.forEach(note => {
-  store.dispatch({type: 'ADD_NOTE', payload: note.content})
+  store.dispatch({type: 'ADD_NOTE', payload: note})
 
   console.log(store.getState())
 }))
