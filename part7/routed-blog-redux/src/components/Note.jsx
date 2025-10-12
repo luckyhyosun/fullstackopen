@@ -1,6 +1,9 @@
 import { useParams } from "react-router-dom"
+import { useSelector } from "react-redux"
 
-const Note = ({ notes }) => {
+const Note = () => {
+  const notes = useSelector(state => state)
+
   const id = useParams().id
   const note = notes.find(n => n.id === id)
 

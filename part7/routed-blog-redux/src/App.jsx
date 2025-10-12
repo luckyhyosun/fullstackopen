@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import Home from './components/Home'
 import Note from './components/Note'
@@ -8,6 +8,7 @@ import Users from './components/Users'
 import Login from './components/Login'
 import Footer from './components/Footer'
 import Notification from './components/Notification'
+import { fetchNotes } from './reducers/noteReducer'
 
 import {
   Routes,
@@ -18,11 +19,13 @@ import {
 
 
 const App = () => {
-  // const [notes, setNotes] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
+  const dispatch = useDispatch()
 
-  const notes = useSelector(state => state)
+  useEffect(() => {
+    dispatch(fetchNotes())
+  }, [])
 
   const login = (user) => {
     setUser(user)
@@ -47,8 +50,8 @@ const App = () => {
       }
       <Notification message={message}/>
       <Routes>
-        <Route path="/notes/:id" element={<Note notes={notes} />} />
-        <Route path="/notes" element={<Notes notes={notes} />} />
+        <Route path="/notes/:id" element={<Note />} />
+        <Route path="/notes" element={<Notes />} />
         <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
         <Route path="/login" element={<Login onLogin={login} />} />
         <Route path="/" element={<Home />} />

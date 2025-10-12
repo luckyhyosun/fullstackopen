@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 import {
@@ -9,7 +10,10 @@ import {
   TableCell,
 } from '@mui/material'
 
-const Notes = ({ notes }) => (
+const Notes = () => {
+  const notes = useSelector(state => state)
+
+  return (
   <div>
     <h2>Notes</h2>
     <TableContainer component={Paper}>
@@ -30,5 +34,6 @@ const Notes = ({ notes }) => (
     </TableContainer>
   </div>
 )
+}
 
 export default Notes
