@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 
 const Note = () => {
-  const notes = useSelector(state => state)
+  const notes = useSelector(state => state.notes)
 
   const id = useParams().id
   const note = notes.find(n => n.id === id)

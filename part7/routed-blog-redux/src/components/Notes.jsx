@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 
 const Notes = () => {
-  const notes = useSelector(state => state)
+  const notes = useSelector(state => state.notes)
 
   return (
   <div>
