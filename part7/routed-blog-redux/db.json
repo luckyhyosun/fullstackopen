@@ -4,19 +4,22 @@
       "id": "1",
       "content": "HTML is easy",
       "important": true,
-      "user": "Kim Luukkainen"
+      "user": "Kim Luukkainen",
+      "likes": 0
     },
     {
       "id": "2",
       "content": "Browser can execute only JavaScript",
       "important": false,
-      "user": "Lind Luukkainen"
+      "user": "Lind Luukkainen",
+      "likes": 0
     },
     {
       "id": "3",
       "content": "Most important methods of HTTP-protocol are GET and POST",
       "important": true,
-      "user": "Aalto Hellas"
+      "user": "Aalto Hellas",
+      "likes": 0
     }
   ],
   "loginUser": []
