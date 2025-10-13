@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Home from './components/Home'
@@ -9,6 +9,7 @@ import Login from './components/Login'
 import Footer from './components/Footer'
 import Notification from './components/Notification'
 import { fetchNotes } from './reducers/noteReducer'
+import { initilaizeUser } from './reducers/userReducer'
 
 import {
   Routes,
@@ -20,10 +21,11 @@ import {
 
 const App = () => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
+  const user = ''
 
   useEffect(() => {
     dispatch(fetchNotes())
+    dispatch(initilaizeUser())
   }, [])
 
   const padding = {

@@ -1,24 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 import userService from '../services/user'
 
 const userSlice = createSlice({
   name: 'user',
   initialState: null,
   reducers: {
-    showLoginUser(state, action){
+    initUser(state, action){
       return action.payload
+    },
+    setLoginUser(state, action){
+      const foundUser = state.find(user => user.username === action.payload)
+      return foundUser
     }
   }
 })
 
-export const setLoginUser = (username) => {
-  console.log(username);
-
+export const initilaizeUser = () => {
   return async dispatch => {
-    const user = await userService.postUser(username)
-    dispatch(showLoginUser(user))
+    const user = await userService.allUsers()
+    dispatch(initUser(user))
   }
 }
 
-export const { showLoginUser } = userSlice.actions
+export const { initUser, setLoginUser } = userSlice.actions
 export default userSlice.reducer
