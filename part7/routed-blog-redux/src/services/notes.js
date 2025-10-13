@@ -19,4 +19,9 @@ const updateNote = async (obj) => {
   return response.data
 }
 
-export default { getAll, addNote, updateNote }
+const deleteNote = async (obj) => {
+  const response = await axios.delete(`${baseUrl}/${obj.id}`)
+  return response.data
+}
+
+export default { getAll, addNote, updateNote, deleteNote }
