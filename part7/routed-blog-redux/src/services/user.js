@@ -2,9 +2,10 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3000/loginUser'
 
-const allUsers = async () => {
-  const response = await axios.get(baseUrl)
+const addUser = async (username) => {
+  const newUser = {username}
+  const response = await axios.post(baseUrl, newUser)
   return response.data
 }
 
-export default { allUsers }
+export default { addUser }

@@ -19,14 +19,5 @@
       "user": "Aalto Hellas"
     }
   ],
-  "loginUser": [
-    {
-      "username": "wow",
-      "password": "1111"
-    },
-    {
-      "username": "hello",
-      "password": "2222"
-    }
-  ]
+  "loginUser": []
 }

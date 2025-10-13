@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from "react-router-dom"
-import { setLoginUser } from '../reducers/userReducer'
+import { addUser } from '../reducers/userReducer'
 import { createNotification, resetNotiAction } from '../reducers/notificationReducer'
 
 const Login = () => {
@@ -12,11 +12,11 @@ const Login = () => {
   const onSubmit = (event) => {
     event.preventDefault()
 
-    dispatch(setLoginUser(username))
+    dispatch(addUser(username))
     dispatch(createNotification(`Hello, ${username}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 2000)
 
-    navigate('/')
+    navigate('/users')
   }
 
   return (
