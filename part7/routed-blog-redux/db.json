@@ -25,15 +25,24 @@
   "users": [
     {
       "id": "a82a",
-      "username": "kim"
+      "username": "Kim Luukkainen",
+      "blogs": [
+        "1"
+      ]
     },
     {
       "id": "25b2",
-      "username": "park"
+      "username": "Lind Luukkainen",
+      "blogs": [
+        "2"
+      ]
     },
     {
       "id": "cff8",
-      "username": "lee"
+      "username": "Aalto Hellas",
+      "blogs": [
+        "3"
+      ]
     }
   ]
 }
