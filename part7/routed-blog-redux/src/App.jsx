@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import Home from './components/Home'
 import Note from './components/Note'
 import Notes from './components/Notes'
-import Users from './components/Users'
+import User from './components/User'
 import Login from './components/Login'
 import Footer from './components/Footer'
 import Notification from './components/Notification'
@@ -14,7 +14,6 @@ import {
   Routes,
   Route,
   Link,
-  Navigate,
 } from "react-router-dom"
 
 
@@ -33,13 +32,13 @@ const App = () => {
     <div className="container">
       <Link style={padding} to="/">home</Link>
       <Link style={padding} to="/notes">notes</Link>
-      <Link style={padding} to="/users">users</Link>
+      <Link style={padding} to="/users">user</Link>
       <Link style={padding} to="/login">login</Link>
       <Notification />
       <Routes>
         <Route path="/notes/:id" element={<Note />} />
         <Route path="/notes" element={<Notes />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/user" element={<User />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
       </Routes>

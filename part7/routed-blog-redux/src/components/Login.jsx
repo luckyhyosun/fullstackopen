@@ -16,7 +16,7 @@ const Login = () => {
     dispatch(createNotification(`Hello, ${username}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 2000)
 
-    navigate('/users')
+    navigate('/user')
   }
 
   return (
