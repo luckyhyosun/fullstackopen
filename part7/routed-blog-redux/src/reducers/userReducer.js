@@ -3,13 +3,24 @@ import userService from '../services/user'
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: null,
+  initialState: { all: [], loggedInUser: null },
   reducers: {
+    initUsers(state, action){
+      console.log(action.payload);
+      state.all =  action.payload
+    },
     setLoginUser(state, action){
-      return action.payload
+      state.loggedInUser = action.payload
     }
   }
 })
+
+export const fetchUsers = () => {
+  return async dispatch => {
+    const users = await userService.allUser()
+    dispatch(initUsers(users))
+  }
+}
 
 export const addUser = (username) => {
   return async dispatch => {
@@ -18,5 +29,5 @@ export const addUser = (username) => {
   }
 }
 
-export const { initUser, setLoginUser } = userSlice.actions
+export const { initUsers, setLoginUser } = userSlice.actions
 export default userSlice.reducer

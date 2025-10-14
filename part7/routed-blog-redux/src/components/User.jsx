@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux"
 
 const Users = () => {
-  const user = useSelector(state => state.users)
+  const user = useSelector(state => state.users.loggedInUser)
   if(user){
     console.log(user);
   }

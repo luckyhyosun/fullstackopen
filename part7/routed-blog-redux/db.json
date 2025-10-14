@@ -22,5 +22,18 @@
       "likes": 0
     }
   ],
-  "loginUser": []
+  "users": [
+    {
+      "id": "a82a",
+      "username": "kim"
+    },
+    {
+      "id": "25b2",
+      "username": "park"
+    },
+    {
+      "id": "cff8",
+      "username": "lee"
+    }
+  ]
 }

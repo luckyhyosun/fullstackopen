@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { addNote } from '../reducers/noteReducer'
 import { createNotification } from '../reducers/notificationReducer'
 import { resetNotiAction } from '../reducers/notificationReducer'
+import Users from './Users'
 
 const Home = () => {
   const [newNote, setNewNote] = useState('');
@@ -28,6 +29,8 @@ const Home = () => {
     <h2>Add new Note</h2>
     <input type="text" value={newNote} onChange={(e) => {setNewNote(e.target.value)}}/>
     <button onClick={addNewNotefnc}>submit</button>
+
+    <Users />
   </div>
   )
 }

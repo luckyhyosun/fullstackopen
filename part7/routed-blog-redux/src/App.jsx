@@ -9,6 +9,7 @@ import Login from './components/Login'
 import Footer from './components/Footer'
 import Notification from './components/Notification'
 import { fetchNotes } from './reducers/noteReducer'
+import { fetchUsers } from './reducers/userReducer'
 
 import {
   Routes,
@@ -22,7 +23,8 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchNotes())
-  }, [])
+    dispatch(fetchUsers())
+  }, [fetchNotes, fetchUsers])
 
   const padding = {
     padding: 5
@@ -32,7 +34,7 @@ const App = () => {
     <div className="container">
       <Link style={padding} to="/">home</Link>
       <Link style={padding} to="/notes">notes</Link>
-      <Link style={padding} to="/users">user</Link>
+      <Link style={padding} to="/user">user</Link>
       <Link style={padding} to="/login">login</Link>
       <Notification />
       <Routes>
