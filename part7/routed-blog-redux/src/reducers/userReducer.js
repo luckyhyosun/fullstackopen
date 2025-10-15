@@ -22,9 +22,9 @@ export const fetchUsers = () => {
   }
 }
 
-export const addUser = (username) => {
+export const addUser = (username, password) => {
   return async dispatch => {
-    const user = await userService.addUser(username)
+    const user = await userService.addUser(username, password)
     dispatch(setLoginUser(user))
   }
 }

@@ -7,14 +7,35 @@ import { createNotification, resetNotiAction } from '../reducers/notificationRed
 const Login = () => {
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const dispatch = useDispatch()
 
-  const onSubmit = (event) => {
+  const onLogin = (event) => {
     event.preventDefault()
 
-    dispatch(addUser(username))
-    dispatch(createNotification(`Hello, ${username}`))
-    setTimeout(() => {dispatch(resetNotiAction())}, 2000)
+    if(!username){
+      dispatch(createNotification('Write the username'))
+      setTimeout(() => {dispatch(resetNotiAction())}, 2000)
+      return
+    }
+
+    dispatch(createNotification(`Login succeed👋, ${username}`))
+    setTimeout(() => {dispatch(resetNotiAction())}, 5000)
+
+    navigate('/user')
+  }
+
+  const onSignup = (event) => {
+    event.preventDefault()
+    dispatch(addUser(username, password))
+
+    if(!username){
+      dispatch(createNotification('Write the username'))
+      setTimeout(() => {dispatch(resetNotiAction())}, 2000)
+      return
+    }
+    dispatch(createNotification(`Sign up succeed👍, ${username}`))
+    setTimeout(() => {dispatch(resetNotiAction())}, 5000)
 
     navigate('/user')
   }
@@ -22,14 +43,15 @@ const Login = () => {
   return (
     <div>
       <h2>login</h2>
-      <form onSubmit={onSubmit}>
+      <form>
         <div>
-          username: <input type='text'onChange={(e) => setUsername(e.target.value)}/>
+          username: <input type='text' value={username} onChange={(e) => setUsername(e.target.value)}/>
         </div>
         <div>
-          password: <input type='password' />
+          password: <input type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
         </div>
-        <button type="submit" primary=''>login</button>
+        <button type="submit" onClick={onLogin}>login</button>
+        <button type="submit" onClick={onSignup}>sign up</button>
       </form>
     </div>
   )

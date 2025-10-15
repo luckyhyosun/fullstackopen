@@ -7,8 +7,8 @@ const allUser = async () => {
   return response.data
 }
 
-const addUser = async (username) => {
-  const newUser = {username}
+const addUser = async (username, password) => {
+  const newUser = {username, password, blogs:[]}
   const response = await axios.post(baseUrl, newUser)
   return response.data
 }

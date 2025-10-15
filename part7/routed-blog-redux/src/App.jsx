@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Home from './components/Home'
 import Note from './components/Note'
@@ -20,6 +20,7 @@ import {
 
 const App = () => {
   const dispatch = useDispatch()
+  const isUserLoggedIn = useSelector (state => state.users.loggedInUser)
 
   useEffect(() => {
     dispatch(fetchNotes())
@@ -35,7 +36,10 @@ const App = () => {
       <Link style={padding} to="/">home</Link>
       <Link style={padding} to="/notes">notes</Link>
       <Link style={padding} to="/user">user</Link>
-      <Link style={padding} to="/login">login</Link>
+      { isUserLoggedIn
+        ? <div style={{display:"inline-block"}}>{isUserLoggedIn.username} is logged in</div>
+        : <Link style={padding} to="/login">login</Link>
+      }
       <Notification />
       <Routes>
         <Route path="/notes/:id" element={<Note />} />

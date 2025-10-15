@@ -271,7 +271,7 @@ Frontend
   3. Gets the response object.
 
 + [bcrypt](https://www.npmjs.com/package/bcrypt) is Node.js library that secure hash passwords and compare hashes for authentication.
-1
+
 ### Both
 + [Axios](https://axios-http.com/)
 
