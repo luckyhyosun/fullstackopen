@@ -1844,6 +1844,42 @@ The key concept of <code>ref</code>is:
 
 **⚡️ Other React Hooks**: React offers 15 different [built-in hooks](https://react.dev/reference/react/hooks).
 
+⚡️ Hooks that **DO trigger re-renders**:
++ useState
++ useSelector (from React-redux)
++ useContext
+
++ Custom hooks that DO cause re-renders:
+If a custom hook uses state-managing hooks internally, it can trigger re-renders.
+  ```js
+  // Custom hook that manages state
+  const useCounter = () => {
+    const [count, setCount] = useState(0);
+
+    const increment = () => setCount(count + 1);
+
+    return { count, increment };
+  };
+
+  // Component using the custom hook
+  const Counter = () => {
+    const { count, increment } = useCounter(); // ✅ Re-renders when count changes
+
+    return (
+      <div>
+        <p>Count: {count}</p>
+        <button onClick={increment}>+</button>
+      </div>
+    );
+  };
+  ```
+
+⚡️ Hooks that do **NOT trigger re-renders**:
++ useDispatch
++ useEffect
++ useRef
++ useCallback, useMemo
+
 **⚡️ Custom React Hooks**: the primary purpose of [custom hooks](https://react.dev/learn/reusing-logic-with-custom-hooks) is to facilitate the **reuse of the logic, separation of concerns**, and **cleaner components**.
   - Custom hooks are **regular JavaScript functions** that can use any other hooks, as long as they adhere to the [rules of hooks](https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#rules-of-hooks).
   - The name of custom hooks must start with the word `use`.
