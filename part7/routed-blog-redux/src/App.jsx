@@ -25,7 +25,7 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchNotes())
     dispatch(fetchUsers())
-  }, [fetchNotes, fetchUsers])
+  }, [dispatch])
 
   const padding = {
     padding: 5
