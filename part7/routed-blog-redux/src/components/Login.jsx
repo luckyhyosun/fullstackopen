@@ -37,7 +37,7 @@ const Login = () => {
     dispatch(createNotification(`Sign up succeed👍, ${username}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 5000)
 
-    navigate('/user')
+    navigate('/')
   }
 
   return (

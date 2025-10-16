@@ -11,6 +11,9 @@ const userSlice = createSlice({
     },
     setLoginUser(state, action){
       state.loggedInUser = action.payload
+    },
+    apendUser(state, action){
+      state.all.push(action.payload)
     }
   }
 })
@@ -26,8 +29,9 @@ export const addUser = (username, password) => {
   return async dispatch => {
     const user = await userService.addUser(username, password)
     dispatch(setLoginUser(user))
+    dispatch(apendUser(user))
   }
 }
 
-export const { initUsers, setLoginUser } = userSlice.actions
+export const { initUsers, setLoginUser, apendUser } = userSlice.actions
 export default userSlice.reducer

@@ -43,6 +43,12 @@
       "blogs": [
         "3"
       ]
+    },
+    {
+      "id": "f940",
+      "username": "newbie",
+      "password": "11",
+      "blogs": []
     }
   ]
 }
