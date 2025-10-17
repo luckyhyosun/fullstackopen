@@ -12,8 +12,6 @@ import {
 
 const Notes = () => {
   const notes = useSelector(state => state.notes)
-  console.log(notes);
-
 
   return (
   <div>
@@ -27,7 +25,7 @@ const Notes = () => {
                 <Link to={`/notes/${note.id}`}>{note.content}</Link>
               </TableCell>
               <TableCell>
-                {note.user}
+                {note.user.username}
               </TableCell>
             </TableRow>
           ))}

@@ -14,11 +14,13 @@ const addUser = async (username, password) => {
 }
 
 const updateUser = async (userId, noteObj) => {
-  console.log(userId, noteObj);
+  const newBlog = {
+    id: noteObj.id,
+    content: noteObj.content
+  }
 
   const foundUser = await axios.get(`${baseUrl}/${userId}`)
-  const updatedUserObj = {...foundUser, blogs: foundUser.data.blogs.push(noteObj.id)}
-  console.log(updatedUserObj.data);
+  const updatedUserObj = {...foundUser, blogs: foundUser.data.blogs.push(newBlog)}
 
   const response = await axios.put(`${baseUrl}/${userId}`, updatedUserObj.data)
   return response.data

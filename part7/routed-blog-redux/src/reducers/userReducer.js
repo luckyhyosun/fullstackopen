@@ -6,7 +6,6 @@ const userSlice = createSlice({
   initialState: { all: [], loggedInUser: null },
   reducers: {
     initUsers(state, action){
-      console.log(action.payload);
       state.all =  action.payload
     },
     setLoginUser(state, action){

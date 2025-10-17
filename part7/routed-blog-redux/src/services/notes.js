@@ -7,8 +7,12 @@ const getAll = async () => {
   return response.data
 }
 
-const addNote = async (userId, content) => {
-  const newNote = { content, important: false, likes: 0, userId}
+const addNote = async (user, content) => {
+  const userData = {
+    id: user.id,
+    username: user.username
+  }
+  const newNote = { content, important: false, likes: 0, user: userData}
   const response = await axios.post(baseUrl, newNote)
   return response.data
 }

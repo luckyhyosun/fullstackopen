@@ -26,8 +26,6 @@ const noteSlice = createSlice({
 export const fetchNotes = () => {
   return async dispatch => {
     const notes = await noteService.getAll()
-    console.log(notes);
-
     dispatch(initNotes(notes))
   }
 }
@@ -36,8 +34,7 @@ export const addNote = (isUserLoggedIn, newNote) => {
   if(!isUserLoggedIn) return
 
   return async dispatch => {
-  const addedNote = await noteService.addNote(isUserLoggedIn.id, newNote)
-  console.log(addedNote);
+  const addedNote = await noteService.addNote(isUserLoggedIn, newNote)
   dispatch(appendNote(addedNote))
 
   const updatedUser = await userSevice.updateUser(isUserLoggedIn.id, addedNote)
