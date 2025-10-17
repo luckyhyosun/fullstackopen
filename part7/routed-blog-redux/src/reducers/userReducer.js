@@ -12,8 +12,11 @@ const userSlice = createSlice({
     setLoginUser(state, action){
       state.loggedInUser = action.payload
     },
-    apendUser(state, action){
+    appendUser(state, action){
       state.all.push(action.payload)
+    },
+    changeUser(state, action){
+      return state.all.map(user => user.id !== action.payload.id ? user : action.payload)
     }
   }
 })
@@ -29,9 +32,16 @@ export const addUser = (username, password) => {
   return async dispatch => {
     const user = await userService.addUser(username, password)
     dispatch(setLoginUser(user))
-    dispatch(apendUser(user))
+    dispatch(appendUser(user))
   }
 }
 
-export const { initUsers, setLoginUser, apendUser } = userSlice.actions
+export const updateUser = (userId, noteObj) => {
+  return async dispatch => {
+    const updatedUser = await userService.updateUser(userId, noteObj)
+    dispatch(changeUser(updatedUser))
+  }
+}
+
+export const { initUsers, setLoginUser, appendUser, changeUser } = userSlice.actions
 export default userSlice.reducer

@@ -14,9 +14,7 @@ const Home = () => {
   const isUserLoggedIn = useSelector(state => state.users.loggedInUser)
 
   const addNewNotefnc = () => {
-    console.log(newNote);
-
-    dispatch(addNote(newNote))
+    dispatch(addNote(isUserLoggedIn, newNote))
     dispatch(createNotification(`Successfully Create New note: ${newNote}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 2000)
 

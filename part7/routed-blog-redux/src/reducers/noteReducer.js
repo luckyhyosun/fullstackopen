@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import noteService from '../services/notes'
+import userSevice from '../services/user'
+import { changeUser } from '../reducers/userReducer'
 
 const noteSlice = createSlice({
   name: 'notes',
@@ -30,16 +32,22 @@ export const fetchNotes = () => {
   }
 }
 
-export const addNote = (newNote) => {
+export const addNote = (isUserLoggedIn, newNote) => {
+  if(!isUserLoggedIn) return
+
   return async dispatch => {
-    const newNoteRes = await noteService.addNote(newNote)
-    dispatch(appendNote(newNoteRes))
+  const addedNote = await noteService.addNote(isUserLoggedIn.id, newNote)
+  console.log(addedNote);
+  dispatch(appendNote(addedNote))
+
+  const updatedUser = await userSevice.updateUser(isUserLoggedIn.id, addedNote)
+  dispatch(changeUser(updatedUser))
   }
 }
 
-export const updateNote = (noteObj) => {
+export const updateNote = (userId, noteObj) => {
   return async dispatch => {
-    const updatedNote = await noteService.updateNote(noteObj)
+    const updatedNote = await noteService.updateNote(userId, noteObj)
     dispatch(modifyNote(updatedNote))
   }
 }

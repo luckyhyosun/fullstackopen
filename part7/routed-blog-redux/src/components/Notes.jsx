@@ -12,6 +12,8 @@ import {
 
 const Notes = () => {
   const notes = useSelector(state => state.notes)
+  console.log(notes);
+
 
   return (
   <div>

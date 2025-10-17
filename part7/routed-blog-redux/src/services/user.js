@@ -13,4 +13,15 @@ const addUser = async (username, password) => {
   return response.data
 }
 
-export default { allUser, addUser }
+const updateUser = async (userId, noteObj) => {
+  console.log(userId, noteObj);
+
+  const foundUser = await axios.get(`${baseUrl}/${userId}`)
+  const updatedUserObj = {...foundUser, blogs: foundUser.data.blogs.push(noteObj.id)}
+  console.log(updatedUserObj.data);
+
+  const response = await axios.put(`${baseUrl}/${userId}`, updatedUserObj.data)
+  return response.data
+}
+
+export default { allUser, addUser, updateUser}
