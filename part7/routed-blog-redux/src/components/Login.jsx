@@ -10,7 +10,8 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
 
-  const loggedInUser = useSelector(state => state.loggedInUser)
+  const loggedInUser = useSelector(state => state.users.loggedInUser)
+  const allUsers = useSelector(state => state.users.all)
 
   const onLogin = (event) => {
     event.preventDefault()
@@ -40,13 +41,24 @@ const Login = () => {
 
   const onSignup = (event) => {
     event.preventDefault()
-    dispatch(addUser(username, password))
+    const isUserExisted = allUsers.some(user => user.username === username)
 
     if(!username){
       dispatch(createNotification('Write the username'))
       setTimeout(() => {dispatch(resetNotiAction())}, 2000)
       return
     }
+
+    if(isUserExisted){
+      setUsername('')
+      setPassword('')
+
+      dispatch(createNotification(`${username} is already existed.`))
+      setTimeout(() => {dispatch(resetNotiAction())}, 2000)
+      return
+    }
+
+    dispatch(addUser(username, password))
     dispatch(createNotification(`Sign up succeed👍, ${username}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 5000)
 
