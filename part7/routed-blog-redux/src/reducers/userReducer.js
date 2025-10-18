@@ -11,6 +11,9 @@ const userSlice = createSlice({
     setLoginUser(state, action){
       state.loggedInUser = action.payload
     },
+    logoutUser(state, action){
+      state.loggedInUser = action.payload
+    },
     appendUser(state, action){
       state.all.push(action.payload)
     },
@@ -53,5 +56,5 @@ export const updateUser = (userId, noteObj) => {
   }
 }
 
-export const { initUsers, setLoginUser, appendUser, changeUser } = userSlice.actions
+export const { initUsers, setLoginUser, logoutUser, appendUser, changeUser } = userSlice.actions
 export default userSlice.reducer

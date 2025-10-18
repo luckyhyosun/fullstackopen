@@ -9,7 +9,7 @@ import Login from './components/Login'
 import Footer from './components/Footer'
 import Notification from './components/Notification'
 import { fetchNotes } from './reducers/noteReducer'
-import { fetchUsers } from './reducers/userReducer'
+import { fetchUsers, logoutUser } from './reducers/userReducer'
 
 import {
   Routes,
@@ -37,7 +37,10 @@ const App = () => {
       <Link style={padding} to="/notes">notes</Link>
       <Link style={padding} to="/user">user</Link>
       { isUserLoggedIn
-        ? <div style={{display:"inline-block"}}>{isUserLoggedIn.username} is logged in</div>
+        ? <div style={{display:"inline-block"}}>
+          {isUserLoggedIn.username} is logged in {' '}
+          <Link style={padding} to='/' onClick={() => {dispatch(logoutUser(null))}}>logout</Link>
+          </div>
         : <Link style={padding} to="/login">login</Link>
       }
       <Notification />
