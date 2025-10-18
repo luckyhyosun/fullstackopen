@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { updateNote, deleteNote } from '../reducers/noteReducer'
@@ -8,6 +9,7 @@ const Note = () => {
   const navigate = useNavigate()
   const notes = useSelector(state => state.notes)
   const loggedInUser = useSelector(state => state.users.loggedInUser)
+  const [comment, setComment] = useState('')
 
   const id = useParams().id
   const note = notes.find(n => n.id === id)
@@ -19,6 +21,10 @@ const Note = () => {
   const handleDeleteBtn = () => {
     dispatch(deleteNote(note))
     navigate('/notes')
+  }
+
+  const handleComment = () => {
+    console.log(comment);
   }
 
   if(!note){
@@ -37,6 +43,27 @@ const Note = () => {
         <button onClick={handleDeleteBtn} style={{"marginTop":"30px", "marginBottom":"30px", "border":"none" , "padding": "5px"}}>
           delete❌
         </button>
+      )}
+      <h5><strong>Comments</strong></h5>
+      {!loggedInUser
+        ? <input disabled placeholder="Login is required"/>
+        : note.user.id !== loggedInUser?.id
+          ? <div>
+              <input
+                type="text"
+                style={{"marginBottom": "20px"}}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <button onClick={handleComment}>Send</button>
+            </div>
+          : <input disabled placeholder="Only others can comment" />
+      }
+
+      {note.comments && (
+        <ul>
+          {note.comments.map(comment => <li key={comment.id}>{comment.text}</li>)}
+        </ul>
       )}
     </div>
   )

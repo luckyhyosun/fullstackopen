@@ -5,6 +5,16 @@
       "content": "HTML is easy",
       "important": true,
       "likes": 0,
+      "comments": [
+        {
+          "id": "11",
+          "text": "Yes, you are right:)"
+        },
+        {
+          "id": "12",
+          "text": "Good to know!"
+        }
+      ],
       "user": {
         "id": "a82a",
         "username": "Kim Luukkainen"
@@ -15,6 +25,7 @@
       "content": "Browser can execute only JavaScript",
       "important": false,
       "likes": 0,
+      "comments": [],
       "user": {
         "id": "25b2",
         "username": "Lind Luukkainen"
@@ -25,6 +36,7 @@
       "content": "Most important methods of HTTP-protocol are GET and POST",
       "important": true,
       "likes": 0,
+      "comments": [],
       "user": {
         "id": "cff8",
         "username": "Aalto Hellas"
@@ -35,6 +47,7 @@
       "content": "hello i'm new",
       "important": false,
       "likes": 0,
+      "comments": [],
       "user": {
         "id": "0537",
         "username": "newUser"
@@ -45,6 +58,7 @@
       "content": "my first note",
       "important": false,
       "likes": 0,
+      "comments": [],
       "user": {
         "id": "f940",
         "username": "newbie"
