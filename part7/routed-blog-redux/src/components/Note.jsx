@@ -20,14 +20,19 @@ const Note = () => {
     navigate('/notes')
   }
 
+  if(!note){
+    navigate('/')
+    return
+  }
+
   return (
     <div>
-      <h2>{note.content}</h2>
-      <div>{note.user}</div>
-      <p>Likes: {note.likes? note.likes: 0}</p>
-      <button onClick={handleLikeBtn}>Like: 👍</button>
-      <button onClick={handleDeleteBtn}>Delete: ❌</button>
-      <div><strong>{note.important ? 'important' : ''}</strong></div>
+      <h2>📝 {note.content}</h2>
+      <div>Importance: {note.important ? 'Yes' : 'No'}</div>
+      <p>Likes: {note.likes}
+        <button style={{"marginLeft":"20px", "border":"none"}}onClick={handleLikeBtn}>up👍</button>
+      </p>
+      <button onClick={handleDeleteBtn} style={{"marginTop":"30px", "marginBottom":"30px", "border":"none" , "padding": "5px"}}>delete❌</button>
     </div>
   )
 }

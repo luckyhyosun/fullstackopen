@@ -45,7 +45,7 @@ const App = () => {
       }
       <Notification />
       <Routes>
-        <Route path="/notes/:id" element={<Note />} />
+        <Route path="/note/:id" element={<Note />} />
         <Route path="/notes" element={<Notes />} />
         <Route path="/user/:id" element={<User />} />
         <Route path="/login" element={<Login />} />

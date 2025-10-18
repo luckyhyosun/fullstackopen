@@ -22,7 +22,7 @@ const Notes = () => {
           {notes.map(note => (
             <TableRow key={note.id}>
               <TableCell>
-                <Link to={`/notes/${note.id}`}>{note.content}</Link>
+                <Link to={`/note/${note.id}`}>{note.content}</Link>
               </TableCell>
               <TableCell>
                 {note.user.username}
