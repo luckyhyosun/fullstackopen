@@ -7,6 +7,7 @@ const Note = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const notes = useSelector(state => state.notes)
+  const loggedInUser = useSelector(state => state.users.loggedInUser)
 
   const id = useParams().id
   const note = notes.find(n => n.id === id)
@@ -32,7 +33,11 @@ const Note = () => {
       <p>Likes: {note.likes}
         <button style={{"marginLeft":"20px", "border":"none"}}onClick={handleLikeBtn}>up👍</button>
       </p>
-      <button onClick={handleDeleteBtn} style={{"marginTop":"30px", "marginBottom":"30px", "border":"none" , "padding": "5px"}}>delete❌</button>
+      {note.user.id === loggedInUser?.id && (
+        <button onClick={handleDeleteBtn} style={{"marginTop":"30px", "marginBottom":"30px", "border":"none" , "padding": "5px"}}>
+          delete❌
+        </button>
+      )}
     </div>
   )
 }

@@ -881,7 +881,18 @@ export default ProfileTab;
   // in Redux app
   const matchingNotes = state.filter(note => note.id === id)
   ```
-  The <code>matchingNotes</code> isan array (probably with just one note inside), not the note object itself.
+  The <code>matchingNotes</code> is an array (probably with just one note inside), not the note object itself.
+
+✴️ **map()**
++ Returns **a new array** containing the results of the callback function.
++ Find 🔎 'Redux only updates the state if you either' section for better understanding.
+  ```js
+  const numbers = [1, 2, 3];
+  const doubled = numbers.map(num => num * 2);
+
+  console.log(doubled); // [2, 4, 6]
+  console.log(numbers); // [1, 2, 3] (unchanged)
+  ```
 
 ## Appendix
 ✴️ **MVP/ [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)/ MVVM pattern**: according to how “dumb” (**passive**) the **View** is, the table would look like this:
@@ -3955,6 +3966,56 @@ And <code>createslice</code> needs **3** things to starts:<br /> 👉 <code>crea
     ```
       - (state, action) => **newState**
       - Because the return value of the reducer becomes the **new state**.
+
+  - 💡 Heart of how **Redux Toolkit** and **Immer** handle state updates.
+    - The first version:
+      ```js
+      // Part7/routed-blog-redux/reducers/
+      // userReducer.js
+      changeUser(state, action){
+        return state.allUsers.map(user => user.id !== action.payload.id ? user : action.payload)
+      }
+      ```
+    - At first glance, this looks fine — it returns a new array.
+    - But here’s the issue:
+      + You’re returning **an array, not a state object**.
+      + The reducer expects to return the **entire state**, not just allUsers.
+      + So, after this executes, Redux thinks your whole state has become just that array of users. So that breaks the expected structure.
+        ```js
+        // Expected state structure
+        {
+          users: [
+            all: [...],
+            loggedInUser: null
+          ],
+          notes: [{...}, {...}, {...}]
+        }
+        ```
+    - In this second version:
+      ```js
+      changeUser(state, action){
+        state.allUsers = state.allUsers.map(user => user.id !== action.payload.id ? user : action.payload)
+      }
+      ```
+      - You’re not returning a **new root object**.
+      - Instead, you’re mutating `state.allUsers` **directly**.
+      - This works because Redux Toolkit uses **Immer** under the hood — Immer allows you to **“mutate” state safely**.
+
+    - If you’re writing a **classic Redux reducer** (no Immer), you must:
+      ```js
+      changeUser(state, action) {
+        return {
+          ...state, // copy the rest of the state
+          allUsers: state.allUsers.map(user =>
+            user.id !== action.payload.id ? user : action.payload
+          ),
+        };
+      }
+      ```
+      - Never mutate the original state.
+      - Return a new object that copies the old state, but updates the parts you changed.
+
+
 
 Why using <code>createSlice</code> is beneficial?
 + In a small app, the switch-case looks simpler.

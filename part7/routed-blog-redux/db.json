@@ -39,6 +39,16 @@
         "id": "0537",
         "username": "newUser"
       }
+    },
+    {
+      "id": "1e3d",
+      "content": "my first note",
+      "important": false,
+      "likes": 0,
+      "user": {
+        "id": "f940",
+        "username": "newbie"
+      }
     }
   ],
   "users": [
@@ -46,28 +56,46 @@
       "id": "a82a",
       "username": "Kim Luukkainen",
       "blogs": [
-        "1"
+        {
+          "id": "1",
+          "content": "HTML is easy"
+        }
       ]
     },
     {
       "id": "25b2",
       "username": "Lind Luukkainen",
       "blogs": [
-        "2"
+        {
+          "id": "2",
+          "content": "Browser can execute only JavaScript"
+        }
       ]
     },
     {
       "id": "cff8",
       "username": "Aalto Hellas",
       "blogs": [
-        "3"
+        {
+          "id": "3",
+          "content": "Most important methods of HTTP-protocol are GET and POST"
+        }
       ]
     },
     {
       "id": "f940",
       "username": "newbie",
       "password": "11",
-      "blogs": []
+      "blogs": [
+        {
+          "id": "1e3d",
+          "content": "my first note"
+        },
+        {
+          "id": "6794",
+          "content": "my second note"
+        }
+      ]
     },
     {
       "id": "0537",
