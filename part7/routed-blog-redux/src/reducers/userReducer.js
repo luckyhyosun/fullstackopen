@@ -31,6 +31,9 @@ export const loginCheck = (username, password) => {
   return async dispatch => {
     const allUsers = await userService.allUser()
     const foundUser = allUsers.find(user => user.username === username && user.password === password)
+    if(!foundUser){
+      return null
+    }
     dispatch(setLoginUser(foundUser))
   }
 }

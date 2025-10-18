@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom"
 import { loginCheck, addUser } from '../reducers/userReducer'
 import { createNotification, resetNotiAction } from '../reducers/notificationReducer'
@@ -9,6 +9,8 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
+
+  const loggedInUser = useSelector(state => state.loggedInUser)
 
   const onLogin = (event) => {
     event.preventDefault()
@@ -20,6 +22,15 @@ const Login = () => {
     }
 
     dispatch(loginCheck(username, password))
+
+    if(!loggedInUser){
+      setUsername('')
+      setPassword('')
+
+      dispatch(createNotification(`${username} is not registered, please sign up! 🤓`))
+      setTimeout(() => {dispatch(resetNotiAction())}, 5000)
+      return
+    }
 
     dispatch(createNotification(`Login succeed👋, ${username}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 5000)
