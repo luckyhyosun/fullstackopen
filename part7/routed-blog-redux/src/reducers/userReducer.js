@@ -32,7 +32,7 @@ export const loginCheck = (username, password) => {
     const allUsers = await userService.allUser()
     const foundUser = allUsers.find(user => user.username === username && user.password === password)
     if(!foundUser){
-      return null
+      return
     }
     dispatch(setLoginUser(foundUser))
   }

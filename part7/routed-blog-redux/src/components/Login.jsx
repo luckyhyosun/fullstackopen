@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom"
 import { loginCheck, addUser } from '../reducers/userReducer'
@@ -13,6 +13,18 @@ const Login = () => {
   const loggedInUser = useSelector(state => state.users.loggedInUser)
   const allUsers = useSelector(state => state.users.all)
 
+  // handle login success
+  useEffect(() => {
+    if(loggedInUser){
+      dispatch(createNotification(`Login succeed👋, ${username}`))
+      setTimeout(() => {dispatch(resetNotiAction())}, 5000)
+
+      setUsername('')
+      setPassword('')
+      navigate('/user')
+    }
+  }, [loggedInUser])
+
   const onLogin = (event) => {
     event.preventDefault()
 
@@ -22,21 +34,17 @@ const Login = () => {
       return
     }
 
-    dispatch(loginCheck(username, password))
+    const isUserRegistered = allUsers.some(user => user.username === username)
 
-    if(!loggedInUser){
+    if(!isUserRegistered){
       setUsername('')
       setPassword('')
-
       dispatch(createNotification(`${username} is not registered, please sign up! 🤓`))
       setTimeout(() => {dispatch(resetNotiAction())}, 5000)
       return
     }
 
-    dispatch(createNotification(`Login succeed👋, ${username}`))
-    setTimeout(() => {dispatch(resetNotiAction())}, 5000)
-
-    navigate('/user')
+    dispatch(loginCheck(username, password))
   }
 
   const onSignup = (event) => {
@@ -62,7 +70,7 @@ const Login = () => {
     dispatch(createNotification(`Sign up succeed👍, ${username}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 5000)
 
-    navigate('/')
+    navigate('/user')
   }
 
   return (
