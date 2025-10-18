@@ -18,7 +18,7 @@ const userSlice = createSlice({
       state.all.push(action.payload)
     },
     changeUser(state, action){
-      return state.all.map(user => user.id !== action.payload.id ? user : action.payload)
+      state.all = state.all.map(user => user.id !== action.payload.id ? user : action.payload)
     }
   }
 })
