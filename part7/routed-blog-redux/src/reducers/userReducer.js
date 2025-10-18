@@ -27,6 +27,14 @@ export const fetchUsers = () => {
   }
 }
 
+export const loginCheck = (username, password) => {
+  return async dispatch => {
+    const allUsers = await userService.allUser()
+    const foundUser = allUsers.find(user => user.username === username && user.password === password)
+    dispatch(setLoginUser(foundUser))
+  }
+}
+
 export const addUser = (username, password) => {
   return async dispatch => {
     const user = await userService.addUser(username, password)

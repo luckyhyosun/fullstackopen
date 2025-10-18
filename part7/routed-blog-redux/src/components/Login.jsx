@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from "react-router-dom"
-import { addUser } from '../reducers/userReducer'
+import { loginCheck, addUser } from '../reducers/userReducer'
 import { createNotification, resetNotiAction } from '../reducers/notificationReducer'
 
 const Login = () => {
@@ -18,6 +18,8 @@ const Login = () => {
       setTimeout(() => {dispatch(resetNotiAction())}, 2000)
       return
     }
+
+    dispatch(loginCheck(username, password))
 
     dispatch(createNotification(`Login succeed👋, ${username}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 5000)
