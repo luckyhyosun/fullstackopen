@@ -35,9 +35,9 @@ const App = () => {
     <div className="container">
       <Link style={padding} to="/">home</Link>
       <Link style={padding} to="/notes">notes</Link>
-      <Link style={padding} to="/user">user</Link>
       { isUserLoggedIn
         ? <div style={{display:"inline-block"}}>
+          <Link style={padding} to={`/user/${isUserLoggedIn.id}`}>user</Link>
           {isUserLoggedIn.username} is logged in {' '}
           <Link style={padding} to='/' onClick={() => {dispatch(logoutUser(null))}}>logout</Link>
           </div>
@@ -47,7 +47,7 @@ const App = () => {
       <Routes>
         <Route path="/notes/:id" element={<Note />} />
         <Route path="/notes" element={<Notes />} />
-        <Route path="/user" element={<User />} />
+        <Route path="/user/:id" element={<User />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
       </Routes>

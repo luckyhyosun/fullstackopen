@@ -21,7 +21,7 @@ const Login = () => {
 
       setUsername('')
       setPassword('')
-      navigate('/user')
+      navigate(`/user/${loggedInUser.id}`)
     }
   }, [loggedInUser])
 
@@ -70,7 +70,7 @@ const Login = () => {
     dispatch(createNotification(`Sign up succeed👍, ${username}`))
     setTimeout(() => {dispatch(resetNotiAction())}, 5000)
 
-    navigate('/user')
+    navigate(`/user/${loggedInUser.id}`)
   }
 
   return (
