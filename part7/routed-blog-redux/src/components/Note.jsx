@@ -3,6 +3,16 @@ import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { updateNote, deleteNote, addcomment } from '../reducers/noteReducer'
 import { useNavigate } from "react-router-dom"
+import styled from 'styled-components'
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
 
 const Note = () => {
   const dispatch = useDispatch()
@@ -55,7 +65,7 @@ const Note = () => {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
               />
-              <button onClick={() => handleComment(note, comment)}>Send</button>
+              <Button onClick={() => handleComment(note, comment)}>Send</Button>
             </div>
           : <input disabled placeholder="Only others can comment" />
       }

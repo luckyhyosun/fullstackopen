@@ -3,6 +3,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom"
 import { loginCheck, addUser } from '../reducers/userReducer'
 import { createNotification, resetNotiAction } from '../reducers/notificationReducer'
+import styled from 'styled-components'
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
 
 const Login = () => {
   const navigate = useNavigate()
@@ -83,8 +93,8 @@ const Login = () => {
         <div>
           password: <input type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
         </div>
-        <button type="submit" onClick={onLogin}>login</button>
-        <button type="submit" onClick={onSignup}>sign up</button>
+        <Button type="submit" onClick={onLogin}>login</Button>
+        <Button type="submit" onClick={onSignup}>sign up</Button>
       </form>
     </div>
   )

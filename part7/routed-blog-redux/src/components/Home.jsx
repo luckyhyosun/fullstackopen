@@ -5,6 +5,16 @@ import { addNote } from '../reducers/noteReducer'
 import { createNotification } from '../reducers/notificationReducer'
 import { resetNotiAction } from '../reducers/notificationReducer'
 import Users from './Users'
+import styled from 'styled-components'
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
 
 const Home = () => {
   const [newNote, setNewNote] = useState('');
@@ -32,7 +42,7 @@ const Home = () => {
         <div>
           <h2>Add new Note</h2>
           <input type="text" value={newNote} onChange={(e) => {setNewNote(e.target.value)}}/>
-          <button onClick={addNewNotefnc}>submit</button>
+          <Button onClick={addNewNotefnc}>submit</Button>
         </div>
       )
     }
