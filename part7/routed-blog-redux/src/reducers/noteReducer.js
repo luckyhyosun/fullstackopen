@@ -56,5 +56,12 @@ export const deleteNote = (noteObj) => {
   }
 }
 
+export const addcomment = (note, comment) => {
+  return async dispatch => {
+    const updatedNote = await noteService.addComment(note, comment)
+    dispatch(modifyNote(updatedNote))
+  }
+}
+
 export const { appendNote, initNotes, modifyNote, removeNote } = noteSlice.actions
 export default noteSlice.reducer

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-import { updateNote, deleteNote } from '../reducers/noteReducer'
+import { updateNote, deleteNote, addcomment } from '../reducers/noteReducer'
 import { useNavigate } from "react-router-dom"
 
 const Note = () => {
@@ -23,8 +23,8 @@ const Note = () => {
     navigate('/notes')
   }
 
-  const handleComment = () => {
-    console.log(comment);
+  const handleComment = (note, comment) => {
+    dispatch(addcomment(note, comment))
   }
 
   if(!note){
@@ -55,7 +55,7 @@ const Note = () => {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
               />
-              <button onClick={handleComment}>Send</button>
+              <button onClick={() => handleComment(note, comment)}>Send</button>
             </div>
           : <input disabled placeholder="Only others can comment" />
       }

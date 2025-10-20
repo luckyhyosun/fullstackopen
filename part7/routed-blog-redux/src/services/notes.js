@@ -28,4 +28,19 @@ const deleteNote = async (obj) => {
   return response.data
 }
 
-export default { getAll, addNote, updateNote, deleteNote }
+const addComment = async (note, commentText) => {
+  const newComment = {
+    id: Date.now().toString(),
+    text: commentText
+  }
+
+  const updatedNote = {
+    ...note,
+    comments: [...(note.comments || []), newComment]
+  }
+
+  const response = await axios.put(`${baseUrl}/${note.id}`, updatedNote)
+  return response.data
+}
+
+export default { getAll, addNote, updateNote, deleteNote, addComment }

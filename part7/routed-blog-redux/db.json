@@ -47,7 +47,16 @@
       "content": "hello i'm new",
       "important": false,
       "likes": 0,
-      "comments": [],
+      "comments": [
+        {
+          "id": "1760978588151",
+          "text": "Welcome!"
+        },
+        {
+          "id": "1760978628564",
+          "text": "Bello"
+        }
+      ],
       "user": {
         "id": "0537",
         "username": "newUser"
