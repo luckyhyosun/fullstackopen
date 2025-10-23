@@ -11,13 +11,14 @@ import {
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { fetchAllUser } from './reducers/userReducer'
-
+import { fetchAllBlogs } from './reducers/blogReducer'
 
 function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchAllUser())
+    dispatch(fetchAllBlogs())
   }, [dispatch])
 
   const padding = {

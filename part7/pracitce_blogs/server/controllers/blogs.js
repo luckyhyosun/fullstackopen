@@ -11,6 +11,11 @@ const getTokenFrom = req => {
   return null
 }
 
+blogRouter.get('/', async(req, res) => {
+  const allBlogs = await Blog.find()
+  res.status(200).json(allBlogs)
+})
+
 blogRouter.post('/', async(req, res) => {
   const {title, content} = req.body
 
