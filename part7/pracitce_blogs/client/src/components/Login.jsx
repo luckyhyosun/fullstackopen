@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import userService from '../services/users'
 import loginService from '../services/login'
+import blogService from '../services/blogs'
 
 const Button = styled.button`
   background: Bisque;
@@ -31,6 +32,7 @@ const Login = () => {
   const onHandleLogin = async (e) => {
     e.preventDefault()
     const user = await loginService.login({username, password})
+    blogService.setToken(user.token)
     console.log(user);
   }
 
