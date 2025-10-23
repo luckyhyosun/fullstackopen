@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import userService from '../services/users'
+import loginService from '../services/login'
 
 const Button = styled.button`
   background: Bisque;
@@ -21,9 +22,15 @@ const Login = () => {
   const [username, setusername] = useState('')
   const [password, setPassword] = useState('')
 
-  const onHandleSignin = async (e) => {
+  const onHandleSignup = async (e) => {
     e.preventDefault()
     const user = await userService.signup({username, password})
+    console.log(user);
+  }
+
+  const onHandleLogin = async (e) => {
+    e.preventDefault()
+    const user = await loginService.login({username, password})
     console.log(user);
   }
 
@@ -41,8 +48,8 @@ const Login = () => {
           <Input type='password' id='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
         </div>
 
-        <Button>login</Button>
-        <Button onClick={onHandleSignin}>signup</Button>
+        <Button onClick={onHandleLogin}>login</Button>
+        <Button onClick={onHandleSignup}>signup</Button>
       </form>
     </>
   )
