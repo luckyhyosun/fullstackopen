@@ -8,7 +8,18 @@ import {
   Link,
 } from "react-router-dom"
 
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { fetchAllUser } from './reducers/userReducer'
+
+
 function App() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchAllUser())
+  }, [dispatch])
+
   const padding = {
     padding: 5
   }
