@@ -9,12 +9,14 @@ import {
 } from "react-router-dom"
 
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllUser } from './reducers/userReducer'
 import { fetchAllBlogs } from './reducers/blogReducer'
 
 function App() {
   const dispatch = useDispatch()
+
+  const loggedInUser = useSelector(state => state.users.loggedInUser)
 
   useEffect(() => {
     dispatch(fetchAllUser())
@@ -25,11 +27,21 @@ function App() {
     padding: 5
   }
 
+  const onHandleLogout = (id) => {
+    console.log(id);
+  }
+
   return (
     <>
       <Link style={padding} to="/">home</Link>
       <Link style={padding} to="/blogs">blogs</Link>
-      <Link style={padding} to="/login">login</Link>
+      {loggedInUser
+        ? <div style={{"display": "inline"}}>
+            {loggedInUser.username} is logged in!
+            <button onClick={() => onHandleLogout(loggedInUser.id)}>logout</button>
+          </div>
+        : <Link style={padding} to="/login">login</Link>
+      }
 
       <Routes>
         <Route path="/" element={<Home />} />

@@ -7,6 +7,9 @@ const userSlice = createSlice({
   reducers: {
     initUsers(state, action){
       state.allUsers = action.payload
+    },
+    setLoggedInUser(state, action){
+      state.loggedInUser = action.payload
     }
   }
 })
@@ -22,5 +25,13 @@ export const fetchAllUser = () => {
   }
 }
 
-export const { initUsers } = userSlice.actions
+export const setUserLoggedIn = (username) => {
+  return async dispatch => {
+    const allUsers = await userService.allUsers()
+    const foundUser = allUsers.find(user => user.username === username) || null
+    dispatch(setLoggedInUser(foundUser))
+  }
+}
+
+export const { initUsers, setLoggedInUser } = userSlice.actions
 export default userSlice.reducer

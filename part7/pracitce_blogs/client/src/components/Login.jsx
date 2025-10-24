@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from "react-router-dom"
 import styled from 'styled-components'
 import userService from '../services/users'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import { setUserLoggedIn } from '../reducers/userReducer'
 
 const Button = styled.button`
   background: Bisque;
@@ -20,8 +23,13 @@ const Input = styled.input`
 `
 
 const Login = () => {
+  const dispatch = useDispatch()
+  const navigation = useNavigate()
+
   const [username, setusername] = useState('')
   const [password, setPassword] = useState('')
+
+  const allUsers = useSelector(state => state.users.allUsers)
 
   const onHandleSignup = async (e) => {
     e.preventDefault()
@@ -31,9 +39,19 @@ const Login = () => {
 
   const onHandleLogin = async (e) => {
     e.preventDefault()
-    const user = await loginService.login({username, password})
-    blogService.setToken(user.token)
-    console.log(user);
+
+    const foundUser = allUsers.some(user => user.username === username)
+
+    if(foundUser){
+      const user = await loginService.login({username, password})
+      blogService.setToken(user.token)
+      dispatch(setUserLoggedIn(username))
+      navigation('/')
+    }else{
+      setusername('')
+      setPassword('')
+      window.alert("register first please")
+    }
   }
 
   return (
