@@ -22,7 +22,6 @@ app.use(middleware.tokenExtractor)
 
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
-// Middleware comes before router
-app.use('/api/blogs', middleware.userExtractor, blogRouter)
+app.use('/api/blogs', blogRouter)
 
 module.exports = app
