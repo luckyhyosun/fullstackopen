@@ -12,6 +12,9 @@ const userSlice = createSlice({
     },
     setLoggedInUser(state, action){
       state.loggedInUser = action.payload
+    },
+    setLogoutUser(state, action){
+      state.loggedInUser = action.payload
     }
   }
 })
@@ -32,7 +35,6 @@ export const loginUser = ({username, password}) => {
     const user = await loginService.login({username, password})
     console.log(user);
 
-    window.localStorage.setItem('blogAppToken', user.token)
     window.localStorage.setItem('blogAppUser', JSON.stringify({
       username: user.username,
       token: user.token
@@ -56,5 +58,13 @@ export const checkPersistantUser = () => {
   }
 }
 
-export const { initUsers, setLoggedInUser } = userSlice.actions
+export const logoutUser = () => {
+  return dispatch => {
+    window.localStorage.removeItem('blogAppUser')
+    blogService.setToken(null)
+    dispatch(setLogoutUser(null))
+  }
+}
+
+export const { initUsers, setLoggedInUser, setLogoutUser } = userSlice.actions
 export default userSlice.reducer
