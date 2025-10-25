@@ -5,6 +5,7 @@ const userRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const blogRouter = require('./controllers/blogs')
 const cors = require('cors')
+const middleware = require('./utils/middleware')
 
 const app = express()
 
@@ -15,8 +16,13 @@ mongoose
 
 app.use(express.json())
 app.use(cors())
+// without specifying a path,
+// the middleware runs for every request to your application, regardless of which router handles it.
+app.use(middleware.tokenExtractor)
+
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
-app.use('/api/blogs', blogRouter)
+// Middleware comes before router
+app.use('/api/blogs', middleware.userExtractor, blogRouter)
 
 module.exports = app

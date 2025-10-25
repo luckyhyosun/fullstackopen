@@ -3065,6 +3065,17 @@ What is **basic structure** of custom middleware?
     ```
   - This middleware always runs for every request.
   - If an error occurs inside it (like a thrown exception), Express will skip the rest of the normal middleware & route handlers, and go straight to error-handling middleware.
+  - And when you are using the middleware in Express.js, **order matters**.
+    + The `tokenExtractor` middleware is applied **globally** to all routes in your Express app because of this line:
+      ```js
+      app.use(middleware.tokenExtractor)
+      ```
+    + The `userExtractor` middleware is only applied to the blogRouter, in this Express app because of this line:
+      ```js
+      app.use('/api/blogs', middleware.userExtractor, blogRouter)
+      ````
+    + And in this case, **middleware must come before the router** because of how the middleware chain works.
+    + Because Your blog routes likely need to know who the user is before they can create/update/delete blog post (need to verify permission)
 
 
 2. Error-handling middleware has **four parameteres**.
