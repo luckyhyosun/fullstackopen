@@ -4773,3 +4773,12 @@ All of this happens automatically through the infrastructure and there is no nee
   - Focus on: **Code formatting** and **style**
   - Purpose: Ensures your code is consistently formatted.
   - Prettier automatically formats your code to a consistent style — spacing, indentation, quotes, line width, etc.
+
+✴️ **GraphQL**
+
+The GraphQL philosophy is very different from REST. **REST** is **resource-based**. Every resource, for example a user, has its own address which identifies it, for example /users/10. All operations done to the resource are done with **HTTP requests** to its URL. The action depends on the **HTTP method used**.
+
+Unlike REST, all GraphQL queries are sent to the same address, and their type is POST.
+
++ **Schema**
+  - is the [type system](https://graphql.org/learn/schema/) describes what data can be queried from the API between the client and the server.
