@@ -10,7 +10,7 @@ import {
 
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllUser } from './reducers/userReducer'
+import { fetchAllUser, checkPersistantUser } from './reducers/userReducer'
 import { fetchAllBlogs } from './reducers/blogReducer'
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
   const loggedInUser = useSelector(state => state.users.loggedInUser)
 
   useEffect(() => {
+    dispatch(checkPersistantUser())
     dispatch(fetchAllUser())
     dispatch(fetchAllBlogs())
   }, [dispatch])

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import userService from '../services/users'
+import blogService from '../services/blogs'
+import loginService from '../services/login'
 
 const userSlice = createSlice({
   name: 'user',
@@ -25,11 +27,32 @@ export const fetchAllUser = () => {
   }
 }
 
-export const setUserLoggedIn = (username) => {
+export const loginUser = ({username, password}) => {
   return async dispatch => {
-    const allUsers = await userService.allUsers()
-    const foundUser = allUsers.find(user => user.username === username) || null
-    dispatch(setLoggedInUser(foundUser))
+    const user = await loginService.login({username, password})
+    console.log(user);
+
+    window.localStorage.setItem('blogAppToken', user.token)
+    window.localStorage.setItem('blogAppUser', JSON.stringify({
+      username: user.username,
+      token: user.token
+    }))
+
+    blogService.setToken(user.token)
+
+    dispatch(setLoggedInUser({username: user.username}))
+  }
+}
+
+export const checkPersistantUser = () => {
+  return async dispatch => {
+    const loggedUser = JSON.parse(window.localStorage.getItem('blogAppUser'))
+    console.log(loggedUser);
+
+    if(loggedUser){
+      blogService.setToken(loggedUser.token)
+      dispatch(setLoggedInUser({username: loggedUser.username}))
+    }
   }
 }
 
