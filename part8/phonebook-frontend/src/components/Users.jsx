@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
-import userService from '../services/user'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllUsers } from '../reducers/user'
 
 const Users = () => {
   const usersStyle = {
@@ -9,13 +10,12 @@ const Users = () => {
     padding: "10px"
   }
 
-  const [allUsers, setAllUsers] = useState([])
+  const dispatch = useDispatch()
+  const allUsers = useSelector(state => state.users)
 
   useEffect(() => {
-    userService
-      .allUsers()
-      .then(users => setAllUsers(users))
-  }, [allUsers])
+    dispatch(fetchAllUsers())
+  }, [dispatch])
 
   return (
     <div style={usersStyle}>
