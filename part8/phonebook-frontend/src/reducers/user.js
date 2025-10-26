@@ -7,6 +7,9 @@ const userSlice = createSlice({
   reducers: {
     intiUsers(state, action){
       return action.payload
+    },
+    appendUser(state, action){
+      return [...state, action.payload]
     }
   }
 })
@@ -18,5 +21,12 @@ export const fetchAllUsers = () => {
   }
 }
 
-export const { intiUsers } = userSlice.actions
+export const addUser = ({username, contact}) => {
+  return async dispatch => {
+    const newUser = await userService.addUser({username, contact})
+    dispatch(appendUser(newUser))
+  }
+}
+
+export const { intiUsers, appendUser } = userSlice.actions
 export default userSlice.reducer

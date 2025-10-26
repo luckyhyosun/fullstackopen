@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import userService from '../services/user'
 import { setNotification } from '../reducers/notification'
+import { addUser } from '../reducers/user'
 
 const NewUser = () => {
   const newUserStyle = {
@@ -18,7 +18,7 @@ const NewUser = () => {
 
   const onAddUser = async (e) => {
     e.preventDefault();
-    await userService.addUser({username,contact})
+    dispatch(addUser({username, contact}))
     dispatch(setNotification(`✅ ${username} is created!`))
 
     setUsername('')
