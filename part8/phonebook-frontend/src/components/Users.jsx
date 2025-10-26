@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllUsers } from '../reducers/user'
+import { fetchAllUsers, deleteUser } from '../reducers/user'
 
 const Users = () => {
   const usersStyle = {
@@ -13,6 +13,10 @@ const Users = () => {
   const dispatch = useDispatch()
   const allUsers = useSelector(state => state.users)
 
+  const onDeleteuser = (id) => {
+    dispatch(deleteUser(id))
+  }
+
   useEffect(() => {
     dispatch(fetchAllUsers())
   }, [dispatch])
@@ -23,7 +27,11 @@ const Users = () => {
       {allUsers.length === 0
         ? <i>no users are registerd yet</i>
         : (<ul>
-          {allUsers.map(user => <li key={user.id}>{user.username} - {user.contact}</li>)}
+          {allUsers.map(user =>
+            <li key={user.id}>
+              {user.username} - {user.contact} {' '}
+              <button onClick={() => onDeleteuser(user.id)}>delete</button>
+            </li>)}
         </ul>)
       }
     </div>

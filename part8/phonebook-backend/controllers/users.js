@@ -11,7 +11,13 @@ UserRouter.post('/', async (req, res) => {
 
   const newUser = new User({username, contact})
   const savedUser = await newUser.save()
-    res.status(200).json(savedUser)
+  res.status(200).json(savedUser)
+})
+
+UserRouter.delete('/:id', async(req, res) => {
+  const userId = req.params.id
+  const deletedUser = await User.findByIdAndDelete(userId)
+  res.status(200).json(deletedUser)
 })
 
 module.exports = UserRouter

@@ -10,6 +10,9 @@ const userSlice = createSlice({
     },
     appendUser(state, action){
       return [...state, action.payload]
+    },
+    removeUser(state, action){
+      return state.filter(user => user.id !== action.payload.id)
     }
   }
 })
@@ -28,5 +31,12 @@ export const addUser = ({username, contact}) => {
   }
 }
 
-export const { intiUsers, appendUser } = userSlice.actions
+export const deleteUser = (id) => {
+  return async dispatch => {
+    const deletedUser = await userService.deleteUser(id)
+    dispatch(removeUser(deletedUser))
+  }
+}
+
+export const { intiUsers, appendUser, removeUser } = userSlice.actions
 export default userSlice.reducer
