@@ -20,8 +20,8 @@ const Users = () => {
   return (
     <div style={usersStyle}>
       <h2>All User</h2>
-      {!allUsers
-        ? 'no users are registerd yet'
+      {allUsers.length === 0
+        ? <i>no users are registerd yet</i>
         : (<ul>
           {allUsers.map(user => <li key={user.id}>{user.username} - {user.contact}</li>)}
         </ul>)
