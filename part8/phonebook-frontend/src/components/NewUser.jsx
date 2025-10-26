@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import userService from '../services/user'
 
 const NewUser = () => {
   const newUserStyle = {
@@ -11,10 +12,12 @@ const NewUser = () => {
   const [username, setUsername] = useState('')
   const [contact, setContact] = useState('')
 
-  const onAddUser = (e) => {
+  const onAddUser = async (e) => {
     e.preventDefault();
-    console.log('controlled component username: ', username)
-    console.log('controlled component contact: ', contact)
+    await userService.addUser({username,contact})
+
+    setUsername('')
+    setContact('')
   }
 
   return (
