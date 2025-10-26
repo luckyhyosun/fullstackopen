@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllUsers, deleteUser } from '../reducers/user'
+import { setNotification } from '../reducers/notification'
 
 const Users = () => {
   const usersStyle = {
@@ -13,8 +14,9 @@ const Users = () => {
   const dispatch = useDispatch()
   const allUsers = useSelector(state => state.users)
 
-  const onDeleteuser = (id) => {
-    dispatch(deleteUser(id))
+  const onDeleteuser = (user) => {
+    dispatch(deleteUser(user.id))
+    dispatch(setNotification(`🚀 ${user.username} is deleted!`))
   }
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const Users = () => {
           {allUsers.map(user =>
             <li key={user.id}>
               {user.username} - {user.contact} {' '}
-              <button onClick={() => onDeleteuser(user.id)}>delete</button>
+              <button onClick={() => onDeleteuser(user)}>delete</button>
             </li>)}
         </ul>)
       }
