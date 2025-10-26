@@ -610,6 +610,10 @@ Frontend
 + npm install --save-dev deep-freeze
   - add the library _deep-freeze_, which can be used to ensure that the **reducer** has been correctly defined as **an immutable function**.
 
+**To run Apollo server**
++ npm install @apollo/server graphql
+  - install apollo server
+  - Run in backend
 
 ## Classification
 
@@ -4776,9 +4780,117 @@ All of this happens automatically through the infrastructure and there is no nee
 
 ✴️ **GraphQL**
 
+is a **query language** and a **runtime** for APIs. It’s designed to let clients ask for exactly the data they need — and **nothing more**.
+
+GraphQL is an **alternative to RESTful APIs** for communicating between clients.
+
 The GraphQL philosophy is very different from REST. **REST** is **resource-based**. Every resource, for example a user, has its own address which identifies it, for example /users/10. All operations done to the resource are done with **HTTP requests** to its URL. The action depends on the **HTTP method used**.
 
 Unlike REST, all GraphQL queries are sent to the same address, and their type is POST.
 
+⚔️ REST vs GraphQL
+| Feature                            | **REST API**                                         | **GraphQL API**                                      |
+| ---------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| **Structure**                      | Multiple endpoints (`/users`, `/posts`, `/comments`) | Single endpoint (e.g., `/graphql`)                   |
+| **Data fetching**                  | Each endpoint returns a fixed data structure         | Clients request *exactly* what they need             |
+| **Over-fetching / Under-fetching** | Common — you might get too much or too little data   | None — you specify fields precisely                  |
+| **Versioning**                     | Often uses `/v1`, `/v2` for new versions             | Usually no versioning — schema evolves smoothly      |
+| **Performance**                    | Can require multiple requests                        | Often faster — one request can fetch all needed data |
+| **Response format**                | Typically JSON, fixed per endpoint                   | JSON, flexible per query                             |
+| **Documentation**                  | Manually maintained                                  | Auto-generated from schema                           |
+
+
++ **Graph**
+  - is the graph data structure from computer science.
+  - comes from your data’s relationships.
+  - describes nodes and relationships you want to follow.
+  - For example, in a social media app:
+    + A `User` has `Posts`
+    + Each `Post` has `Comments`
+    + Each `Comment` has an `Author` (another User)
+    + These relationships naturally form a **graph structure**:
+      ```
+      User → Post → Comment → User
+      ```
+    + GraphQL lets you query that graph efficiently:
+      ```graphql
+      {
+        user(id: "1") {
+          name
+          posts {
+            title
+            comments {
+              text
+              author {
+                name
+              }
+            }
+          }
+        }
+      }
+      ```
+
++ **QL**
+  - means **Query Language**
+  - is how you ask for data from a computer in a structured way.
+  - is a special set of rules and words that lets you ask questions (like, "*Hey, give me the name of the user with ID 1.*") in a way the computer understands.
+  - For example:
+    + SQL is a query language for relational databases:
+      ```sql
+      SELECT name FROM users WHERE id = 1;
+      ```
+    + GraphQL is a query language for APIs (data graphs):
+      ```graphql
+      {
+        user(id: "1") {
+          name
+        }
+      }
+      ```
+
 + **Schema**
   - is the [type system](https://graphql.org/learn/schema/) describes what data can be queried from the API between the client and the server.
+  - **Types** are [type system](https://graphql.org/learn/schema/#type-system)
+  - **Scalar type** represents a single, [indivisible value](https://graphql.org/learn/schema/#scalar-types) — the basic building blocks of data.
+  - Scalars are **primitive types** and the leaf nodes in a GraphQL query; they cannot have subfields. They are essential for defining the shape of data at the **leaf level** of your GraphQL schema.
+    + 🌿 **Leaf Node** :
+      - these terms come from **tree structures**
+      - A leaf node is a node in a tree that doesn’t have any children — it’s the end point of a branch.
+      - A leaf node is a field that **returns a scalar value** (like String, Int, Boolean, etc.), not an object that can be expanded further.
+        ```
+        {
+          user {
+            id       # leaf node (ID scalar)
+            name     # leaf node (String scalar)
+            profile {  # not a leaf node — it's an object
+              bio    # leaf node inside 'profile'
+            }
+          }
+        }
+        ```
+      - `id`, `name`, and `bio` are leaf nodes.
+    + 🌳 **Leaf Level** :
+      - The leaf level is simply the **deepest level** in the tree — the layer where all the leaf nodes are found.
+      - The leaf level includes the fields: `id`, `name`, and `bio`.
+
++ **Queries**
+  - is telling what kind of [queries](https://graphql.org/learn/queries/) can be made to the API.
+
+✴️ **Apollo**
+
+is a **GraphQL platform**. It make it easier to build, manage, and use GraphQL APIs on both the server and client sides.
+
+⚙️ The Apollo Ecosystem:
+
+| Tool| Purpose| Where It’s Used|
+| --------------------- | ----------------------------------------------------------------- | ----------------------- |
+| **Apollo Server**| Runs your GraphQL API — defines schema, handles queries/resolvers | 🖥️ Backend|
+| **Apollo Client**| Fetches data from GraphQL API — integrates with React, Vue, etc.  | 💻 Frontend |
+| **Apollo Studio**| Cloud platform for monitoring, analytics, schema management| ☁️ Cloud|
+| **Apollo Federation** | Allows multiple GraphQL services to combine into one “supergraph”| 🏗️ Large-scale backend|
+| **Apollo Router**| High-performance GraphQL gateway built in Rust| 🚀 Infrastructure|
+
+
++ **Apollo Server**
+  - is a [GraphQL server library](https://www.apollographql.com/docs/apollo-server)
+  - makes it easy to build and run a GraphQL API in JavaScript or TypeScript.
