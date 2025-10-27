@@ -25,10 +25,15 @@ let persons = [
 ]
 
 const typeDefs = `
+  type Address {
+    street: String!
+    city: String!
+  }
+
   type Person {
     name: String!
     phone: String
-    street: String!
+    address: Address!
     city: String!
     id: ID!
   }
@@ -46,6 +51,17 @@ const resolvers = {
     allPersons: () => persons,
     findPerson: (root, args) =>
       persons.find(p => p.name === args.name)
+  },
+  Person: {
+    name: (root) => root.name,
+    phone: (root) => root.phone,
+    address: (root) => {
+      return {
+        street: root.street,
+        city: root.city
+      }
+    },
+    id: (root) => root.id
   }
 }
 

@@ -4891,6 +4891,11 @@ is a **GraphQL platform**. It make it easier to build, manage, and use GraphQL A
 | **Apollo Router**| High-performance GraphQL gateway built in Rust| 🚀 Infrastructure|
 
 
-+ **Apollo Server**
-  - is a [GraphQL server library](https://www.apollographql.com/docs/apollo-server)
-  - makes it easy to build and run a GraphQL API in JavaScript or TypeScript.
+🚀 **Apollo Server**
++ is a [GraphQL server library](https://www.apollographql.com/docs/apollo-server)
++ makes it easy to build and run a GraphQL API in JavaScript or TypeScript.
++ has 2 parameters:
+  - **typeDefs**
+  - **[resolvers](https://www.apollographql.com/docs/apollo-server/data/resolvers)** (needs [four parameters](https://the-guild.dev/graphql/tools/docs/resolvers#resolver-function-signature))
+  - extra:
+    + [default resolver](https://the-guild.dev/graphql/tools/docs/resolvers#default-resolver)
