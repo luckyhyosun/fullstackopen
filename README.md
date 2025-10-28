@@ -4899,3 +4899,7 @@ is a **GraphQL platform**. It make it easier to build, manage, and use GraphQL A
   - **[resolvers](https://www.apollographql.com/docs/apollo-server/data/resolvers)** (needs [four parameters](https://the-guild.dev/graphql/tools/docs/resolvers#resolver-function-signature))
   - extra:
     + [default resolver](https://the-guild.dev/graphql/tools/docs/resolvers#default-resolver)
+
+🚀 **Mutation**
+- [Mutation](https://graphql.org/learn/mutations/) is to modify data
+- `uuid()` is a [library](https://github.com/uuidjs/uuid#readme) to make a unique value
