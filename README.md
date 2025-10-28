@@ -4914,6 +4914,7 @@ is a **GraphQL platform**. It make it easier to build, manage, and use GraphQL A
 
   - extra:
     + [default resolver](https://the-guild.dev/graphql/tools/docs/resolvers#default-resolver)
+    + [enum](https://graphql.org/learn/schema/#enum-types) type is a special kind of scalar that is restricted to a particular set of allowed values
 
 **Mutation**
 + [Mutation](https://graphql.org/learn/mutations/) is to modify data
