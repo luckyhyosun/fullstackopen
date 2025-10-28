@@ -4897,9 +4897,35 @@ is a **GraphQL platform**. It make it easier to build, manage, and use GraphQL A
 + has 2 parameters:
   - **typeDefs**
   - **[resolvers](https://www.apollographql.com/docs/apollo-server/data/resolvers)** (needs [four parameters](https://the-guild.dev/graphql/tools/docs/resolvers#resolver-function-signature))
+    + `root` (or `obj` or `parent`) represents the parent object that contains the current field being resolved.
+      ```graphql
+      Person: {
+        address: (root) => {
+          return {
+            street: root.street,  // root is the Person object
+            city: root.city
+          }
+        }
+      }
+      ```
+    + `args` represents the arguments passed to a GraphQL operation (query or mutation).
+    + `context`
+    + `info`
+
   - extra:
     + [default resolver](https://the-guild.dev/graphql/tools/docs/resolvers#default-resolver)
 
-🚀 **Mutation**
-- [Mutation](https://graphql.org/learn/mutations/) is to modify data
-- `uuid()` is a [library](https://github.com/uuidjs/uuid#readme) to make a unique value
+**Mutation**
++ [Mutation](https://graphql.org/learn/mutations/) is to modify data
++ `uuid()` is a [library](https://github.com/uuidjs/uuid#readme) to make a unique value
+
+**Validation**
++ the **lifecycle** of a GraphQL request is called [validation](https://graphql.org/learn/validation/)
++ Whenever a GraphQL server receives a request (like a query or mutation), it goes through a series of well-defined stages, collectively known as the request lifecycle.
+These stages are usually:
+  1. Parse → convert the incoming query string into an abstract syntax tree (AST).
+  2. Validate → automatically check that the query is valid against the GraphQL schema.
+  3. Execute → run the query and resolve the data fields.
++ So some of the **error handling** can be automatically done with GraphQL validation. But there are some exceptions:
+  - stricter rules for data sent to a **Mutation** have to be added **manually**
+  - An error could be handled by throwing [GraphQLError](https://www.apollographql.com/docs/apollo-server/data/errors#custom-errors) with a proper [error code](https://www.apollographql.com/docs/apollo-server/data/errors#built-in-error-codes).
