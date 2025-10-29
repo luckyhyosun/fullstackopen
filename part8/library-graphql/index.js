@@ -98,16 +98,6 @@ let books = [
 */
 
 const typeDefs = `
-  enum Genre {
-    REFACTORING
-    AGILE
-    PATTERNS
-    DESIGN
-    CLASSIC
-    CRIME
-    REVOLUTION
-  }
-
   type Book {
     title: String!
     published: Int!
@@ -142,7 +132,7 @@ const resolvers = {
 
       return books.filter(book => book.author === args.author)
     },
-    allAuthors: authors
+    allAuthors: () => authors
   },
   Author: {
     bookCount: (root) => books.filter(book => book.author === root.name).length
