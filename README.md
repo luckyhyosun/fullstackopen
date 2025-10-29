@@ -4930,3 +4930,24 @@ These stages are usually:
 + So some of the **error handling** can be automatically done with GraphQL validation. But there are some exceptions:
   - stricter rules for data sent to a **Mutation** have to be added **manually**
   - An error could be handled by throwing [GraphQLError](https://www.apollographql.com/docs/apollo-server/data/errors#custom-errors) with a proper [error code](https://www.apollographql.com/docs/apollo-server/data/errors#built-in-error-codes).
+
+**🐬 Pro Tips**
++ **Apollo Server** → Runs on the backend (Node.js, Express, etc.).
++ **Apollo Client** → Runs on the frontend (React, Vue, etc.).
+
+🧠 **Apollo Client**
++ is a comprehensive GraphQL [library](https://www.apollographql.com/docs/react) for **state management** and JavaScript **data-fetching**.
++ It helps your frontend (e.g., React, Vue, or Angular app) efficiently communicate with a GraphQL server, manage queries and mutations, and keep your UI in sync with your backend data.
+
+**What Apollo Client Is**
++ **A GraphQL client library**: It lets you send GraphQL queries and mutations from your frontend and handle the results easily.
++ **A cache manager**: Apollo automatically caches fetched data, so your app doesn’t need to re-fetch the same info repeatedly.
++ **A state management tool**: Beyond server data, Apollo can also handle local UI state, reducing the need for tools like Redux or Zustand in some cases.
+
+**Client Object**
++ is an [instance](https://www.apollographql.com/docs/react/get-started#step-3-initialize-apolloclient) that connects your frontend to your GraphQL server.
++ Think of it like your app’s “**data brain**” — it:
+  - Knows where your GraphQL server lives.
+  - Manages how to fetch, cache, and update data.
+  - Apollo Client sends GraphQL queries (requests) → to the GraphQL Server.
+  - Provides your app with access to GraphQL features via React hooks like useQuery, useMutation, etc.
