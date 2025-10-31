@@ -4951,3 +4951,6 @@ These stages are usually:
   - Manages how to fetch, cache, and update data.
   - Apollo Client sends GraphQL queries (requests) → to the GraphQL Server.
   - Provides your app with access to GraphQL features via React hooks like useQuery, useMutation, etc.
+
+**useQuery**
++ [useQuery](https://www.apollographql.com/docs/react/api/react/useQuery) is a Hook for executing queries
