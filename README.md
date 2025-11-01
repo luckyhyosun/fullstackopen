@@ -4946,11 +4946,24 @@ These stages are usually:
 
 **Client Object**
 + is an [instance](https://www.apollographql.com/docs/react/get-started#step-3-initialize-apolloclient) that connects your frontend to your GraphQL server.
++ is stored in Apollo client's **cache**, not directly in client.
++ The data stored in Apollo Client's cache is the **result of** executing the **resolvers** on the GraphQL server.
 + Think of it like your app’s “**data brain**” — it:
   - Knows where your GraphQL server lives.
   - Manages how to fetch, cache, and update data.
   - Apollo Client sends GraphQL queries (requests) → to the GraphQL Server.
   - Provides your app with access to GraphQL features via React hooks like useQuery, useMutation, etc.
 
+**Variables**
++ is a dynamic argument for GraphQL ([Link](https://graphql.org/learn/queries/#variables))
+
+**Query**
++ is one of core concepts of Graphql to fetch data **only as required** ([Link]((https://www.apollographql.com/docs/react/data/queries#executing-queries-manually)))
+
 **useQuery**
-+ [useQuery](https://www.apollographql.com/docs/react/api/react/useQuery) is a Hook for executing queries
++ is a Hook for executing queries ([Link](https://www.apollographql.com/docs/react/api/react/useQuery))
++ useQuery returns an object from Apollo Client that contains `loading`, `error`, `dataState` and `data` properties you can use to render your UI.
+  - `skip` [option](https://www.apollographql.com/docs/react/data/queries#skipoptional) makes it possible to do the query only if a set condition is true
+
+**useLazyQuery**
++ defines a query which is executed when the user wants to see the detailed information ([Link](https://www.apollographql.com/docs/react/api/react/useLazyQuery))
