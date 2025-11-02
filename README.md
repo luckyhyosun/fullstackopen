@@ -5025,3 +5025,22 @@ These stages are usually:
   }
   ```
 + The bad side of the solution is **all the pointless web traffic**.
+
+**refetchQueries**
++ is the useMutation hook's parameter ([Link](https://www.apollographql.com/docs/react/data/refetching))
++ updates your client-side GraphQL data by **refetching queries from the server**
++ could refetch every active query after a client-side update
+  ```jsx
+  const [ createPerson ] = useMutation(CREATE_PERSON, {
+    refetchQueries: [ { query: ALL_PERSONS } ]
+  })
+  ```
+
++ no extra web traffic.
++ But if one user now updates the state of the server, the changes do not show to other users immediately.
++ If you want to do multiple queries, you can pass multiple objects inside refetchQueries. This will allow you to update different parts of your app at the same time. Here is an example:
+  ```jsx
+  const [ createPerson ] = useMutation(CREATE_PERSON, {
+    refetchQueries: [ { query: ALL_PERSONS }, { query: OTHER_QUERY }, { query: ... } ] // pass as many queries as you need
+  })
+  ```
