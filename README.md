@@ -5011,3 +5011,17 @@ These stages are usually:
   ```jsx
   createPerson({  variables: { name, phone, street, city } })
   ```
++ But the screen is not updated. This is because **Apollo Client cannot automatically update the cache** of an application, so it still contains the state from before the mutation.
+
+**Polling**
++ provides near-real-time synchronization with your server by executing your query periodically at a specified interval ([Link](https://www.apollographql.com/docs/react/data/queries#polling))
+  ```jsx
+  const App = () => {
+    const result = useQuery(ALL_PERSONS, {
+      pollInterval: 2000
+    })
+
+    //...
+  }
+  ```
++ The bad side of the solution is **all the pointless web traffic**.
