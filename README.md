@@ -5044,3 +5044,6 @@ These stages are usually:
     refetchQueries: [ { query: ALL_PERSONS }, { query: OTHER_QUERY }, { query: ... } ] // pass as many queries as you need
   })
   ```
+
+**Error Handling**
++ Whenever Apollo Server encounters errors while processing a GraphQL operation, its response to the client includes an `errors` array containing each error that occurred. ([Link](https://www.apollographql.com/docs/apollo-server/data/errors))
