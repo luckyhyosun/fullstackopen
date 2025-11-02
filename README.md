@@ -4967,3 +4967,47 @@ These stages are usually:
 
 **useLazyQuery**
 + defines a query which is executed when the user wants to see the detailed information ([Link](https://www.apollographql.com/docs/react/api/react/useLazyQuery))
+
+**Cache**
++ Apollo Client stores the results of your GraphQL queries in a local, normalized, in-memory cache ([Link](https://www.apollographql.com/docs/react/caching/overview))
+
+**useMutation**
++ is a Hook to define mutation function ([Link](https://www.apollographql.com/docs/react/api/react/useMutation))
++ In React Apollo, useMutation does not return just a function — it returns an array with **two items**:
+  ```jsx
+  const CREATE_PERSON = gql`
+  mutation createPerson($name: String!, $street: String!, $city: String!, $phone: String) {
+    addPerson(
+      name: $name,
+      street: $street,
+      city: $city,
+      phone: $phone
+    ) {
+      name
+      phone
+      id
+      address {
+        street
+        city
+      }
+    }
+  }
+  `
+
+  const [createPerson, result] = useMutation(CREATE_PERSON)
+  ```
++ The first element of the array is the mutation function.
+  - `createPerson` itself is a function.
+  - `result`is the mutation result object (data/loading/error)
++ So, `useMutation` returns something like:
+  ```jsx
+  [
+    function createPerson(options) { ... },
+    { data, loading, error }
+  ]
+  ```
+
++ The query variables receive values when the query is made:
+  ```jsx
+  createPerson({  variables: { name, phone, street, city } })
+  ```
