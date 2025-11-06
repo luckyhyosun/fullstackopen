@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useMutation } from "@apollo/client/react";
-import { UPDATE_YEAR } from '../queries'
+import { ALL_AUTHORS, UPDATE_YEAR } from '../queries'
 
 const BirthYear = () => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
 
-  const [updateUser] = useMutation(UPDATE_YEAR)
+  const [updateUser] = useMutation(UPDATE_YEAR, {refetchQueries: [{query: ALL_AUTHORS}]})
 
   const submit = (event) => {
     event.preventDefault()
