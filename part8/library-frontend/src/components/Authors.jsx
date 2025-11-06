@@ -1,3 +1,43 @@
+import { useState } from 'react'
+import { useMutation } from "@apollo/client/react";
+import { UPDATE_YEAR } from '../queries'
+
+const BirthYear = () => {
+  const [name, setName] = useState('')
+  const [born, setBorn] = useState('')
+
+  const [updateUser] = useMutation(UPDATE_YEAR)
+
+  const submit = (event) => {
+    event.preventDefault()
+
+    updateUser({variables: {name, setBornTo: parseInt(born)}})
+
+    setName('')
+    setBorn('')
+  }
+
+  return (
+    <form onSubmit={submit}>
+      Name:
+      <input
+        type="text"
+        value={name}
+        onChange={({target}) => setName(target.value)}
+      />
+      <br />
+      Year:
+      <input
+        type="text"
+        value={born}
+        onChange={({target}) => setBorn(target.value)}
+      />
+      <br />
+      <button type='submit'>update!</button>
+    </form>
+  )
+}
+
 const Authors = (props) => {
   if (!props.show) {
     return null
@@ -23,6 +63,9 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+
+      <h2>Set Birth Year</h2>
+      <BirthYear />
     </div>
   )
 }
