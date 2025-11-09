@@ -4935,6 +4935,25 @@ These stages are usually:
 + **Apollo Server** → Runs on the backend (Node.js, Express, etc.).
 + **Apollo Client** → Runs on the frontend (React, Vue, etc.).
 
+🚀 **Apollo server vs Mongoose server**
++ What Mongoose does:
+  - Connects to MongoDB database
+  - Provides data modeling and validation
+  - Handles database operations (save, find, etc.)
+
++ What ApolloServer does:
+  - Creates the GraphQL HTTP server
+  - Handles GraphQL queries and mutations from clients
+  - Routes requests to your resolvers
+  - Serves the GraphQL playground interface
+
++ The flow:
+  1. Client sends GraphQL query →
+  2. ApolloServer receives it →
+  3. ApolloServer calls your resolvers →
+  4. Resolvers use Mongoose to query MongoDB →
+  5. ApolloServer sends response back to client
+
 🧠 **Apollo Client**
 + is a comprehensive GraphQL [library](https://www.apollographql.com/docs/react) for **state management** and JavaScript **data-fetching**.
 + It helps your frontend (e.g., React, Vue, or Angular app) efficiently communicate with a GraphQL server, manage queries and mutations, and keep your UI in sync with your backend data.
