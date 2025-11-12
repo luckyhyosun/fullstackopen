@@ -102,12 +102,24 @@ const resolvers = {
     }
   },
   Mutation: {
-    addPerson: async (root, args) => {
-      const person = new Person({...args})
+    addPerson: async (root, args, context) => {
+      const person = new Person({ ...args })
+      const currentUser = context.currentUser
+
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        })
+      }
+
       try {
         await person.save()
+        currentUser.friends = currentUser.friends.concat(person)
+        await currentUser.save()
       } catch (error) {
-        throw new GraphQLError('Saving person failed', {
+        throw new GraphQLError('Saving user failed', {
           extensions: {
             code: 'BAD_USER_INPUT',
             invalidArgs: args.name,
@@ -115,6 +127,8 @@ const resolvers = {
           }
         })
       }
+
+      return person
     },
 
     editNumber: async (root, args) => {
