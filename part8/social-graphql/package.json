@@ -8,5 +8,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "@apollo/server": "^5.1.0",
+    "graphql": "^16.12.0"
   }
 }
