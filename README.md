@@ -170,7 +170,7 @@ Frontend
 + Frontend: state, UI, and API calls
 + Backend: database access, HTTP clients, authentication, and messaging.
 
-**APIs**: Defines how frontend and backend talk. Frontend doesn’t access the backend directly is because of security, structure, and separation of concerns.
+**APIs** (Application Programming Interface): A set of rules that lets one piece of software talk to another piece of software, which means it defines how frontend and backend talk. Frontend doesn’t access the backend directly is because of security, structure, and separation of concerns.
 + Frontend: allow communicate with database, external services, and the browser
 + Backend: allow to expose endpoints to clients, communicate with microservices, or connect to external services.
 
@@ -4911,6 +4911,131 @@ is a **GraphQL platform**. It make it easier to build, manage, and use GraphQL A
     + `args` represents the arguments passed to a GraphQL operation (query or mutation).
     + `context`
     + `info`
+  - GraphQL schema **≠** your database structure
+    + Resolvers are where you translate your raw data into the shape described in the GraphQL schema.
+      ```graphql
+        let persons = [
+          {
+            name: "Arto Hellas",
+            phone: "040-123543",
+            street: "Tapiolankatu 5 A",
+            city: "Espoo",
+            id: "3d594650-3436-11e9-bc57-8b80ba54c431"
+          },
+          {
+            name: "Matti Luukkainen",
+            phone: "040-432342",
+            street: "Malminkaari 10 A",
+            city: "Helsinki",
+            id: '3d599470-3436-11e9-bc57-8b80ba54c431'
+          },
+          {
+            name: "Venla Ruuska",
+            street: "Nallemäentie 22 C",
+            city: "Helsinki",
+            id: '3d599471-3436-11e9-bc57-8b80ba54c431'
+          },
+        ]
+
+        const typeDefs = `
+          type Address {
+            street: String!
+            city: String!
+          }
+
+          type Person {
+            name: String!
+            phone: String
+            address: Address!
+            id: ID!
+          }
+
+          type Query {
+            personCount: Int!
+            allPersons: [Person!]!
+            findPerson(name: String!): Person
+          }
+        `
+
+        const resolvers = {
+          Person: {
+            name: (root) => root.name,
+            phone: (root) => root.phone,
+            address: (root) => {
+              return {
+                street: root.street,
+                city: root.city
+              }
+            },
+            id: (root) => root.id
+          },
+
+          Query: {
+            personCount: () => persons.length,
+            allPersons: () => persons,
+            findPerson: (root, args) =>
+              persons.find(p => p.name === args.name)
+          }
+        }
+      ```
+    + In this code avobe, resolver **maps** the data structure into the schema structure.
+      ```pgsql
+      /*Raw data*/
+
+      Person
+      ├── name
+      ├── phone
+      ├── street
+      └── city
+      ````
+
+      ```graphql
+      Person: {
+        name: (root) => root.name,
+        phone: (root) => root.phone,
+        address: (root) => {
+          return {
+            street: root.street,
+            city: root.city
+          }
+        },
+        id: (root) => root.id
+      }
+      ```
+
+      ```pgsql
+      /*Schema*/
+
+      Person
+      ├── name
+      ├── phone
+      ├── address
+      │     ├── street
+      │     └── city
+      └── id
+      ```
+    + Then, why do I need to use **extra type for Address**?
+    + Because GraphQL schemas describe the shape of the API, not the shape of your database.
+    + If you want nested API data, you must define nested schema types.
+    + 👉 Your **GraphQL API** = the set of queries, types, and fields that clients can use to get data.
+    + 🧠 Easy rule to remember
+      - If a field returns an **object** → you need a **type**.
+      - If it's just a **value** (string, number, boolean) → **no type** needed.
+        ```graphql
+        /*Your GraphQL API*/
+
+        type Address {
+          street: String!
+          city: String!
+        }
+
+        type Person {
+          name: String!
+          phone: String
+          address: Address!
+          id: ID!
+        }
+        ```
 
   - extra:
     + [Default resolver](https://the-guild.dev/graphql/tools/docs/resolvers#default-resolver):
