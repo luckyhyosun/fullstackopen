@@ -4913,7 +4913,27 @@ is a **GraphQL platform**. It make it easier to build, manage, and use GraphQL A
     + `info`
 
   - extra:
-    + [default resolver](https://the-guild.dev/graphql/tools/docs/resolvers#default-resolver)
+    + [Default resolver](https://the-guild.dev/graphql/tools/docs/resolvers#default-resolver):
+      ```pgsql
+      /*Default resolver*/
+
+      Person: {
+        name: (root) => root.name,
+        phone: (root) => root.phone,
+        street: (root) => root.street,
+        city: (root) => root.city,
+        id: (root) => root.id
+      }
+      ```
+
+      ```pgsql
+      Query
+      └── allPersons          <- parent resolver (returns array of persons)
+              └── Person      <- each element is passed as root to Person resolvers
+                    ├── name  <- parent is the person object
+                    ├── phone
+                    └── city
+      ```
     + [enum](https://graphql.org/learn/schema/#enum-types) type is a special kind of scalar that is restricted to a particular set of allowed values
 
 **Mutation**
