@@ -4701,6 +4701,7 @@ As the application grows, the monolithic backend approach starts turning problem
 A [microservice architecture](https://martinfowler.com/articles/microservices.html) (microservices) is a way of composing the backend of an application from many separate, independent services, which communicate with each other over the network. An individual microservice's purpose is to take care of a particular logical functional whole. In a pure microservice architecture, the services do not use a shared database.
 
 Implement an [API gateway](https://microservices.io/patterns/apigateway) that is the single entry point for all clients. The API gateway handles requests in one of two ways. Some requests are simply proxied/routed to the appropriate service. It handles other requests by fanning out to multiple services.
+
 ![api gateway](https://microservices.io/i/apigateway.jpg)
 (image from [microservices.io](https://microservices.io/patterns/¡apigateway))
 
