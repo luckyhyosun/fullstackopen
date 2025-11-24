@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 
+import PersonForm from './components/PersonForm'
+
 const ALL_PERSONS = gql`
 query {
   allPersons {
@@ -66,6 +68,9 @@ function Persons({persons}) {
           </button>
         </div>
       )}
+
+      <h3>Add Person</h3>
+      <PersonForm />
     </div>
   )
 }
