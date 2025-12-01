@@ -1,11 +1,13 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { GraphQLError } = require('graphql')
+const jwt = require('jsonwebtoken')
 
 require('dotenv').config()
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 const Person = require('./models/person')
+const User = require('./models/user')
 
 const MONGODB_URI = process.env.MONGODB_URI
 console.log('connecting to', MONGODB_URI)
@@ -36,10 +38,21 @@ const typeDefs = `
     NO
   }
 
+  type User {
+    username: String!
+    friends: [Person!]!
+    id: ID!
+  }
+
+  type Token {
+    value: String!
+  }
+
   type Query {
     personCount: Int!
     allPersons(phone: YesNo): [Person!]!
     findPerson(name: String!): Person
+    me: User
   }
 
   type Mutation {
@@ -54,6 +67,15 @@ const typeDefs = `
       name: String!
       phone: String!
     ): Person
+
+    createUser(
+      username: String!
+    ): User
+
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 `
 
@@ -114,6 +136,40 @@ const resolvers = {
           }
         })
       }
+    },
+
+    createUser: async (root, args) => {
+      const user = new User({username: args.username})
+
+      return user.save()
+        .catch(error => {
+          throw new GraphQLError('Creating the user failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.username,
+              error
+            }
+          })
+        })
+    },
+
+    login: async (root, args) => {
+      const user = await User.findOne({username: args.username})
+
+      if(!user || args.password !== 'secret' ){
+        throw new GraphQLError('wrong credentials', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
     }
   }
 }
