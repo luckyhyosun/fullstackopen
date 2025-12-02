@@ -76,6 +76,10 @@ const typeDefs = `
       username: String!
       password: String!
     ): Token
+
+    addAsFriend(
+      name: String!
+    ): User
   }
 `
 
@@ -184,6 +188,27 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
+
+    addAsFriend: async (root, args, {currentUser}) => {
+      const nonFriendAlready = (person) =>
+        !currentUser.friends
+          .map(f => f._id.toString())
+          .includes(person._id.toString())
+
+      if (!currentUser) {
+        throw new GraphQLError('wrong credentials', {
+          extensions: { code: 'BAD_USER_INPUT' }
+        })
+      }
+
+      const person = await Person.findOne({name: args.name})
+      if ( nonFriendAlready(person) ) {
+        currentUser.friends = currentUser.friends.concat(person)
+      }
+
+      await currentUser.save()
+      return currentUser
     }
   }
 }
