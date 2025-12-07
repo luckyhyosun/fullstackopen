@@ -78,7 +78,22 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args) => {
       const author = {name: args.author}
+      if(author.name.length < 5){
+        throw new GraphQLError('too short author name', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
+      }
+
       const book = {...args, author}
+      if(book.title.length < 5){
+        throw new GraphQLError('too short book name', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
+      }
       try{
         await book.save()
       }catch(error){
