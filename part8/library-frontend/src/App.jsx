@@ -14,6 +14,9 @@ const App = () => {
     return <div>loading...</div>
   }
 
+  console.log(userResult);
+
+
   return (
     <div>
       <div>
@@ -24,7 +27,7 @@ const App = () => {
 
       <Authors show={page === "authors"} authors={userResult.data.allAuthors}/>
 
-      <Books show={page === "books"} books={bookResult.data.allBooks}/>
+      {/* <Books show={page === "books"} books={bookResult.data.allBooks}/> */}
 
       <NewBook show={page === "add"} />
     </div>
