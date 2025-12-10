@@ -49,7 +49,7 @@ const typeDefs = `
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String, genre: String): [Book!]!
+    allBooks: [Book!]!
     allAuthors: [Author!]!
     me: User
   }
