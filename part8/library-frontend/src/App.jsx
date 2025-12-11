@@ -14,9 +14,6 @@ const App = () => {
     return <div>loading...</div>
   }
 
-  console.log(userResult);
-  console.log(bookResult)
-
   return (
     <div>
       <div>
