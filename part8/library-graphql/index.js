@@ -76,7 +76,6 @@ const typeDefs = `
 
     login(
       username: String!
-      password: String!
     ): Token
   }
 `
@@ -164,6 +163,27 @@ const resolvers = {
           })
         })
     },
+
+    login: async (root, args) => {
+      const user = await User.findOne({username: args.username})
+
+      if(!user){
+        throw new GraphQLError('No user found', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.username,
+            error
+          }
+        })
+      }
+
+      const tokenForUser = {
+        username: user.username,
+        id: user._id
+      }
+
+      return { value: jwt.sign(tokenForUser, process.env.JWT_SECRET)}
+    }
   }
 }
 
