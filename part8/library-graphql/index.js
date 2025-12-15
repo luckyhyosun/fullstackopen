@@ -35,7 +35,7 @@ const typeDefs = `
     name: String!
     id: ID!
     born: Int
-    bookCount: Int!
+    bookCount: Int
   }
 
   type User {
@@ -62,7 +62,7 @@ const typeDefs = `
       author: String!,
       published: Int!,
       genres: [String!]!
-    ): [Book!]!
+    ): Book!
 
     editAuthor(
       name: String!
@@ -85,12 +85,16 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      if(!args.author){
-        return Book.find({})
+      // return populated author objects so GraphQL Author type resolves
+      const filter = {}
+      if (args.genre) filter.genres = args.genre
+      // if filtering by author name, find author and use its id
+      if (args.author) {
+        const a = await Author.findOne({ name: args.author })
+        if (!a) return []
+        filter.author = a._id
       }
-      if(args.genre){
-        return Book.find({ genres: args.genre})
-      }
+      return Book.find(filter).populate('author')
     },
     allAuthors: async () => Author.find({}),
     me: (root, args, context) => {
@@ -98,34 +102,40 @@ const resolvers = {
     }
   },
   Author: {
-    bookCount: async (root) => Book.collection.countDocuments({ 'author': root.name })
+    // count by author ObjectId
+    bookCount: async (root) => Book.countDocuments({ author: root._id })
   },
   Mutation: {
     addBook: async (root, args) => {
-      const author = {name: args.author}
-      if(author.name.length < 5){
-        throw new GraphQLError('too short author name', {
-          extensions: {
-            code: 'BAD_USER_INPUT'
-          }
-        })
+      // find existing author or create one
+      let author = await Author.findOne({ name: args.author })
+      if (!author) {
+        author = new Author({ name: args.author, born: null })
+        if (author.name.length < 4) {
+          throw new GraphQLError('too short author name', {
+            extensions: { code: 'BAD_USER_INPUT' }
+          })
+        }
+        await author.save()
       }
 
-      const book = {...args, author}
-      if(book.title.length < 5){
-        throw new GraphQLError('too short book name', {
-          extensions: {
-            code: 'BAD_USER_INPUT'
-          }
-        })
-      }
-      try{
-        await book.save()
-      }catch(error){
-        throw new GraphQLError('Saving person failed', {
+      const book = new Book({
+        title: args.title,
+        published: args.published,
+        // store the ObjectId reference
+        author: author._id,
+        genres: args.genres
+      })
+
+      try {
+        const saved = await book.save()
+        // return populated author so the GraphQL Author fields are available
+        return saved.populate('author')
+      } catch (error) {
+        throw new GraphQLError('Saving book failed', {
           extensions: {
             code: 'BAD_USER_INPUT',
-            invalidArgs: args.name,
+            invalidArgs: args.title,
             error
           }
         })
@@ -133,12 +143,14 @@ const resolvers = {
     },
 
     editAuthor: async (root, args) => {
-      const foundAuthor = Author.findOne({name:args.name})
-      foundAuthor.born = args.born
+      const foundAuthor = await Author.findOne({ name: args.name })
+      if (!foundAuthor) return null
 
-      try{
-        await foundAuthor.save()
-      }catch(error){
+      foundAuthor.born = args.setBornTo
+
+      try {
+        return await foundAuthor.save()
+      } catch (error) {
         throw new GraphQLError('Saving number failed', {
           extensions: {
             code: 'BAD_USER_INPUT',
