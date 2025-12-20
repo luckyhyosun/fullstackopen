@@ -9,16 +9,15 @@ const PhoneForm = ({ setError }) => {
   const [ changeNumber, result ] = useMutation(EDIT_NUMBER, {
     refetchQueries: [ { query: ALL_PERSONS } ],
       onError: (error) => {
-        console.log("graphQLErrors:", error.graphQLErrors)
+        console.log("error:", error);
         console.log("message:", error.message)
-
-        // const messages = error.graphQLErrors.map(e => e.message).join('\n')
-
         setError(error.message)
       }
     })
 
   useEffect(() => {
+    console.log(result.data);
+
     if(result.data && result.data.editNumber === null){
       setError('person not found')
     }
