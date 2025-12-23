@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useMutation } from '@apollo/client/react'
+import { LOGIN } from '../queries'
 
 const Login = (props) => {
   const [username, setUsername] = useState('')
@@ -6,10 +8,17 @@ const Login = (props) => {
 
   if (!props.show) return null
 
+  const [login, result] = useMutation(LOGIN, {
+    onError: (error) => {
+      console.log(error.graphQLErrors[0].message);
+    }
+  })
+
   const loginSubmit = (event)=> {
     event.preventDefault()
 
     console.log(username, password);
+    login({ variables: {username, password}})
   }
 
   return(
