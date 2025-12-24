@@ -76,6 +76,7 @@ const typeDefs = `
 
     login(
       username: String!
+      password: String!
     ): Token
   }
 `
@@ -179,12 +180,10 @@ const resolvers = {
     login: async (root, args) => {
       const user = await User.findOne({username: args.username})
 
-      if(!user){
-        throw new GraphQLError('No user found', {
+      if(!user || args.password !== 'hello'){
+        throw new GraphQLError('wrong credentials', {
           extensions: {
-            code: 'BAD_USER_INPUT',
-            invalidArgs: args.username,
-            error
+            code: 'BAD_USER_INPUT'
           }
         })
       }
