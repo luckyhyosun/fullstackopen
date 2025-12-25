@@ -54,15 +54,6 @@ const App = () => {
     client.resetStore()
   }
 
-  if (!token) {
-    return (
-      <>
-        <Notify errorMessage={errorMessage} />
-        <LoginForm setToken={setToken} setError={notify} />
-      </>
-    )
-  }
-
   return (
     <div>
       <Notify errorMessage={errorMessage} />
