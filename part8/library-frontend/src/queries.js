@@ -31,7 +31,9 @@ mutation addBook(
   addBook(title: $title, author: $author, published: $published, genres: $genres) {
     title
     published
-    author
+    author {
+      name
+    }
     genres
     id
   }
