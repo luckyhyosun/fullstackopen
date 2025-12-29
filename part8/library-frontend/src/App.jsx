@@ -54,7 +54,7 @@ const App = () => {
       <Authors show={page === "authors"} authors={userResult.data.allAuthors}/>
       <Books show={page === "books"} books={bookResult.data.allBooks}/>
       <NewBook show={page === "add"} />
-      <Recommend show={page === "recommend"} loggedinUser={loggedinUser.data.me}/>
+      <Recommend show={page === "recommend"} loggedinUser={loggedinUser.data.me} books={bookResult.data.allBooks}/>
     </div>
   );
 };
