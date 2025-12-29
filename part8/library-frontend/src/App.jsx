@@ -5,14 +5,15 @@ import NewBook from "./components/NewBook";
 import Login from "./components/Login";
 import Recommend from "./components/Recommend";
 import { useQuery, useApolloClient } from "@apollo/client/react";
-import { ALL_AUTHORS, ALL_BOOKS } from './queries'
+import { ALL_AUTHORS, ALL_BOOKS, ME } from './queries'
 
 const App = () => {
   const [page, setPage] = useState("authors");
   const [token, setToken] = useState(null)
 
   const userResult = useQuery(ALL_AUTHORS);
-  const bookResult = useQuery(ALL_BOOKS)
+  const bookResult = useQuery(ALL_BOOKS);
+  const loggedinUser = useQuery(ME);
 
   const client = useApolloClient();
 
@@ -53,7 +54,7 @@ const App = () => {
       <Authors show={page === "authors"} authors={userResult.data.allAuthors}/>
       <Books show={page === "books"} books={bookResult.data.allBooks}/>
       <NewBook show={page === "add"} />
-      <Recommend show={page === "recommend"}/>
+      <Recommend show={page === "recommend"} loggedinUser={loggedinUser.data.me}/>
     </div>
   );
 };

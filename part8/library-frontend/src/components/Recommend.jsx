@@ -6,7 +6,9 @@ const Recommend = (props) => {
   return (
     <div>
       <h2>recommendataion</h2>
-      <p>Books in your favorite genre is... <span style={{fontWeight: "bold"}}>this</span></p>
+      <p>Books in
+        <span style={{fontWeight: "bold"}}> {props.loggedinUser.username} </span> favorite genre is...
+        <span style={{fontWeight: "bold"}}> {props.loggedinUser.favoriteGenre}</span></p>
     </div>
   )
 }
