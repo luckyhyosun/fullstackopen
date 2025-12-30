@@ -60,3 +60,5 @@ const typeDefs = `
     ): User
   }
 `
+
+module.exports = typeDefs
