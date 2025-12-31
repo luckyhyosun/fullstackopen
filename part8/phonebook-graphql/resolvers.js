@@ -29,20 +29,20 @@ const resolvers = {
   Mutation: {
     addPerson: async (root, args, context) => {
       const person = new Person({ ...args })
-      const currentUser = context.currentUser
+      // const currentUser = context.currentUser
 
-      if (!currentUser) {
-        throw new GraphQLError('not authenticated', {
-          extensions: {
-            code: 'BAD_USER_INPUT',
-          }
-        })
-      }
+      // if (!currentUser) {
+      //   throw new GraphQLError('not authenticated', {
+      //     extensions: {
+      //       code: 'BAD_USER_INPUT',
+      //     }
+      //   })
+      // }
 
       try {
         await person.save()
-        currentUser.friends = currentUser.friends.concat(person)
-        await currentUser.save()
+        // currentUser.friends = currentUser.friends.concat(person)
+        // await currentUser.save()
       } catch (error) {
         throw new GraphQLError('Saving user failed', {
           extensions: {
