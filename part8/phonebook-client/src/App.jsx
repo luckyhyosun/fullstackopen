@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useQuery, useApolloClient } from "@apollo/client/react";
+import { useQuery, useApolloClient, useSubscription } from "@apollo/client/react";
 import Persons from './components/Persons'
 import PersonForm from "./components/PersonForm";
-import { ALL_PERSONS } from './queries'
+import { ALL_PERSONS, PERSON_ADDED } from './queries'
 import PhoneForm from './components/PhoneForm';
 import LoginForm from './components/LoginForm';
 
@@ -23,6 +23,12 @@ const App = () => {
   const [token, setToken] = useState(null)
 
   const client = useApolloClient()
+
+  useSubscription(PERSON_ADDED, {
+    onData: ({ data }) => {
+      console.log(data)
+    }
+  })
 
   if (result.loading) {
     return <div>loading...</div>
