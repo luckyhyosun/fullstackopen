@@ -5,9 +5,10 @@ const typeDefs = `
   }
 
   type Person {
-    name: String!
+    name: String
     phone: String
     address: Address!
+    friendOf: [User!]!
     id: ID!
   }
 
