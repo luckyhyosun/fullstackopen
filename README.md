@@ -5376,11 +5376,12 @@ lets the server push data to the client whenever something happens — like a ne
 
     Subscription: {
       messageAdded: {
-        subscribe: () => pubsub.asyncIterator(['MESSAGE_ADDED'])
+        subscribe: () => pubsub.asyncIterableIterator(['MESSAGE_ADDED'])
       }
     }
     ```
-    + `pubsub.asyncIterator(['MESSAGE_ADDED'])` creates a listener for events labeled "`MESSAGE_ADDED`".
+    + `pubsub.asyncIterableIterator(['MESSAGE_ADDED'])` creates a listener for events labeled "`MESSAGE_ADDED`".
+    + `asyncIterableIterator` is a superset of `asyncIterator`.
     + The server keeps this listener open and sends data to subscribers when events happen.
 
 3. **Publishing** an Event
