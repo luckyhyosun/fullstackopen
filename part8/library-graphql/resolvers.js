@@ -1,8 +1,11 @@
 const { GraphQLError } = require('graphql')
 const jwt = require('jsonwebtoken')
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 
 const Author = require('./models/author')
 const Book = require('./models/book')
+const User = require('./models/user')
 
 const resolvers = {
   Query: {
@@ -53,8 +56,9 @@ const resolvers = {
 
       try {
         const saved = await book.save()
-        // return populated author so the GraphQL Author fields are available
-        return saved.populate('author')
+        const populated = await saved.populate('author')
+        pubsub.publish('BOOK_ADDED', { bookAdded: populated })
+        return populated
       } catch (error) {
         throw new GraphQLError('Saving book failed', {
           extensions: {
@@ -117,6 +121,11 @@ const resolvers = {
       }
 
       return { value: jwt.sign(tokenForUser, process.env.JWT_SECRET)}
+    }
+  },
+  Subscription: {
+    bookAdded: {
+       subscribe: () => pubsub.asyncIterableIterator('BOOK_ADDED')
     }
   }
 }

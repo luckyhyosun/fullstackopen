@@ -5355,3 +5355,43 @@ These stages are usually:
 
     const serverCleanup = useServer({ schema }, wsServer)
     ```
+
+✴️ **GraphQL Subscription**
+
+lets the server push data to the client whenever something happens — like a new message in a chat app. Unlike queries or mutations (which return one response and close), subscriptions stay open and send updates over time. These updates happen in response to events you publish.
+
+1. A Subscription Is **Waiting** for Something
+    ```js
+    //schema.js
+
+    type Subscription {
+      messageAdded: Message!
+    }
+    ```
+    + Clients can subscribe to messageAdded and the server will send updates when a new message is created.
+
+2. Subscriptions Use an `AsyncIterator` to “**Listen**”
+    ```js
+    //resolver.js
+
+    Subscription: {
+      messageAdded: {
+        subscribe: () => pubsub.asyncIterator(['MESSAGE_ADDED'])
+      }
+    }
+    ```
+    + `pubsub.asyncIterator(['MESSAGE_ADDED'])` creates a listener for events labeled "`MESSAGE_ADDED`".
+    + The server keeps this listener open and sends data to subscribers when events happen.
+
+3. **Publishing** an Event
+    ```js
+    Mutation: {
+      addMessage(parent, args) {
+        const newMessage = saveMessageToDB(args)
+        pubsub.publish('MESSAGE_ADDED', { messageAdded: newMessage })
+        return newMessage
+      }
+    }
+    ```
+    + This tells the subscription system: “Hey, something new happened!”
+    + Anyone subscribed to "`MESSAGE_ADDED`" will receive it.
