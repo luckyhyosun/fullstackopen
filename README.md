@@ -5414,3 +5414,6 @@ lets the server push data to the client whenever something happens — like a ne
   1. **Development Environment**: In this step, it is often easier to make use of real-time compilation and auto-reloading so one can see the resulting changes more quickly.
   2. 🚀 **Build step**:  During this step, all TypeScript code is compiled into JavaScript in a separate folder.
   3. **Production Environment**: This step runs the code from the "Build step" folder.
+
++ **Types** ([Link](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html))
+  - The primitives: `string`, `number`, and `boolean`
