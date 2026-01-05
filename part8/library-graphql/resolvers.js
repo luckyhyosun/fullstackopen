@@ -30,7 +30,15 @@ const resolvers = {
   },
   Author: {
     // count by author ObjectId
-    bookCount: async (root) => Book.countDocuments({ author: root._id })
+    bookCount: async (root) => Book.countDocuments({ author: root._id }),
+    bookName: async (root) => {
+      const foundBooks = await Book.find({
+        author: {
+          $in: [root._id]
+        }
+      })
+      return foundBooks
+    }
   },
   Mutation: {
     addBook: async (root, args) => {
