@@ -18,8 +18,17 @@ const App = () => {
   const client = useApolloClient();
 
   useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
+    onData: ({ data, client }) => {
       console.log(data.data)
+      const addedBook = data.data.bookAdded
+
+      window.alert(`New book (${addedBook.title}) is added`)
+
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(addedBook),
+        }
+      })
     }
   })
 
