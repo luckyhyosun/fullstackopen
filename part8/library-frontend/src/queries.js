@@ -78,8 +78,10 @@ query {
 `
 
 export const BOOK_ADDED = gql`
-subscription bookAdded{
-  ...bookDetails
+subscription  {
+  bookAdded{
+    ...bookDetails
+  }
 }
 ${BOOK_DETAILS}
 `
