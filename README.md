@@ -5417,3 +5417,24 @@ lets the server push data to the client whenever something happens — like a ne
 
 + **Types** ([Link](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html))
   - The primitives: `string`, `number`, and `boolean`
+
++ **Type alias** ([Link](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases)) is a way to give a new name to an existing type. It doesn’t create a new type—it just creates an alias, or shorthand, for an existing one, which can make your code clearer, more readable, and easier to maintain.
+  - Think of it as labeling a box: the box doesn’t change, but you can give it a meaningful name so everyone knows what’s inside.
+  - Here’s an example in **TypeScript**:
+    ```ts
+    // Basic type alias
+    type ID = string | number;
+
+    let userId: ID;
+    userId = 123;      // ✅ valid
+    userId = "abc123"; // ✅ valid
+    ```
+  - Here, `ID` is an alias for `string` | `number`. Another example with objects is below:
+    ```ts
+    type User = {
+      name: string;
+      age: number;
+    };
+
+    const alice: User = { name: "Alice", age: 30 };
+    ```
