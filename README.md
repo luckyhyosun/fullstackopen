@@ -5415,8 +5415,9 @@ lets the server push data to the client whenever something happens — like a ne
   2. 🚀 **Build step**:  During this step, all TypeScript code is compiled into JavaScript in a separate folder.
   3. **Production Environment**: This step runs the code from the "Build step" folder.
 
-+ **Types** ([Link](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html))
++ **Type Keywords** ([Link](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html))
   - The primitives: `string`, `number`, and `boolean`
+  - `Interface`: This is one way to define the "shape" an object should have. ([Link](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#interfaces))
 
 + **Type alias** ([Link](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-aliases)) is a way to give a new name to an existing type. It doesn’t create a new type—it just creates an alias, or shorthand, for an existing one, which can make your code clearer, more readable, and easier to maintain.
   - Think of it as labeling a box: the box doesn’t change, but you can give it a meaningful name so everyone knows what’s inside.
@@ -5466,3 +5467,13 @@ lets the server push data to the client whenever something happens — like a ne
     npm install --save-dev @types/react @types/express @types/lodash @types/jest @types/mongoose
     ```
   - Since the typings are only used before compilation, the typings are **not needed in the production build** and they should always be in the **devDependencies** of the `package.json`.
+
++ **TypeScript** vs **Generics Syntax**
+  ```ts
+  //TypeScirpt for symple array
+  let values: number[];
+
+  // Genetic Syntax fro more complex array
+  let values: Array<number>;
+  ```
+  - [Examples](https://typescript-eslint.io/rules/array-type/#array-simple) of simple/ complex arrays.
