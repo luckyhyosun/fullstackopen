@@ -5438,3 +5438,31 @@ lets the server push data to the client whenever something happens — like a ne
 
     const alice: User = { name: "Alice", age: 30 };
     ```
+
++ **unknown** ([Link](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html#new-unknown-top-type)) is the type-safe counterpart of `any`.
+  - the default type of the **error** object in TypeScript is `unknown`.
+  - So, we should [narrow](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) type to access the field:
+    ```ts
+    try {
+      console.log(calculator(1, 5 , 'divide'));
+    } catch (error: unknown) {
+      let errorMessage = 'Something went wrong: '
+      // here we can not use error.message
+
+      if (error instanceof Error) {
+        // the type is narrowed and we can refer to error.message
+
+        errorMessage += error.message;
+      }
+      // here we can not use error.message
+
+      console.log(errorMessage);
+    }
+    ```
+
++ **Type packages**
+  - types for existing packages can be found by using `@types/` in terminal. Such as:
+    ```
+    npm install --save-dev @types/react @types/express @types/lodash @types/jest @types/mongoose
+    ```
+  - Since the typings are only used before compilation, the typings are **not needed in the production build** and they should always be in the **devDependencies** of the `package.json`.
