@@ -1,0 +1,6 @@
+{
+  //It prevents TypeScript from silently using the any type when it can’t infer a type.
+  "compilerOptions": {
+    "noImplicitAny": true,
+  }
+}
