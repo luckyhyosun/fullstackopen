@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils"
+
 interface ExerciseValue {
   periodLength: number,
   trainingDays: number,
@@ -8,11 +10,11 @@ interface ExerciseValue {
   average: number
 }
 
-const calculateExercises = (args: string[]): any => {
+const calculateExercises = (args: string[]): ExerciseValue => {
   const weekHours= args.slice(3)
   const exerciseHours = weekHours.map((arg) => {
     const value = Number(arg);
-    if(isNaN(value)){
+    if(isNotNumber(value)){
       throw new Error('Provided values were not numbers!')
     }
     return value
