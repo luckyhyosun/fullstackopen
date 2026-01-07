@@ -1,6 +1,6 @@
-const calculateBmi = (height:number, weight:number): [number, string]=> {
-  const squaredHeight = Math.pow(height/100, 2)
-  const bmi = weight / squaredHeight
+const calculateBmi = (args: string[]): string=> {
+  const squaredHeight = Math.pow(Number(args[0])/100, 2)
+  const bmi = Number(args[1]) / squaredHeight
   const result = parseFloat(bmi.toFixed(2))
 
   let range;
@@ -14,7 +14,7 @@ const calculateBmi = (height:number, weight:number): [number, string]=> {
     range = 'Obesity range'
   }
 
-  return [result, range]
+  return range
 }
 
-console.log(calculateBmi(180, 74))
+console.log(calculateBmi(process.argv))
