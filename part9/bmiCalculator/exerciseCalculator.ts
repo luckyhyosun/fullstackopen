@@ -7,11 +7,21 @@ interface ExerciseValue {
   target: number,
   average: number
 }
-const exerciseHours = [3, 0, 2, 4.5, 0, 3, 1]
 
-const calculateExercises = (hours:number[], targetNumber: number): ExerciseValue => {
-  const sum = hours.reduce((a, b) => a + b, 0)
-  const average = sum/hours.length
+const calculateExercises = (args: string[]): any => {
+  const weekHours= args.slice(3)
+  const exerciseHours = weekHours.map((arg) => {
+    const value = Number(arg);
+    if(isNaN(value)){
+      throw new Error('Provided values were not numbers!')
+    }
+    return value
+  })
+
+  const sum = exerciseHours.reduce((a, b) => a + b, 0)
+  const average = sum/exerciseHours.length
+  const targetNumber = Number(args[2])
+
   const success = () => {
     if(average > targetNumber){
       return true
@@ -34,8 +44,8 @@ const calculateExercises = (hours:number[], targetNumber: number): ExerciseValue
   }
 
   return {
-    periodLength: hours.length,
-    trainingDays: trainingDays(hours),
+    periodLength: exerciseHours.length,
+    trainingDays: trainingDays(exerciseHours),
     success: success(),
     rating: rating()[0],
     ratingDescription: rating()[1],
@@ -45,12 +55,11 @@ const calculateExercises = (hours:number[], targetNumber: number): ExerciseValue
 }
 
 try {
-  console.log(calculateExercises(exerciseHours, 2))
+  console.log(calculateExercises(process.argv))
 }catch (error: unknown) {
   let errorMessage = 'Error occurs!'
   if(error instanceof Error) {
     errorMessage += error.message
   }
-
   console.log(errorMessage);
 }
