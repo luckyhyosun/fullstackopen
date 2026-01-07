@@ -622,6 +622,10 @@ Frontend
 + npm run ts-node -- multiplier.ts
   - run TS file (multiplier.ts), as it would with Node.
 
++ npm install --save-dev ts-node-dev
+  - for auto-reloading
+  - It is meant to be used only with a **development environment** that takes care of recompilation on every change, like `nodemon`.
+
 ## Classification
 
 ###  API
@@ -5479,3 +5483,21 @@ lets the server push data to the client whenever something happens — like a ne
   let values: Array<number>;
   ```
   - [Examples](https://typescript-eslint.io/rules/array-type/#array-simple) of simple/ complex arrays.
+
++ **Use of prefix**
+  - If it is absolutely impossible to get rid of **an unused variable**, you can prefix it with an **underscore** to inform the compiler you have thought about it and there is nothing you can do.
+  - the example of the code below, `_req`:
+    ```ts
+    import express from 'express';
+    const app = express()
+
+    app.get('/ping', (_req, res) => {
+      res.send('pong')
+    })
+
+    const PORT = 3003;
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    })
+    ```
