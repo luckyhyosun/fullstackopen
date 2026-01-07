@@ -1,6 +1,13 @@
 {
-  //It prevents TypeScript from silently using the any type when it can’t infer a type.
   "compilerOptions": {
+    "target": "ES2022",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
+    "esModuleInterop": true,
+    "module": "node16"
   }
 }

@@ -5410,6 +5410,8 @@ lets the server push data to the client whenever something happens — like a ne
 + DefinitelyTyped ([Link](https://github.com/DefinitelyTyped/DefinitelyTyped)) : Most popular source for type declaration files.
 + TypeScript Playground ([Link](https://www.typescriptlang.org/play/?#code/PTAEHUFMBsGMHsC2lQBd5oBYoCoE8AHSAZVgCcBLA1UABWgEM8BzM+AVwDsATAGiwoBnUENANQAd0gAjQRVSQAUCEmYKsTKGYUAbpGF4OY0BoadYKdJMoL+gzAzIoz3UNEiPOofEVKVqAHSKymAAmkYI7NCuqGqcANag8ABmIjQUXrFOKBJMggBcISGgoAC0oACCbvCwDKgU8JkY7p7ehCTkVDQS2E6gnPCxGcwmZqDSTgzxxWWVoASMFmgYkAAeRJTInN3ymj4d-jSCeNsMq-wuoPaOltigAKoASgAywhK7SbGQZIIz5VWCFzSeCrZagNYbChbHaxUDcCjJZLfSDbExIAgUdxkUBIursJzCFJtXydajBBCcQQ0MwAUVWDEQC0gADVHBQGNJ3KAALygABEAAkYNAMOB4GRonzFBTBPB3AERcwABS0+mM9ysygc9wASmCKhwzQ8ZC8iHFzmB7BoXzcZmY7AYzEg-Fg0HUiQ58D0Ii8fLpDKZgj5SWxfPADlQAHJhAA5SASPlBFQAeS+ZHegmdWkgR1QjgUrmkeFATjNOmGWH0KAQiGhwkuNok4uiIgMHGxCyYrA4PCCJSAA))
 
++ tsconfig [documentation](https://www.typescriptlang.org/tsconfig/)
+
 + How TypeScript works
   1. **Development Environment**: In this step, it is often easier to make use of real-time compilation and auto-reloading so one can see the resulting changes more quickly.
   2. 🚀 **Build step**:  During this step, all TypeScript code is compiled into JavaScript in a separate folder.
