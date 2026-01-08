@@ -1,4 +1,4 @@
-import calculateBmi from './bmiCalculator';
+import { calculateBmi } from './bmiCalculator';
 import { isNotNumber } from "./utils"
 import express from 'express';
 const app = express()

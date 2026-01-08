@@ -1,4 +1,4 @@
-const calculateBmi = (weight:number, height:number): string=> {
+export const calculateBmi = (weight:number, height:number): string=> {
   const squaredHeight = Math.pow(height/100, 2)
   const bmi = weight/ squaredHeight
   const result = parseFloat(bmi.toFixed(2))
@@ -16,5 +16,3 @@ const calculateBmi = (weight:number, height:number): string=> {
 
   return range
 }
-
-export default calculateBmi
