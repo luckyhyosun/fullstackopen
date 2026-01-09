@@ -16,3 +16,20 @@ export const calculateBmi = (weight:number, height:number): string=> {
 
   return range
 }
+
+if (require.main === module) {
+  const args = process.argv.slice(2)
+
+  if (args.length < 2) {
+    console.error('Please provide height and weight as arguments')
+  }
+
+  const height = Number(args[0])
+  const weight = Number(args[1])
+
+  if (isNaN(height) || isNaN(weight)) {
+    console.error('Height and weight must be valid numbers')
+  }
+
+  console.log(calculateBmi(weight, height))
+}
