@@ -1,7 +1,10 @@
 import { calculateBmi } from './bmiCalculator';
 import { isNotNumber } from "./utils"
+
 import express from 'express';
 const app = express()
+
+app.use(express.json())
 
 app.get('/hello', (_req, res) => {
   res.send('Hello Full Stack!')
@@ -22,6 +25,12 @@ app.get('/bmi', (req, res) => {
     height,
     result
   })
+})
+
+app.post('/exercises', (req, _res) => {
+  const { daily_exercises, target } = req.body
+
+  console.log(daily_exercises, target );
 })
 
 const PORT = 3003
