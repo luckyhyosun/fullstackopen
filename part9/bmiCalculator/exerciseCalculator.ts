@@ -73,3 +73,18 @@ export const calculateExercises = (args: Arguments): ExerciseValue => {
 //   }
 //   console.log(errorMessage);
 // }
+
+if(require.main === module){
+  const target = Number(process.argv[2])
+  const daily_exercises = process.argv.slice(3).map((arg) => {
+  const value = Number(arg);
+  if(isNotNumber(value)){
+    throw new Error('Provided values were not numbers!')
+  }
+  return value
+})
+
+  const args = { daily_exercises, target}
+
+  console.log(calculateExercises(args))
+}
