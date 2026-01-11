@@ -10,8 +10,16 @@ interface ExerciseValue {
   average: number
 }
 
-const calculateExercises = (args: string[]): ExerciseValue => {
-  const weekHours= args.slice(3)
+interface Arguments {
+  target: number,
+  daily_exercises: number[]
+}
+
+export const calculateExercises = (args: Arguments): ExerciseValue => {
+  const targetNumber = args.target
+  const weekHours = args.daily_exercises
+
+  // const weekHours= args.slice(3)
   const exerciseHours = weekHours.map((arg) => {
     const value = Number(arg);
     if(isNotNumber(value)){
@@ -22,7 +30,7 @@ const calculateExercises = (args: string[]): ExerciseValue => {
 
   const sum = exerciseHours.reduce((a, b) => a + b, 0)
   const average = sum/exerciseHours.length
-  const targetNumber = Number(args[2])
+  // const targetNumber = Number(args[2])
 
   const success = () => {
     if(average > targetNumber){
@@ -56,12 +64,12 @@ const calculateExercises = (args: string[]): ExerciseValue => {
   }
 }
 
-try {
-  console.log(calculateExercises(process.argv))
-}catch (error: unknown) {
-  let errorMessage = 'Error occurs!'
-  if(error instanceof Error) {
-    errorMessage += error.message
-  }
-  console.log(errorMessage);
-}
+// try {
+//   console.log(calculateExercises(process.argv))
+// }catch (error: unknown) {
+//   let errorMessage = 'Error occurs!'
+//   if(error instanceof Error) {
+//     errorMessage += error.message
+//   }
+//   console.log(errorMessage);
+// }

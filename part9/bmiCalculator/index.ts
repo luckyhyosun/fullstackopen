@@ -1,4 +1,5 @@
 import { calculateBmi } from './bmiCalculator';
+import { calculateExercises } from './exerciseCalculator'
 import { isNotNumber } from "./utils"
 
 import express from 'express';
@@ -27,10 +28,11 @@ app.get('/bmi', (req, res) => {
   })
 })
 
-app.post('/exercises', (req, _res) => {
-  const { daily_exercises, target } = req.body
+app.post('/exercises', (req, res) => {
+  const { target, daily_exercises } = req.body
+  const result = calculateExercises({ target, daily_exercises })
 
-  console.log(daily_exercises, target );
+  res.send(result)
 })
 
 const PORT = 3003
