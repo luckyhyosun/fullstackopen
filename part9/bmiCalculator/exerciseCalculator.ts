@@ -17,20 +17,10 @@ interface Arguments {
 
 export const calculateExercises = (args: Arguments): ExerciseValue => {
   const targetNumber = args.target
-  const weekHours = args.daily_exercises
-
-  // const weekHours= args.slice(3)
-  const exerciseHours = weekHours.map((arg) => {
-    const value = Number(arg);
-    if(isNotNumber(value)){
-      throw new Error('Provided values were not numbers!')
-    }
-    return value
-  })
+  const exerciseHours = args.daily_exercises
 
   const sum = exerciseHours.reduce((a, b) => a + b, 0)
   const average = sum/exerciseHours.length
-  // const targetNumber = Number(args[2])
 
   const success = () => {
     if(average > targetNumber){
@@ -63,16 +53,6 @@ export const calculateExercises = (args: Arguments): ExerciseValue => {
     average: average
   }
 }
-
-// try {
-//   console.log(calculateExercises(process.argv))
-// }catch (error: unknown) {
-//   let errorMessage = 'Error occurs!'
-//   if(error instanceof Error) {
-//     errorMessage += error.message
-//   }
-//   console.log(errorMessage);
-// }
 
 if(require.main === module){
   const target = Number(process.argv[2])
