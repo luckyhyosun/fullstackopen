@@ -30,6 +30,17 @@ app.get('/bmi', (req, res) => {
 
 app.post('/exercises', (req, res) => {
   const { target, daily_exercises } = req.body
+
+  if(!target || !daily_exercises){
+    const error = "parameters missing"
+    res.status(422).send({error})
+  }
+
+  if(isNotNumber(target) || isNotNumber(daily_exercises)){
+    const error = "malformatted parameters"
+    res.status(400).send({error})
+  }
+
   const result = calculateExercises({ target, daily_exercises })
 
   res.send(result)
