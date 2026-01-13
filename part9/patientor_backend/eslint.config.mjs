@@ -17,6 +17,7 @@ export default tseslint.config({
   plugins: {
     "@stylistic": stylistic,
   },
+  // Prevent ESlint to interpret the files in the build directory
   ignores: ["build/*"],
   rules: {
     '@stylistic/semi': 'error',
