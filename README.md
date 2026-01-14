@@ -359,16 +359,16 @@ Frontend
 
 ## Future Plan
 - [ ] Typescript
-- [ ] Next.js
+- [x] Next.js
 - [ ] Vue.js
-- [ ] GraphQL
+- [x] GraphQL
 - [x] Redux.js
 - [x] Axios
 - [ ] [WebGL](https://thespatialstudio.de/en/xr-glossary/webgl)
 - [ ] [Three.js](https://threejs.org/)
 - [ ] Event-driven / Data-driven
 - [ ] Algorithm
-- [ ] CSS preprocessor](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor)
+- [ ] [CSS preprocessor](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor)
 - [ ] [Sentry](https://sentry.io/welcome/)
 - [ ] [Securing Software](https://cybersecuritybase.mooc.fi/module-2.1)
 - [ ] [Helmet](https://helmetjs.github.io/) : a security library of backend in Express applications.

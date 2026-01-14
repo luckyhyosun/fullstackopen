@@ -4,8 +4,8 @@ app.use(express.json());
 
 const PORT = '3003';
 
-app.get('/api/ping', (_req, res) => {
-  res.send('pong');
+app.get('/ping', (_req, res) => {
+  res.send('hellll yess');
 });
 
 app.listen(PORT, () => {
