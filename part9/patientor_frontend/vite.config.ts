@@ -7,8 +7,8 @@ export default defineConfig({
   server:{
     proxy: {
       //connect to backend
-      '/': {
-        target: 'http://localhost:3003/ping',
+      '/ping': {
+        target: 'http://localhost:3001',
         changeOrigin: true
       }
     }
