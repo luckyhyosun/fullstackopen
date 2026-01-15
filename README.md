@@ -5226,6 +5226,33 @@ These stages are usually:
 
 
 ✴️ **GraphQL Operations**
++ **Data Flow Summary** from Frontend to GraphQL backend
+  1. **Frontend Query: Customer**
+    - Says “I want a vegan burger and a lemonade.”
+  2. **HTTP/WebSocket: Waiter**
+    - Takes the order from the customer
+    - Knows how to talk to the kitchen, not how to cook
+  3. **Web Server(Express / Fastify) : Restaurant Entrance & Reception**
+    - Handles people coming in
+    - Makes sure orders are allowed in the building
+    - Routes orders to the right place
+  4. **Apollo Server: Head Chef**
+    - Reads the order
+    - Checks the menu (GraphQL schema)
+    - Decides which cooks (resolvers) should handle each part
+  5. **Resolvers: Cooks**
+    - Actually prepare the food
+    - Fetch ingredients (MongoDB)
+    - Combine everything correctly
+  6. **MongoDB: Pantry / Fridge**
+    - Stores all the ingredients
+  7. **Response: Plated Food**
+    - Finished dish ready to go out
+  8. **Apollo Client Cache: Serving Tray Memory**
+    - Remembers what was just served
+    - If the customer asks again, it may reuse it
+  9. **React Component: Customer Eating**
+    - Displays and uses the food
 + **Query** – asks for data (like `GET` in REST).
 + **Mutation** – modifies data (like `POST`, `PUT`, or `DELETE` in REST).
 + **Subscription** – keeps a live connection open to get updates automatically when data changes.
