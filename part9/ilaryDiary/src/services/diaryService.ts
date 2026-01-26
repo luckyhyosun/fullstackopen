@@ -3,8 +3,7 @@ import diaries from '../data/entries';
 import {
   DiaryEntry,
   NonSensitiveDiaryEntry,
-  Visibility,
-  Weather
+  NewDiaryEntry,
 } from '../types';
 
 const getEntries = ():DiaryEntry[] => {
@@ -20,13 +19,10 @@ const getNonSensitiveEntries = (): NonSensitiveDiaryEntry[]  => {
   }));
 };
 
-const addDiary = (date: string, weather: Weather, visibility: Visibility, comment: string): DiaryEntry => {
+const addDiary = (entry: NewDiaryEntry ): DiaryEntry => {
   const newDiaryEntry = {
     id: Math.max(...diaries.map(d => d.id)) + 1,
-    date,
-    weather,
-    visibility,
-    comment,
+    ...entry
   };
 
   diaries.push(newDiaryEntry);
