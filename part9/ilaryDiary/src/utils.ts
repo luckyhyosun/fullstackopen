@@ -1,4 +1,15 @@
-import { NewDiaryEntry } from './types';
+import { NewDiaryEntry, Weather } from './types';
+
+const isWeather = (str: string): str is Weather => {
+  return ['sunny', 'rainy', 'cloudy', 'stormy'].includes(str);
+};
+
+const parseWeather = (weather: unknown): Weather => {
+  if (!weather || !isString(weather) || !isWeather(weather)) {
+      throw new Error('Incorrect or missing weather: ' + weather);
+  }
+  return weather;
+};
 
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
@@ -25,7 +36,7 @@ const parseComment = (comment: unknown): string => {
 
 const toNewDiaryEntry = (object: unknown):NewDiaryEntry => {
   const newEntry: NewDiaryEntry = {
-    weather: 'cloudy', // fake the return value
+    weather: parseWeather(object.weather), // fake the return value
     visibility: 'great',
     date: parseDate(object.date),
     comment: parseComment(object.comment)
