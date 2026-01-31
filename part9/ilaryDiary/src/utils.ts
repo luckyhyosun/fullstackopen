@@ -1,7 +1,7 @@
 import { NewDiaryEntry, Weather } from './types';
 
-const isWeather = (str: string): str is Weather => {
-  return ['sunny', 'rainy', 'cloudy', 'stormy'].includes(str);
+const isWeather = (param: string): param is Weather => {
+  return Object.values(Weather).map(v => v.toString()).includes(param);
 };
 
 const parseWeather = (weather: unknown): Weather => {
