@@ -5,7 +5,7 @@ const isVisibility = (param: string): param is Visibility => {
 };
 
 const parseVisibility = (visibility: unknown): Visibility => {
-  if (!visibility || !isString(visibility) || !isVisibility(visibility)) {
+  if (!isString(visibility) || !isVisibility(visibility)) {
       throw new Error('Incorrect or missing visibility: ' + visibility);
   }
   return visibility;
@@ -45,15 +45,23 @@ const parseComment = (comment: unknown): string => {
   return comment;
 };
 
-const toNewDiaryEntry = (object: unknown):NewDiaryEntry => {
-  const newEntry: NewDiaryEntry = {
-    weather: parseWeather(object.weather), // fake the return value
-    visibility: parseVisibility(object.visibility),
-    date: parseDate(object.date),
-    comment: parseComment(object.comment)
-  };
+const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
+  if ( !object || typeof object !== 'object' ) {
+    throw new Error('Incorrect or missing data');
+  }
 
-  return newEntry;
+  if ('comment' in object && 'date' in object && 'weather' in object && 'visibility' in object)  {
+    const newEntry: NewDiaryEntry = {
+      weather: parseWeather(object.weather),
+      visibility: parseVisibility(object.visibility),
+      date: parseDate(object.date),
+      comment: parseComment(object.comment)
+    };
+
+    return newEntry;
+  }
+
+  throw new Error('Incorrect data: some fields are missing');
 };
 
 export default toNewDiaryEntry;

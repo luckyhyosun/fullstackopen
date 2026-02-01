@@ -6006,16 +6006,59 @@ lets the server push data to the client whenever something happens — like a ne
       console.log(errorMessage);
     }
     ```
-  * **enum** ([Link](https://www.typescriptlang.org/docs/handbook/enums.html)) is typically used when there is a set of predetermined values that are not expected to change in the future. But, usually, they are used for much tighter unchanging values (for example, weekdays, months, cardinal directions).
+  * However, the unknown type **does not allow any operations**, so that the code below does not compile. Because accessing the `object.fields` is not possible.
 
     ```ts
-    export enum Visibility {
-      Great = "great",
-      Good = "good",
-      Ok = "ok",
-      Poor = "poor",
-    }
+    const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
+      const newEntry: NewDiaryEntry = {
+        comment: parseComment(object.comment),
+        date: parseDate(object.date),
+        weather: parseWeather(object.weather),
+        visibility: parseVisibility(object.visibility),
+      };
+
+      return newEntry;
+    };
     ```
+
+    We can again fix the problem by type narrowing.
+
+    ```ts
+    const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
+      if (!object || typeof object !== "object") {
+        throw new Error("Incorrect or missing data");
+      }
+
+      if (
+        "comment" in object &&
+        "date" in object &&
+        "weather" in object &&
+        "visibility" in object
+      ) {
+        const newEntry: NewDiaryEntry = {
+          weather: parseWeather(object.weather),
+          visibility: parseVisibility(object.visibility),
+          date: parseDate(object.date),
+          comment: parseComment(object.comment),
+        };
+
+        return newEntry;
+      }
+
+      throw new Error("Incorrect data: some fields are missing");
+    };
+    ```
+
+* **enum** ([Link](https://www.typescriptlang.org/docs/handbook/enums.html)) is typically used when there is a set of predetermined values that are not expected to change in the future. But, usually, they are used for much tighter unchanging values (for example, weekdays, months, cardinal directions).
+
+  ```ts
+  export enum Visibility {
+    Great = "great",
+    Good = "good",
+    Ok = "ok",
+    Poor = "poor",
+  }
+  ```
 
 - **Type packages**
   - types for existing packages can be found by using `@types/` in terminal. Such as:
