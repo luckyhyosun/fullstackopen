@@ -1,11 +1,12 @@
 import patientsData from '../data/patients';
-import { Patient } from '../types';
+import { PatientEntry } from '../types';
 
-const getPatients = ():Patient[] => {
-  return patientsData.map(({id, name, dateOfBirth, gender, occupation}) => ({
+const getPatients = ():PatientEntry[] => {
+  return patientsData.map(({id, name, dateOfBirth, ssn, gender, occupation}) => ({
     id,
     name,
     dateOfBirth,
+    ssn,
     gender,
     occupation
   }));
