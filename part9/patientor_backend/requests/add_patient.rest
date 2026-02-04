@@ -5,6 +5,6 @@ Content-Type: application/json
   "name": "Hyosun",
   "dateOfBirth": "1987-10-24",
   "ssn": "optional comment",
-  "gender": "female",
+  "gender": "other",
   "occupation": "engineer"
 }

@@ -3,8 +3,7 @@ import { Patient, PatientEntry } from '../types';
 import { v1 as uuid } from 'uuid';
 
 const getPatients = ():PatientEntry[] => {
-  return patientsData.map(({id, name, dateOfBirth, ssn, gender, occupation}) => ({
-    id,
+  return patientsData.map(({name, dateOfBirth, ssn, gender, occupation}) => ({
     name,
     dateOfBirth,
     ssn,
