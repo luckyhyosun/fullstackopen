@@ -1,4 +1,5 @@
 import { NewDiaryEntry, Visibility, Weather } from './types';
+import { z } from 'zod';
 
 const isVisibility = (param: string): param is Visibility => {
   return Object.values(Visibility).map(v => v.toString()).includes(param);
@@ -38,11 +39,7 @@ const isString = (text: unknown): text is string => {
 };
 
 const parseComment = (comment: unknown): string => {
-  if (!comment || !isString(comment)) {
-    throw new Error('Incorrect or missing comment');
-  }
-
-  return comment;
+  return z.string().parse(comment);
 };
 
 const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
