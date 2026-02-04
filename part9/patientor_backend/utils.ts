@@ -1,7 +1,11 @@
-import { PatientEntry } from './types';
+import { PatientEntry, Gender } from './types';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
+};
+
+const isGender = (param: string): param is Gender => {
+  return Object.values(Gender).map(v => v.toString()).includes(param);
 };
 
 const parseName = (name: unknown): string => {
@@ -25,9 +29,9 @@ const parseSsn = (ssn: unknown): string => {
   return ssn;
 };
 
-const parseGender = (gender: unknown): string => {
-  if(!gender || !isString(gender)){
-    throw new Error ('Incorrect or missing gender');
+const parseGender = (gender: unknown): Gender => {
+  if(!gender || !isString(gender) || !isGender(gender)){
+    throw new Error ('Incorrect or missing gender' + gender);
   }
   return gender;
 };
