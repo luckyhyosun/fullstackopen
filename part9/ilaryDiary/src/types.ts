@@ -27,3 +27,7 @@ export interface DiaryEntry {
 export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
 
 export type NewDiaryEntry = z.infer<typeof newEntrySchema>;
+
+export interface DiaryEntry extends NewDiaryEntry {
+  id: number;
+}
