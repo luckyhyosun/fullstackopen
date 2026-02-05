@@ -38,10 +38,6 @@ const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
 
-const parseComment = (comment: unknown): string => {
-  return z.string().parse(comment);
-};
-
 const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
   if ( !object || typeof object !== 'object' ) {
     throw new Error('Incorrect or missing data');
@@ -52,7 +48,7 @@ const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
       weather: parseWeather(object.weather),
       visibility: parseVisibility(object.visibility),
       date: parseDate(object.date),
-      comment: parseComment(object.comment)
+      comment: z.string().parse(object.comment)
     };
 
     return newEntry;
