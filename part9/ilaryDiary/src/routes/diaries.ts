@@ -1,6 +1,6 @@
 import express from 'express';
 import diaryService from '../services/diaryService';
-import toNewDiaryEntry from '../utils';
+import NewEntrySchema from '../utils';
 import { z } from 'zod';
 
 const router = express.Router();
@@ -21,8 +21,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   try{
-    const newDiaryEntry = toNewDiaryEntry(req.body);
-
+    const newDiaryEntry = NewEntrySchema.parse(req.body);
     const addedEntry = diaryService.addDiary(newDiaryEntry);
     res.send(addedEntry);
   }catch (error:unknown){
