@@ -13,4 +13,4 @@ export const toNewPatientEntry = (object: unknown):PatientEntry => {
   return newPatientSchema.parse(object);
 };
 
-export default newPatientSchema;
+export default toNewPatientEntry;
