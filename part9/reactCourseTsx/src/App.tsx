@@ -1,4 +1,21 @@
-const Header = ({ name }) => {
+interface NameProps {
+  name: string
+}
+
+interface CoursePart {
+  name: string
+  exerciseCount: number
+}
+
+interface ContentProps {
+  parts: CoursePart[]
+}
+
+interface TotalProps {
+  total: number
+}
+
+const Header = ({ name }: NameProps) => {
   return (
     <div>
       <h1>{name}</h1>
@@ -6,17 +23,17 @@ const Header = ({ name }) => {
   )
 }
 
-const Content = ({ parts }) => {
+const Content = ({ parts }: ContentProps) => {
   return (
     <div>
-      {parts.map(part => (
+      {parts.map((part) => (
         <p key={part.name}>{part.name} {part.exerciseCount}</p>
       ))}
     </div>
   )
 }
 
-const Total = ({ total }) => {
+const Total = ({ total }: TotalProps) => {
   return (
     <div>
       <p>Number of exercises {total}</p>
