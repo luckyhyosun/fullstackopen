@@ -1,25 +1,25 @@
-const Header = (props) => {
+const Header = ({ name }) => {
   return (
     <div>
-      <h1>{props.name}</h1>
+      <h1>{name}</h1>
     </div>
   )
 }
 
-const Content = (props) => {
+const Content = ({ parts }) => {
   return (
     <div>
-      {props.parts.map(part => (
+      {parts.map(part => (
         <p key={part.name}>{part.name} {part.exerciseCount}</p>
       ))}
     </div>
   )
 }
 
-const Total = (props) => {
+const Total = ({ total }) => {
   return (
     <div>
-      <p>Number of exercises {props.total}</p>
+      <p>Number of exercises {total}</p>
     </div>
   )
 }
