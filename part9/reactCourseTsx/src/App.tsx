@@ -60,7 +60,7 @@ const Total = ({ total }: TotalProps) => {
 
 const App = () => {
   const courseName = "Half Stack application development";
-  const courseParts = [
+  const courseParts: CoursePart[] = [
   {
     name: "Fundamentals",
     exerciseCount: 10,
@@ -85,13 +85,8 @@ const App = () => {
     description: "Confusing description",
     backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
     kind: "background"
-  },
-  {
-  name: "TypeScript in frontend",
-  exerciseCount: 10,
-  kind: "basic",
-},
-];
+  }
+  ];
 
   const totalExercises = courseParts.reduce((sum, part) => sum + part.exerciseCount, 0);
 
