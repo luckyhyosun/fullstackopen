@@ -60,6 +60,7 @@ const Total = ({ total }: TotalProps) => {
 
 const App = () => {
   const courseName = "Half Stack application development";
+
   const courseParts: CoursePart[] = [
   {
     name: "Fundamentals",
@@ -89,6 +90,28 @@ const App = () => {
   ];
 
   const totalExercises = courseParts.reduce((sum, part) => sum + part.exerciseCount, 0);
+
+  const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
+    );
+  };
+
+  courseParts.forEach(part => {
+    switch(part.kind){
+      case "basic":
+        console.log('see the following:', part.description);
+        break;
+      case "group":
+        console.log('see the following:', part.groupProjectCount);
+        break;
+      case "background":
+        console.log('see the following:', part.backgroundMaterial);
+        break;
+      default:
+      assertNever(part);
+    }
+  })
 
   return (
     <div>
