@@ -43,10 +43,32 @@ const Header = ({ name }: NameProps) => {
 }
 
 const Content = ({ parts }: ContentProps) => {
+  const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
+    );
+  };
+
+  parts.forEach(part => {
+    switch(part.kind){
+      case "basic":
+        console.log('see the following:', part.description);
+        break;
+      case "group":
+        console.log('see the following:', part.groupProjectCount);
+        break;
+      case "background":
+        console.log('see the following:', part.backgroundMaterial);
+        break;
+      default:
+      assertNever(part);
+    }
+  })
+
   return (
     <div>
       {parts.map((part) => (
-        <p key={part.name}>{part.name} {part.exerciseCount}</p>
+        <Part part = {part} />
       ))}
     </div>
   )
@@ -58,6 +80,18 @@ const Total = ({ total }: TotalProps) => {
       <p>Number of exercises {total}</p>
     </div>
   )
+}
+
+interface PartProps {
+  part: CoursePart;
+}
+
+const Part = ({ part }: PartProps) => {
+  return (
+    <div>
+      <p>{part.name} {part.exerciseCount}</p>
+    </div>
+  );
 }
 
 const App = () => {
@@ -92,28 +126,6 @@ const App = () => {
   ];
 
   const totalExercises = courseParts.reduce((sum, part) => sum + part.exerciseCount, 0);
-
-  const assertNever = (value: never): never => {
-    throw new Error(
-      `Unhandled discriminated union member: ${JSON.stringify(value)}`
-    );
-  };
-
-  courseParts.forEach(part => {
-    switch(part.kind){
-      case "basic":
-        console.log('see the following:', part.description);
-        break;
-      case "group":
-        console.log('see the following:', part.groupProjectCount);
-        break;
-      case "background":
-        console.log('see the following:', part.backgroundMaterial);
-        break;
-      default:
-      assertNever(part);
-    }
-  })
 
   return (
     <div>
