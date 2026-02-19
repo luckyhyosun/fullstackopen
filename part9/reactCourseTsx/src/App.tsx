@@ -25,7 +25,12 @@ interface CoursePartBackground extends CoursePartDesc {
   kind: "background"
 }
 
-type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+interface CoursePartSpecial extends CoursePartDesc {
+  requirements: string[];
+  kind: "special"
+}
+
+type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartSpecial;
 
 interface ContentProps {
   parts: CoursePart[]
@@ -59,6 +64,9 @@ const Content = ({ parts }: ContentProps) => {
         break;
       case "background":
         console.log('see the following:', part.backgroundMaterial);
+        break;
+      case "special":
+        console.log('see the following:', part.requirements);
         break;
       default:
       assertNever(part);
@@ -122,7 +130,14 @@ const App = () => {
     description: "Confusing description",
     backgroundMaterial: "https://type-level-typescript.com/template-literal-types",
     kind: "background"
-  }
+  },
+  {
+  name: "Backend development",
+  exerciseCount: 21,
+  description: "Typing the backend",
+  requirements: ["nodejs", "jest"],
+  kind: "special"
+}
   ];
 
   const totalExercises = courseParts.reduce((sum, part) => sum + part.exerciseCount, 0);
