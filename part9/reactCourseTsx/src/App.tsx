@@ -95,11 +95,21 @@ interface PartProps {
 }
 
 const Part = ({ part }: PartProps) => {
-  return (
-    <div>
-      <p>{part.name} {part.exerciseCount}</p>
-    </div>
-  );
+  if(part.kind === 'group'){
+    return (
+        <div>
+          <h3>{part.name} {part.exerciseCount}</h3>
+          <p>Project exercises: {part.groupProjectCount}</p>
+        </div>
+      );
+  }else{
+    return (
+        <div>
+          <h3>{part.name} {part.exerciseCount}</h3>
+          <p>{part.description}</p>
+        </div>
+      );
+  }
 }
 
 const App = () => {
