@@ -1,15 +1,26 @@
-import { useState } from 'react';
-
 interface Note {
   id: string,
   content: string
 }
 
-const App = () => {
-  const [newNote, setNewNote] = useState('');
-  const [notes, setNotes] = useState<Note[]>([]);
+import { useState } from "react";
 
-  return null
+const App = () => {
+  const [notes, setNotes] = useState<Note[]>([
+    { id: '1', content: 'testing' }
+  ]);
+  const [newNote, setNewNote] = useState('');
+
+  return (
+
+    <div>
+      <ul>
+        {notes.map(note =>
+          <li key={note.id}>{note.content}</li>
+        )}
+      </ul>
+    </div>
+  )
 }
 
 export default App
