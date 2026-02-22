@@ -3,9 +3,16 @@ interface Note {
   content: string
 }
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const App = () => {
+  useEffect(() => {
+    axios.get('http://localhost:3001/notes').then(response => {
+      console.log(response.data);
+    })
+  }, [])
+
   const [notes, setNotes] = useState<Note[]>([
     { id: '1', content: 'testing' }
   ]);
