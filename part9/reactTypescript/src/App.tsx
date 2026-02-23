@@ -8,7 +8,7 @@ import axios from "axios";
 
 const App = () => {
   useEffect(() => {
-    axios.get('http://localhost:3001/notes').then(response => {
+    axios.get<Note[]>('http://localhost:3001/notes').then(response => {
       console.log(response.data);
     })
   }, [])
