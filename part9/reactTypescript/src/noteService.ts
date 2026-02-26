@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Note, NewNote } from "./types";
+import type { Note, NewNote } from "./types";
 
 const baseUrl = 'http://localhost:3001/notes'
 
