@@ -7,7 +7,7 @@ export default defineConfig({
   server:{
     proxy: {
       //connect to backend
-      '/ping': {
+      '/api/diaries': {
         target: 'http://localhost:3000',
         changeOrigin: true
       }
