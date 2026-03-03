@@ -4,7 +4,7 @@ import axios from "axios";
 
 function App() {
   useEffect(() => {
-    axios.get('/ping').then(response => {
+    axios.get('/api/diaries').then(response => {
       console.log(response.data);
     })
   }, [])
