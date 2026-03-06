@@ -1,13 +1,20 @@
-import { useEffect } from "react";
-import axios from "axios";
-
+import { useEffect, useState } from "react";
+import { Diary } from './types';
+import diaryService from './services/diary';
 
 function App() {
+  const [diaries, setDiaries] = useState<Diary[]>([]);
   useEffect(() => {
-    axios.get('/api/diaries').then(response => {
-      console.log(response.data);
-    })
-  }, [])
+    const fetchDiaries = async () => {
+      const diaries = await diaryService.getAllDiaries();
+
+      setDiaries(diaries);
+    }
+    void fetchDiaries();
+  }, []);
+
+  console.log(diaries);
+
 
   return (
     <>
