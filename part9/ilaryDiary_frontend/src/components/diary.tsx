@@ -7,8 +7,9 @@ interface Props {
 const DiaryLog = ({data}: Props) => {
   return(
     <div>
-      date: {data.date}
-      weather: {data.weather}
+      <strong>{data.date}</strong>
+      <p><strong>visibility: </strong> {data.visibility} <br />
+      <strong>weather</strong>: {data.weather}</p>
     </div>
   );
 };

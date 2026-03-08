@@ -16,7 +16,7 @@ function App() {
 
   return (
     <>
-      <h1>ilary diary</h1>
+      <h2>Diary Entries</h2>
       {diaries.map(diary => (
         <DiaryComponent key={diary.id} data={diary}/>
       ))}
