@@ -1,8 +1,8 @@
-const addDiary = (event) => {
-  event.preventDefault();
-}
-
 const NewEntry = () => {
+  const addDiary = (event:React.SyntheticEvent) => {
+    event.preventDefault();
+  }
+
   return (
     <>
       <form onSubmit={addDiary}>
