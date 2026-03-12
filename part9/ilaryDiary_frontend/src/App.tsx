@@ -15,10 +15,15 @@ function App() {
     void fetchDiaries();
   }, []);
 
+  const submitNewDiary = (values) => {
+    console.log("add new a diary");
+    console.log(values);
+  }
+
   return (
     <>
       <h2>Add a new Entry</h2>
-      <NewEntry />
+      <NewEntry onSubmit={submitNewDiary}/>
       <h2>Diary Entries</h2>
       {diaries.map(diary => (
         <DiaryComponent key={diary.id} data={diary} />

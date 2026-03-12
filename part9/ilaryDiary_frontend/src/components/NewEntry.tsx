@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import { DiaryWithoutID, Weather, Visibility } from '../types';
 
-const NewEntry = () => {
+interface Props {
+  onSubmit: (values: DiaryWithoutID) => void;
+}
+
+const NewEntry = ({ onSubmit }: Props) => {
   const [date, setDate] = useState('');
   const [visibility, setVisibility] = useState('');
   const [weather, setWeather] = useState('');
@@ -8,6 +13,13 @@ const NewEntry = () => {
 
   const addDiary = (event:React.SyntheticEvent) => {
     event.preventDefault();
+
+    onSubmit({
+      date,
+      visibility: visibility as Visibility,
+      weather: weather as Weather,
+      comment
+    })
   }
 
   return (

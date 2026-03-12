@@ -18,4 +18,7 @@ export interface Diary {
   date: string;
   weather: Weather;
   visibility: Visibility;
+  comment: string;
 }
+
+export type DiaryWithoutID = Omit<Diary, "id">;
