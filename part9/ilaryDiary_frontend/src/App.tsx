@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Diary } from './types';
+import { Diary, DiaryWithoutID } from './types';
 import diaryService from './services/diary';
 import DiaryComponent from './components/Diary';
 import NewEntry from './components/NewEntry';
@@ -15,7 +15,7 @@ function App() {
     void fetchDiaries();
   }, []);
 
-  const submitNewDiary = (values) => {
+  const submitNewDiary = (values: DiaryWithoutID) => {
     console.log("add new a diary");
     console.log(values);
   }
