@@ -16,7 +16,6 @@ function App() {
   }, []);
 
   const submitNewDiary = (values: DiaryWithoutID) => {
-    console.log("add new a diary");
     console.log(values);
   }
 
