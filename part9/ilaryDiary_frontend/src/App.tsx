@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Diary, DiaryWithoutID } from './types';
 import diaryService from './services/diary';
@@ -6,6 +7,9 @@ import NewEntry from './components/NewEntry';
 
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
+  const [error, setError] = useState<string>();
+
+
   useEffect(() => {
     const fetchDiaries = async () => {
       const diaries = await diaryService.getAllDiaries();
@@ -15,8 +19,24 @@ function App() {
     void fetchDiaries();
   }, []);
 
-  const submitNewDiary = (values: DiaryWithoutID) => {
-    console.log(values);
+  const submitNewDiary = async (values: DiaryWithoutID) => {
+    try {
+      console.log(values);
+      const diary = await diaryService.createDiary(values);
+    }catch(e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if (e?.response?.data && typeof e?.response?.data === "string") {
+          const message = e.response.data.replace('Something went wrong. Error: ', '');
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
   }
 
   return (
