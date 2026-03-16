@@ -9,7 +9,6 @@ function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [error, setError] = useState<string>();
 
-
   useEffect(() => {
     const fetchDiaries = async () => {
       const diaries = await diaryService.getAllDiaries();
@@ -21,8 +20,10 @@ function App() {
 
   const submitNewDiary = async (values: DiaryWithoutID) => {
     try {
-      console.log(values);
-      const diary = await diaryService.createDiary(values);
+      const newDiary = await diaryService.createDiary(values);
+      console.log(newDiary);
+
+      setDiaries(diaries.concat(newDiary))
     }catch(e: unknown) {
       if (axios.isAxiosError(e)) {
         if (e?.response?.data && typeof e?.response?.data === "string") {
