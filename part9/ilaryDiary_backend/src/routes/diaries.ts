@@ -40,6 +40,8 @@ const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Nex
 };
 
 router.post('/', newDiaryParser, (req: Request<unknown, unknown, NewDiaryEntry>, res: Response<DiaryEntry>) => {
+  console.log("req.body: ", req.body);
+
   const addedEntry = diaryService.addDiary(req.body);
   res.json(addedEntry);
 });
