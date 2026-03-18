@@ -9,9 +9,13 @@ const getAllDiaries = async () => {
 }
 
 const createDiary = async (object: DiaryWithoutID) => {
-  const { data } = await axios.post<Diary>(baseURL, object);
-
-  return data;
-}
+  try {
+    const { data } = await axios.post<Diary>(baseURL, object);
+    return data;
+  } catch (error) {
+    console.error('POST error:', error.response?.data);  // Add this
+    throw error;
+  }
+};
 
 export default { getAllDiaries, createDiary }
