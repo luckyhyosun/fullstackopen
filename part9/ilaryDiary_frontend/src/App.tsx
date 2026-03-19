@@ -4,6 +4,7 @@ import { Diary, DiaryWithoutID } from './types';
 import diaryService from './services/diary';
 import DiaryComponent from './components/Diary';
 import NewEntry from './components/NewEntry';
+import ErrorMessage from './components/Error';
 
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
@@ -43,6 +44,7 @@ function App() {
   return (
     <>
       <h2>Add a new Entry</h2>
+      <ErrorMessage error={error}/>
       <NewEntry onSubmit={submitNewDiary}/>
       <h2>Diary Entries</h2>
       {diaries.map(diary => (
