@@ -30,9 +30,17 @@ function App() {
         if (e?.response?.data && typeof e?.response?.data === "string") {
           const message = e.response.data.replace('Something went wrong. Error: ', '');
           console.error(message);
+          console.error(e.response?.data);
           setError(message);
         } else {
-          setError("Unrecognized axios error");
+          const errorData = e?.response?.data?.error;
+          if (Array.isArray(errorData)) {
+            const messages = errorData.map(err => typeof err === 'string' ?
+              err : `${err.path}: ${values[err.path]}` || JSON.stringify(err));
+            setError(`Validation errors: ${messages.join('/ ')}`);
+          } else {
+            setError(`Unrecognized axios error: ${errorData || 'Unknown error'}`);
+          }
         }
       } else {
         console.error("Unknown error", e);
