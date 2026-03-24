@@ -36,7 +36,7 @@ function App() {
           const errorData = e?.response?.data?.error;
           if (Array.isArray(errorData)) {
             const messages = errorData.map(err => typeof err === 'string' ?
-              err : `${err.path}: ${values[err.path]}`;
+              err : `${err.path}: ${values[err.path]}` || JSON.stringify(err));
             setError(`Validation errors: ${messages.join('/ ')}`);
           } else {
             setError(`Unrecognized axios error: ${errorData || 'Unknown error'}`);
