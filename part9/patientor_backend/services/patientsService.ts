@@ -12,6 +12,10 @@ const getPatients = ():PatientEntry[] => {
   }));
 };
 
+const getPatientById = (id:string) => {
+  return patientsData.find(id === patientsData.id)
+};
+
 const addPatient = (object: PatientEntry): Patient => {
   const id = uuid();
   const newPatient = {
@@ -25,5 +29,6 @@ const addPatient = (object: PatientEntry): Patient => {
 
 export default {
   getPatients,
+  getPatientById,
   addPatient
 };

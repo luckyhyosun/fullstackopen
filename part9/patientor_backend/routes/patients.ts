@@ -10,9 +10,11 @@ router.get('/', (_req, res) => {
   res.send(patientsService.getPatients());
 });
 
-router.get('/:id', (_req, res) => {
+router.get('/:id', (req, _res) => {
+  console.log(req);
 
-})
+  // res.send(patientsService.getPatientById(id));
+});
 
 const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
   try{
