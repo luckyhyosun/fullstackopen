@@ -1,26 +1,23 @@
 import patientsData from '../data/patients';
-import { Patient, PatientEntry } from '../types';
-import { v1 as uuid } from 'uuid';
+import { PatientEntry } from '../types';
 
-const getPatients = ():PatientEntry[] => {
-  return patientsData.map(({name, dateOfBirth, ssn, gender, occupation}) => ({
+const getPatients = (): PatientEntry[] => {
+  return patientsData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+    id,
     name,
     dateOfBirth,
-    ssn,
     gender,
     occupation
   }));
 };
 
-const getPatientById = (id:string) => {
-  return patientsData.find(id === patientsData.id)
+const getPatientById = (id: string): PatientEntry | undefined => {
+  return patientsData.find((patient) => patient.id === id);
 };
 
-const addPatient = (object: PatientEntry): Patient => {
-  const id = uuid();
+const addPatient = (object: PatientEntry): PatientEntry => {
   const newPatient = {
-    id: id,
-    ...object
+    ...object,
   };
 
   patientsData.push(newPatient);
