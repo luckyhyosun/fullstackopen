@@ -21,6 +21,10 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
 
   const openModal = (): void => setModalOpen(true);
 
+  const openDetailPage = (id: string): void => {
+    console.log(id);
+  };
+
   const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
@@ -61,6 +65,7 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
             <TableCell>Gender</TableCell>
             <TableCell>Occupation</TableCell>
             <TableCell>Health Rating</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -71,6 +76,11 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
                 <HealthRatingBar showText={false} rating={1} />
+              </TableCell>
+              <TableCell>
+                <Button onClick={() => openDetailPage(patient.id)}>
+                  🔰 Show Detail
+                </Button>
               </TableCell>
             </TableRow>
           ))}
