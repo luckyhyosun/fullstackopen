@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import axios from 'axios';
 
@@ -21,8 +22,10 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
 
   const openModal = (): void => setModalOpen(true);
 
-  const openDetailPage = (id: string): void => {
-    console.log(id);
+  const navigate = useNavigate();
+
+  const openDetailPage = (id: string) => {
+    navigate(`/patients/${id}`);
   };
 
   const closeModal = (): void => {
