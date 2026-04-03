@@ -13,8 +13,12 @@ export interface Diagnosis {
   latin?: string;
 }
 
-export interface Entry {
-
+interface BaseEntry {
+  id: string;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
 export interface Patient {
@@ -24,7 +28,7 @@ export interface Patient {
   ssn: string;
   gender: string;
   occupation: string;
-  entries: Entry[];
+  entries: BaseEntry[];
 }
 
 export type PatientEntry = Omit<Patient, 'ssn' | 'entries'>;
