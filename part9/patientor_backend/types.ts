@@ -7,6 +7,15 @@ export enum Gender {
   Other = 'other'
 }
 
+export enum OccupationalHealthcare {
+  "speicalist" = "MD House",
+  "employerNmae" = "HyPD"
+}
+
+export enum Hospital {
+  "speicalist" = "MD House"
+}
+
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
@@ -28,6 +37,14 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
+interface OccupationalHealthcareEntry extends BaseEntry {
+  type: "OccupationalHealthcare";
+}
+
+interface HospitalEntry extends BaseEntry {
+  type: "Hospital";
+}
+
 interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
@@ -42,6 +59,11 @@ export interface Patient {
   occupation: string;
   entries: BaseEntry[];
 }
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
 
 export type PatientEntry = Omit<Patient, 'ssn' | 'entries'>;
 
