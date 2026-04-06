@@ -10,26 +10,12 @@ export enum Gender {
   Other = "other"
 }
 
-export enum OccupationalHealthcare {
-  "speicalist" = "MD House",
-  "employerNmae" = "HyPD"
-}
-
-export enum Hospital {
-  "speicalist" = "MD House"
-}
-
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
   "HighRisk" = 2,
   "CriticalRisk" = 3
 }
-
-export type Entry =
-  | HospitalEntry
-  | OccupationalHealthcareEntry
-  | HealthCheckEntry;
 
 interface BaseEntry {
   id: string;
@@ -39,18 +25,26 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
-interface OccupationalHealthcareEntry extends BaseEntry {
-  type: Entry;
+interface HospitalEntry extends BaseEntry {
+  type: "Hospital";
+  discharge: { date: string; criteria: string };
 }
 
-interface HospitalEntry extends BaseEntry {
-  type: Entry;
+interface OccupationalHealthcareEntry extends BaseEntry {
+  type: "OccupationalHealthcare";
+  employerName: string;
+  sickLeave?: { startDate: string; endDate: string };
 }
 
 interface HealthCheckEntry extends BaseEntry {
-  type: Entry;
+  type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
 }
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
 
 export interface Patient {
   id: string;
@@ -59,7 +53,7 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
-  entries: Entry;
+  entries: Entry[];
 }
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;

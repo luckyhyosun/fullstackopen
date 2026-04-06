@@ -33,8 +33,12 @@ const PatientDetail = () => {
         {patient.occupation}
 
         <hr />
-        {patient.entries[0].date} - {patient.entries[0].description}<br />
-        {patient.entries[0].diagnosisCodes.join('/ ')} <br />
+        {patient.entries.map(entry => (
+          <div key={entry.id}>
+            {entry.date} - {entry.description}<br />
+            {entry.diagnosisCodes?.join(' / ')}
+          </div>
+        ))}
       </div>
     </div>
   );
