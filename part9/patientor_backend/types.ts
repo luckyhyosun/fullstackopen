@@ -38,15 +38,15 @@ interface BaseEntry {
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
-  type: "OccupationalHealthcare";
+  type: Entry;
 }
 
 interface HospitalEntry extends BaseEntry {
-  type: "Hospital";
+  type: Entry;
 }
 
 interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
+  type: Entry;
   healthCheckRating: HealthCheckRating;
 }
 
@@ -55,7 +55,7 @@ export interface Patient {
   name: string;
   dateOfBirth: string;
   ssn: string;
-  gender: string;
+  gender: Gender;
   occupation: string;
   entries: BaseEntry[];
 }
