@@ -8,6 +8,9 @@ const PatientDetail = () => {
 
   const { id } = useParams<{ id: string }>();
 
+  console.log(patient);
+
+
   useEffect(() => {
     if (!id) return;
 
@@ -28,6 +31,10 @@ const PatientDetail = () => {
         {patient.ssn}<br />
         {patient.gender}<br />
         {patient.occupation}
+
+        <hr />
+        {patient.entries[0].date} - {patient.entries[0].description}<br />
+        {patient.entries[0].diagnosisCodes.join('/ ')} <br />
       </div>
     </div>
   );
