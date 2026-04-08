@@ -7,6 +7,7 @@ import { Patient, Diagnosis } from "../../types";
 const PatientDetail = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+  const [addEntryText, setAddEntryText] = useState("");
 
   const { id } = useParams<{ id: string }>();
 
@@ -15,6 +16,10 @@ const PatientDetail = () => {
   const getDiagnosisName = (code: string): string => {
     const diagnosis = diagnoses.find(d => d.code === code);
     return diagnosis ? diagnosis.name : 'Unknown diagnosis';
+  };
+
+  const hanleAddEntryText = (text: string) => {
+    setAddEntryText(text);
   };
 
   useEffect(() => {
@@ -59,6 +64,9 @@ const PatientDetail = () => {
           </div>
         ))}
       </div>
+
+      <input type="text" value= {addEntryText} onChange={e => hanleAddEntryText(e.target.value)}/>
+      <button>Add Entry</button>
     </div>
   );
 };
