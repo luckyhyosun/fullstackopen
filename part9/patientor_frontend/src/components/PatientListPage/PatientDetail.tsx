@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
-import diagnosisService from "../../services/diagnosis";
-import { Patient, Diagnosis } from "../../types";
+import { Patient } from "../../types";
 import EntryDetail from "./EntryDetail";
 
 const PatientDetail = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
-  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [addEntryText, setAddEntryText] = useState("");
 
   const { id } = useParams<{ id: string }>();
@@ -17,15 +15,6 @@ const PatientDetail = () => {
   const hanleAddEntryText = (text: string) => {
     setAddEntryText(text);
   };
-
-  useEffect(() => {
-  const fetchDiagnoses = async () => {
-      const data = await diagnosisService.getAll();
-      setDiagnoses(data);
-    };
-
-    void fetchDiagnoses();
-  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -52,6 +41,8 @@ const PatientDetail = () => {
         {patient.entries.map(entry => (
           <EntryDetail key={entry.id} entry={entry} />
         ))}
+
+        <hr />
         <input type="text" value= {addEntryText} onChange={e => hanleAddEntryText(e.target.value)}/>
         <button>Add Entry</button>
       </div>
