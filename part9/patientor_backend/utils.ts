@@ -1,4 +1,4 @@
-import { Gender } from './types';
+import { Gender, Diagnosis } from './types';
 import { z } from 'zod';
 
 export const newPatientSchema = z.object({
@@ -10,4 +10,11 @@ export const newPatientSchema = z.object({
   entries: z.array(z.any())
 });
 
-export default newPatientSchema;
+export const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> =>  {
+  if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+    // we will just trust the data to be in correct form
+    return [] as Array<Diagnosis['code']>;
+  }
+
+  return object.diagnosisCodes as Array<Diagnosis['code']>;
+};
