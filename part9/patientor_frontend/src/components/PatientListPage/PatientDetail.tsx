@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
 import diagnosisService from "../../services/diagnosis";
 import { Patient, Diagnosis } from "../../types";
+import EntryDetail from "./EntryDetail";
 
 const PatientDetail = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -12,11 +13,6 @@ const PatientDetail = () => {
   const { id } = useParams<{ id: string }>();
 
   console.log(patient);
-
-  const getDiagnosisName = (code: string): string => {
-    const diagnosis = diagnoses.find(d => d.code === code);
-    return diagnosis ? diagnosis.name : 'Unknown diagnosis';
-  };
 
   const hanleAddEntryText = (text: string) => {
     setAddEntryText(text);
@@ -54,19 +50,11 @@ const PatientDetail = () => {
 
         <hr />
         {patient.entries.map(entry => (
-          <div key={entry.id}>
-            {entry.date} - {entry.description}<br />
-            {entry.diagnosisCodes?.map(code => (
-              <li key={code}>
-                {code} {getDiagnosisName(code)}
-              </li>
-            ))}
-          </div>
+          <EntryDetail key={entry.id} entry={entry} />
         ))}
+        <input type="text" value= {addEntryText} onChange={e => hanleAddEntryText(e.target.value)}/>
+        <button>Add Entry</button>
       </div>
-
-      <input type="text" value= {addEntryText} onChange={e => hanleAddEntryText(e.target.value)}/>
-      <button>Add Entry</button>
     </div>
   );
 };
