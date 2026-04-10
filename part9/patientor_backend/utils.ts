@@ -1,7 +1,7 @@
 import { Gender, Diagnosis } from './types';
 import { z } from 'zod';
 
-export const newPatientSchema = z.object({
+const newPatientSchema = z.object({
   name: z.string(),
   dateOfBirth: z.string(),
   ssn: z.string(),
@@ -18,3 +18,5 @@ export const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> =
 
   return object.diagnosisCodes as Array<Diagnosis['code']>;
 };
+
+export default newPatientSchema;

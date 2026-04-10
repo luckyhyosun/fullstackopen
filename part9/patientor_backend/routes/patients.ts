@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import patientsService from '../services/patientsService';
-import newPatientSchema from '../utils';
+import newPatientSchema from "../utils";
 import { newPatientEntry, PatientEntry } from '../types';
 import { z } from 'zod';
 import { v1 as uuid } from 'uuid';
