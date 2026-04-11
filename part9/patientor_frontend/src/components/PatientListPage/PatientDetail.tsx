@@ -2,19 +2,15 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
 import { Patient } from "../../types";
+import AddEntryForm from "../AddEntry/AddEntryForm";
 import EntryDetail from "../AddEntry/EntryDetail";
 
 const PatientDetail = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
-  const [addEntryText, setAddEntryText] = useState("");
 
   const { id } = useParams<{ id: string }>();
 
   console.log(patient);
-
-  const hanleAddEntryText = (text: string) => {
-    setAddEntryText(text);
-  };
 
   useEffect(() => {
     if (!id) return;
@@ -38,13 +34,12 @@ const PatientDetail = () => {
         {patient.occupation}
 
         <hr />
+        <AddEntryForm />
+
+        <hr />
         {patient.entries.map(entry => (
           <EntryDetail key={entry.id} entry={entry} />
         ))}
-
-        <hr />
-        <input type="text" value= {addEntryText} onChange={e => hanleAddEntryText(e.target.value)}/>
-        <button>Add Entry</button>
       </div>
     </div>
   );
