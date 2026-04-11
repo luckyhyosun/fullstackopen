@@ -1,5 +1,5 @@
 import patientsData from '../data/patients';
-import { PatientEntry, Entry, EntryForm } from '../types';
+import { Patient, PatientEntry, Entry, EntryForm } from '../types';
 import { v1 as uuid } from 'uuid';
 
 const getPatients = (): PatientEntry[] => {
@@ -12,11 +12,11 @@ const getPatients = (): PatientEntry[] => {
   }));
 };
 
-const getPatientById = (id: string): PatientEntry | undefined => {
+const getPatientById = (id: string): Patient | undefined => {
   return patientsData.find((patient) => patient.id === id);
 };
 
-const addPatient = (object: PatientEntry): PatientEntry => {
+const addPatient = (object: Patient): Patient => {
   const newPatient = {
     ...object,
   };

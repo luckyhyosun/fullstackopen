@@ -34,7 +34,7 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Array<Diagnosis['code']>;
+  diagnosisCodes?: Array<Diagnosis['code']> | undefined;
 }
 
 interface HospitalEntry extends BaseEntry {
@@ -45,7 +45,7 @@ interface HospitalEntry extends BaseEntry {
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
-  sickLeave?: { startDate: string; endDate: string };
+  sickLeave?: { startDate: string; endDate: string } | undefined;
 }
 
 interface HealthCheckEntry extends BaseEntry {
@@ -78,7 +78,7 @@ export type EntryForm = {
   date: string;
   specialist: string;
   healthCheckRating: HealthCheckRating;
-  diagnosisCodes?: string[];
+  diagnosisCodes?: string[] | undefined;
 };
 
 // Define special omit for unions

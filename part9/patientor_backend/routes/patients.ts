@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import patientsService from '../services/patientsService';
 import { newPatientSchema, newEntrySchema } from "../utils";
-import { newPatientEntry, PatientEntry } from '../types';
+import { newPatientEntry, Patient } from '../types';
 import { z } from 'zod';
 import { v1 as uuid } from 'uuid';
 
@@ -39,11 +39,12 @@ const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Nex
   }
 };
 
-router.post('/', newPatientParser, (req: Request<unknown, unknown, newPatientEntry>, res: Response<PatientEntry>) => {
+router.post('/', newPatientParser, (req: Request<unknown, unknown, newPatientEntry>, res: Response<Patient>) => {
   const id = uuid();
-  const newPatient = {
-    id: id,
-    ...req.body
+  const newPatient: Patient = {
+    id,
+    ...req.body,
+    entries: req.body.entries ?? []
   };
   const addedPatient = patientsService.addPatient(newPatient);
   res.json(addedPatient);
