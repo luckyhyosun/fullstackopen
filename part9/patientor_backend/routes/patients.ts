@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import patientsService from '../services/patientsService';
-import { newPatientSchema } from "../utils";
+import { newPatientSchema, newEntrySchema } from "../utils";
 import { newPatientEntry, PatientEntry } from '../types';
 import { z } from 'zod';
 import { v1 as uuid } from 'uuid';
@@ -47,6 +47,16 @@ router.post('/', newPatientParser, (req: Request<unknown, unknown, newPatientEnt
   };
   const addedPatient = patientsService.addPatient(newPatient);
   res.json(addedPatient);
+});
+
+router.post("/:id/entries", (req, res) => {
+  const { id } = req.params;
+
+  const parsedEntry = newEntrySchema.parse(req.body);
+
+  const newEntry = patientsService.addEntry(id, parsedEntry);
+
+  res.json(newEntry);
 });
 
 router.use(errorMiddleware);

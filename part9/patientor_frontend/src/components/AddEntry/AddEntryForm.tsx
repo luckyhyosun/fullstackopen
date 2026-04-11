@@ -1,20 +1,25 @@
 import { useState } from "react";
 import patientService from "../../services/patients";
+import { EntryForm, HealthCheckRating } from "../../types";
 
 const AddEntryForm = ({ patientId }: { patientId: string }) => {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<EntryForm>({
+    type: "HealthCheck",
     description: "",
     date: "",
     specialist: "",
-    rating: "",
-    code: "",
+    healthCheckRating: HealthCheckRating.Healthy,
+    diagnosisCodes: [],
   });
 
-  const handleInput = (field: keyof typeof form, value: string) => {
-    setForm({
-      ...form,
+  const handleInput = <K extends keyof EntryForm>(
+    field: K,
+    value: EntryForm[K]
+  ) => {
+    setForm((prev) => ({
+      ...prev,
       [field]: value,
-    });
+    }));
   };
 
   const handleAddEntry = async () => {
@@ -53,16 +58,25 @@ const AddEntryForm = ({ patientId }: { patientId: string }) => {
 
       <div>
         HealthCheck rating
-        <input type="text"
-        value={form.rating}
-        onChange={(e) => handleInput("rating", e.target.value)}/>
+        <input type="number"
+        min={0}
+        max={3}
+        value={form.healthCheckRating}
+        onChange={(e) =>
+          handleInput("healthCheckRating", Number(e.target.value))
+        }/>
       </div>
 
       <div>
         Diagnosis Code
         <input type="text"
-        value={form.code}
-        onChange={(e) => handleInput("code", e.target.value)}/>
+        value={form.diagnosisCodes?.join(", ") || ""}
+        onChange={(e) =>
+          handleInput(
+            "diagnosisCodes",
+            e.target.value.split(",").map(s => s.trim())
+          )
+        }/>
       </div>
 
       <button onClick={() => handleAddEntry()}>Add Entry</button>

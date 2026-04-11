@@ -56,11 +56,12 @@ export interface Patient {
 }
 
 export type EntryForm = {
+  type: "HealthCheck";
   description: string;
   date: string;
   specialist: string;
-  rating: string;
-  code: string;
+  healthCheckRating: HealthCheckRating;
+  diagnosisCodes?: string[];
 };
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;

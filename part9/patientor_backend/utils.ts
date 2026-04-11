@@ -10,6 +10,15 @@ export const newPatientSchema = z.object({
   entries: z.array(z.any())
 });
 
+export const newEntrySchema = z.object({
+  type: z.literal("HealthCheck"),
+  description: z.string(),
+  date: z.string(),
+  specialist: z.string(),
+  healthCheckRating: z.number().int().min(0).max(3),
+  diagnosisCodes: z.array(z.string()).optional(),
+});
+
 export const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> =>  {
   if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
     // we will just trust the data to be in correct form
