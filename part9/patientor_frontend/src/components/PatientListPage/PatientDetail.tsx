@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import patientService from "../../services/patients";
 import { Patient } from "../../types";
-import EntryDetail from "./EntryDetail";
+import EntryDetail from "../AddEntry/EntryDetail";
 
 const PatientDetail = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
