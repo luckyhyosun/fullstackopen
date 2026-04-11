@@ -1,6 +1,7 @@
 import { useState } from "react";
+import patientService from "../../services/patients";
 
-const AddEntryForm = () => {
+const AddEntryForm = ({ patientId }: { patientId: string }) => {
   const [form, setForm] = useState({
     description: "",
     date: "",
@@ -14,6 +15,14 @@ const AddEntryForm = () => {
       ...form,
       [field]: value,
     });
+  };
+
+  const handleAddEntry = async () => {
+    const entryValues = form;
+    const newEntry = await patientService.addEntry(patientId, entryValues);
+
+    console.log(newEntry);
+
   };
 
   return (
@@ -56,7 +65,7 @@ const AddEntryForm = () => {
         onChange={(e) => handleInput("code", e.target.value)}/>
       </div>
 
-      <button>Add Entry</button>
+      <button onClick={() => handleAddEntry()}>Add Entry</button>
     </>
   );
 };

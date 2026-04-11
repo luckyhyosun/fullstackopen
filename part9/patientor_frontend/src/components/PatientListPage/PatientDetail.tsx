@@ -33,12 +33,13 @@ const PatientDetail = () => {
         {patient.gender}<br />
         {patient.occupation}
 
-        <hr />
-        <AddEntryForm />
 
         <hr />
         {patient.entries.map(entry => (
-          <EntryDetail key={entry.id} entry={entry} />
+          <div key={entry.id}>
+            <AddEntryForm patientId={entry.id} />
+            <EntryDetail entry={entry} />
+          </div>
         ))}
       </div>
     </div>

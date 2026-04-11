@@ -24,7 +24,6 @@ interface BaseEntry {
   specialist: string;
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
-
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
   discharge: { date: string; criteria: string };
@@ -55,5 +54,13 @@ export interface Patient {
   dateOfBirth?: string;
   entries: Entry[];
 }
+
+export type EntryForm = {
+  description: string;
+  date: string;
+  specialist: string;
+  rating: string;
+  code: string;
+};
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
