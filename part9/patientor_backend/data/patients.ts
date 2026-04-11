@@ -1,5 +1,5 @@
 import { PatientEntry } from '../types';
-import newPatientSchema from '../utils';
+import { newPatientSchema } from '../utils';
 
 const data = [
     {
