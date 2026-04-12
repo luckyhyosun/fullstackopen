@@ -6097,3 +6097,10 @@ lets the server push data to the client whenever something happens — like a ne
       console.log(`Server running on port ${PORT}`);
     });
     ```
+
+✴️ **CI/CD**
+
+- Continuous Integration
+- Continuous Delivery and Continuous Deployment
+
+Explain more about git branches on [here](https://www.atlassian.com/git/tutorials/using-branches)
