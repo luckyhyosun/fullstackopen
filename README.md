@@ -6100,7 +6100,19 @@ lets the server push data to the client whenever something happens — like a ne
 
 ✴️ **CI/CD**
 
-- Continuous Integration
+- Continuous Integration ([Link](https://www.martinfowler.com/articles/continuousIntegration.html))
 - Continuous Delivery and Continuous Deployment
 
 Explain more about git branches on [here](https://www.atlassian.com/git/tutorials/using-branches)
+
+Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/continuous-integration-vs-delivery-vs-deployment)
+
+**Steps for Development**
+
+- Lint: Keep our code clean, maintainable, and merge compatible
+- Build: Put all of our code together into runnable software bundle
+- Test: Ensure we don't break existing features
+- Package: Put it all together in an easily movable batch
+- Deploy: Make it available to the world
+
+- **Using a good CI system (such as GitHub Actions) will allow us to do this all automagically**.
