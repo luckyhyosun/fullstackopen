@@ -6101,7 +6101,7 @@ lets the server push data to the client whenever something happens — like a ne
 ✴️ **CI/CD**
 
 - Continuous Integration ([Link](https://www.martinfowler.com/articles/continuousIntegration.html))
-- Continuous Delivery and Continuous Deployment
+- Continuous Delivery and Continuous Deployment ([Link](https://martinfowler.com/bliki/ContinuousDelivery.html))
 
 Explain more about git branches on [here](https://www.atlassian.com/git/tutorials/using-branches)
 
@@ -6116,3 +6116,5 @@ Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/co
 - Deploy: Make it available to the world
 
 - **Using a good CI system (such as GitHub Actions) will allow us to do this all automagically**.
+
+- CD is often used when one talks about CI that also takes care of deployments.
