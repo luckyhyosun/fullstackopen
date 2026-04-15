@@ -6118,3 +6118,5 @@ Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/co
 - **Using a good CI system (such as GitHub Actions) will allow us to do this all automagically**.
 
 - CD is often used when one talks about CI that also takes care of deployments.
+
+But some concepts frequently cross the line between CI and CD and, as we discussed above, deployment sometimes makes sense to consider CD as part of CI.
