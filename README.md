@@ -6120,3 +6120,7 @@ Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/co
 - CD is often used when one talks about CI that also takes care of deployments.
 
 But some concepts frequently cross the line between CI and CD and, as we discussed above, deployment sometimes makes sense to consider CD as part of CI.
+
+**Git workflows**
+
+- [Link](https://www.atlassian.com/git/tutorials/comparing-workflows)
