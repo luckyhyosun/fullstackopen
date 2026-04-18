@@ -6125,3 +6125,4 @@ But some concepts frequently cross the line between CI and CD and, as we discuss
 
 - [Git workflows](https://www.atlassian.com/git/tutorials/comparing-workflows)
 - [Book: Accelerate](https://itrevolution.com/product/accelerate/)
+- [Paper: The Role of Continuous Delivery in IT and Organizational Performance](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2681909)
