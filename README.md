@@ -6126,3 +6126,9 @@ But some concepts frequently cross the line between CI and CD and, as we discuss
 - [Git workflows](https://www.atlassian.com/git/tutorials/comparing-workflows)
 - [Book: Accelerate](https://itrevolution.com/product/accelerate/)
 - [Paper: The Role of Continuous Delivery in IT and Organizational Performance](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2681909)
+
+**Good to know**
+
+- Deploying is done from the **main branch** so we need to make sure that the tests are run against a copy of the main branch with other's changes merged in.
+- The main branch contains the code running in the **production environment**.
+  - For example, if a bug is found and it needs to be fixed, you can pull a copy of the main branch (knowing it is the code running in production), fix the bug, and make a pull request back to the main branch. This is relatively straight forward
