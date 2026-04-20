@@ -6124,6 +6124,7 @@ But some concepts frequently cross the line between CI and CD and, as we discuss
 **Helpful Links**
 
 - [Git workflows](https://www.atlassian.com/git/tutorials/comparing-workflows)
+- [Pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
 - [Book: Accelerate](https://itrevolution.com/product/accelerate/)
 - [Paper: The Role of Continuous Delivery in IT and Organizational Performance](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2681909)
 
