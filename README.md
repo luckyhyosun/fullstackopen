@@ -6121,7 +6121,7 @@ Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/co
 
 **What is CD?**
 
-- CD is often used when one talks about CI that also takes care of deployments.
+- CD is the practice where the main branch is kept deployable at all times. In general, this is also frequently coupled with automated deployments triggered from merges into the main branch.
 
 But some concepts frequently cross the line between CI and CD and, as we discussed above, deployment sometimes makes sense to consider CD as part of CI.
 
