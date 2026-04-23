@@ -6107,6 +6107,13 @@ Explain more about git branches on [here](https://www.atlassian.com/git/tutorial
 
 Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/continuous-integration-vs-delivery-vs-deployment)
 
+**Helpful Links**
+
+- [Git workflows](https://www.atlassian.com/git/tutorials/comparing-workflows)
+- [Pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
+- [Book: Accelerate](https://itrevolution.com/product/accelerate/)
+- [Paper: The Role of Continuous Delivery in IT and Organizational Performance](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2681909)
+
 **What is CI?**
 
 - Strictly speaking, CI refers to **merging developer changes to the main branch**(opens in a new tab) often, Wikipedia even helpfully suggests: "several times a day".
@@ -6124,13 +6131,6 @@ Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/co
 - CD is the practice where the main branch is kept deployable at all times. In general, this is also frequently coupled with automated deployments triggered from merges into the main branch.
 
 But some concepts frequently cross the line between CI and CD and, as we discussed above, deployment sometimes makes sense to consider CD as part of CI.
-
-**Helpful Links**
-
-- [Git workflows](https://www.atlassian.com/git/tutorials/comparing-workflows)
-- [Pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
-- [Book: Accelerate](https://itrevolution.com/product/accelerate/)
-- [Paper: The Role of Continuous Delivery in IT and Organizational Performance](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2681909)
 
 **Good to know**
 
