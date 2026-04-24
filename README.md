@@ -6137,3 +6137,13 @@ But some concepts frequently cross the line between CI and CD and, as we discuss
 - Deploying is done from the **main branch** so we need to make sure that the tests are run against a copy of the main branch with other's changes merged in.
 - The main branch contains the code running in the **production environment**.
   - For example, if a bug is found and it needs to be fixed, you can pull a copy of the main branch (knowing it is the code running in production), fix the bug, and make a pull request back to the main branch. This is relatively straight forward
+
+**Goal of CI/CD**
+
+- Better, faster software development with fewer preventable bugs and better team cooperation.
+- To do that, think of CI as the answer to these questions:
+  - How to make sure that tests run on all code that will be deployed?
+  - How to make sure that the main branch is deployable at all times?
+  - How to ensure that builds will be consistent and will always work on the platform it'd be deploying to?
+  - How to make sure that the changes don't overwrite each other?
+  - How to make deployments happen at the click of a button or automatically when one merges to the main branch?
