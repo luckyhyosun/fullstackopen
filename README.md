@@ -6124,7 +6124,15 @@ Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/co
   - Package: Put it all together in an easily movable batch
   - Deploy: Make it available to the world
 
-- Using a good CI system (such as GitHub Actions) will allow us to do this all automagically.
+- Some common steps in a CI setup include linting, testing, and building. What are the specific tools for taking care of these steps in the ecosystem of the language you picked?
+
+  : In a typical CI setup for the **JavaScript/TypeScript** ecosystem, several well-established tools are used to handle linting, testing, and building. For linting, **ESLint** is widely adopted to analyze code for potential errors and enforce consistent coding standards. It is often used alongside **Prettier**, which automatically formats code to maintain a uniform style across the project.
+
+  For testing, **Jest** is one of the most popular frameworks, providing features for unit testing, mocking, and code coverage. Other alternatives include **Mocha**, which is more flexible and often paired with assertion libraries, and **Vitest**, a newer and faster option especially suited for projects using modern tooling.
+
+  When it comes to building the project, tools like **Webpack** and **Vite** are commonly used to bundle and optimize code for production. If the project uses **TypeScript**, the TypeScript compiler is also involved to convert TypeScript into JavaScript.
+
+  All of these steps are typically automated using a CI platform such as **GitHub Actions**, which runs the linting, testing, and build processes whenever code is pushed to the repository. Other CI tools like **GitLab CI/CD** or **Jenkins** can serve the same purpose, ensuring that code changes are continuously checked and validated.
 
 **What is CD?**
 
@@ -6147,3 +6155,12 @@ But some concepts frequently cross the line between CI and CD and, as we discuss
   - How to ensure that builds will be consistent and will always work on the platform it'd be deploying to?
   - How to make sure that the changes don't overwrite each other?
   - How to make deployments happen at the click of a button or automatically when one merges to the main branch?
+
+**Server setup**
+
+For companies with strict data‑residency rules, sensitive IP, or regulatory obligations, this level of control is often a decisive advantage, even when cloud CI would otherwise be more convenient.
+
+- [Jenkins](https://www.jenkins.io/): self-hosted setup
+  - For larger projects where more resources are needed or in larger companies where there are multiple teams and projects to take advantage of it.
+- [Github Action](https://github.com/features/actions): cloud-based setup
+  - In general, if you have a small to medium software project that doesn't have any special requirements (e.g. a need for a graphics card to run tests), a cloud-based solution is probably best.
