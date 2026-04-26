@@ -6110,6 +6110,7 @@ Explain CI/CD [Link](https://www.atlassian.com/continuous-delivery/principles/co
 **Helpful Links**
 
 - [Git workflows](https://www.atlassian.com/git/tutorials/comparing-workflows)
+- [Github Action workflow](https://docs.github.com/en/actions/get-started/understand-github-actions#workflows)
 - [Pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
 - [Book: Accelerate](https://itrevolution.com/product/accelerate/)
 - [Paper: The Role of Continuous Delivery in IT and Organizational Performance](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2681909)
