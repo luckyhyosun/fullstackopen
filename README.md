@@ -6165,3 +6165,13 @@ For companies with strict data‑residency rules, sensitive IP, or regulatory ob
   - For larger projects where more resources are needed or in larger companies where there are multiple teams and projects to take advantage of it.
 - [Github Action](https://github.com/features/actions): cloud-based setup
   - In general, if you have a small to medium software project that doesn't have any special requirements (e.g. a need for a graphics card to run tests), a cloud-based solution is probably best.
+
+**Job vs Step**
+
+- Job
+  - Step
+  - Step
+- Job
+  - Step
+
+The jobs will be run in parallel and the steps in each job will be executed sequentially.
