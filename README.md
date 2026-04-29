@@ -6165,6 +6165,7 @@ For companies with strict data‑residency rules, sensitive IP, or regulatory ob
   - For larger projects where more resources are needed or in larger companies where there are multiple teams and projects to take advantage of it.
 - [Github Action](https://github.com/features/actions): cloud-based setup
   - In general, if you have a small to medium software project that doesn't have any special requirements (e.g. a need for a graphics card to run tests), a cloud-based solution is probably best.
+  - To learn more about **which events** can be used to trigger workflows, please refer to [GitHub Action's documentation](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows).
 
 **Job vs Step**
 
@@ -6175,3 +6176,13 @@ For companies with strict data‑residency rules, sensitive IP, or regulatory ob
   - Step
 
 The jobs will be run in parallel and the steps in each job will be executed sequentially.
+
+**YAML**
+
+[YAML](https://docs.ansible.com/projects/ansible/latest/reference_appendices/YAMLSyntax.html) is a recursive acronym for "YAML Ain't Markup Language". As the name might hint, its goal is to be human-readable, and it is commonly used for configuration files.
+
+A basic workflow contains three elements in a YAML document. These three elements are:
+
+- name: Yep, you guessed it, the name of the workflow
+- (on) triggers: The events that trigger the workflow to be executed
+- jobs: The separate jobs that the workflow will execute (a basic workflow might contain only one job).
