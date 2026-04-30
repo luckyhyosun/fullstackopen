@@ -6183,6 +6183,6 @@ The jobs will be run in parallel and the steps in each job will be executed sequ
 
 A basic workflow contains three elements in a YAML document. These three elements are:
 
-- name: Yep, you guessed it, the name of the workflow
+- name: the name of the workflow
 - (on) triggers: The events that trigger the workflow to be executed
 - jobs: The separate jobs that the workflow will execute (a basic workflow might contain only one job).
