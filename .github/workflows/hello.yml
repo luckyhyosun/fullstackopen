@@ -13,5 +13,4 @@ jobs:
         run: |
           echo "Hello World!"
       - name: Run date
-        run: |
-          echo date [-u|--utc|--universal]
+        run: date [-u|--utc|--universal]
