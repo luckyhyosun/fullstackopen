@@ -14,3 +14,5 @@ jobs:
           echo "Hello World!"
       - name: Run date
         run: date -u +"%a %b %d %H:%M:%S UTC %Y"
+      - name: Run ls -l
+        run: ls -l
