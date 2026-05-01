@@ -16,4 +16,4 @@ jobs:
       - name: Install dependencies
         run: npm install eslint @eslint/js --save-dev
       - name: Check style
-        run: npx eslint --init
+        run: npx eslint
