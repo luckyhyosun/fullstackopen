@@ -6186,3 +6186,8 @@ A basic workflow contains three elements in a YAML document. These three element
 - name: the name of the workflow
 - (on) triggers: The events that trigger the workflow to be executed
 - jobs: The separate jobs that the workflow will execute (a basic workflow might contain only one job).
+
+**Automating the deployment**
+
+- [Fly.io](https://fly.io/)
+- [Render](https://render.com/)
