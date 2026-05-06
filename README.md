@@ -6190,6 +6190,9 @@ A basic workflow contains three elements in a YAML document. These three element
 **Automating the deployment**
 
 - [Fly.io](https://fly.io/)
+  ```
+  fly tokens create deploy
+  ```
 - [Render](https://render.com/)
 
 **Process**
