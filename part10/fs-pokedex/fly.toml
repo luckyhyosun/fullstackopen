@@ -1,0 +1,30 @@
+app = "fs-pokedex-lucky"
+primary_region = "ord"
+
+[build]
+builder = "heroku"
+
+[env]
+  NODE_ENV = "production"
+
+[[services]]
+  internal_port = 3000
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+[checks]
+  [checks.alive]
+    grace_period = "5s"
+    interval = "30s"
+    method = "get"
+    path = "/version"
+    protocol = "http"
+    timeout = "5s"
+    type = "http"
