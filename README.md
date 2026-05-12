@@ -6195,3 +6195,12 @@ A basic workflow contains three elements in a YAML document. These three element
 **Process**
 
 - [Process section](https://fly.io/docs/reference/configuration/#the-processes-section)
+
+**Pull Request**
+
+Why using pull requests?
+
+- Even a seasoned developer can often overlook some issues in their code: we all know of the tunnel vision effect.
+- A reviewer can have a different perspective and offer a different point of view.
+- After reading through your changes, at least one other developer will be familiar with the changes you've made.
+- Using PRs allows you to automatically run all tasks in your CI pipeline before the code gets to the main branch. GitHub Actions provides a trigger for pull requests.
