@@ -6204,3 +6204,5 @@ Why using pull requests?
 - A reviewer can have a different perspective and offer a different point of view.
 - After reading through your changes, at least one other developer will be familiar with the changes you've made.
 - Using PRs allows you to automatically run all tasks in your CI pipeline before the code gets to the main branch. GitHub Actions provides a trigger for pull requests.
+
+- [Even trigger workflow](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)
