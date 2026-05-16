@@ -6206,3 +6206,11 @@ Why using pull requests?
 - Using PRs allows you to automatically run all tasks in your CI pipeline before the code gets to the main branch. GitHub Actions provides a trigger for pull requests.
 
 - [Even trigger workflow](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)
+
+**Versioning**
+
+- [Sementic versioning](https://semver.org/)
+  ```text
+  {major}.{minor}.{patch}
+  ```
+- Hash versioning: 32 character long version numbers
