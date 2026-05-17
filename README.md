@@ -6210,7 +6210,15 @@ Why using pull requests?
 **Versioning**
 
 - [Sementic versioning](https://semver.org/)
+
   ```text
   {major}.{minor}.{patch}
   ```
-- Hash versioning: 32 character long version numbers
+
+  - Ideal for official software releases
+
+- Hash versioning (or artifact naming)
+  - 32 character long version numbers
+  - Works best during development
+  - In a typical setup, **development** builds use hash‑based artifact names. This allows every build, lint, and test run to be tied directly to a specific commit.
+  - When code is **merged into the main branch**, **CI** runs the full build and test pipeline again and then **assigns a semantic version number**.
