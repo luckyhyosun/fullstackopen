@@ -6222,5 +6222,3 @@ Why using pull requests?
   - Works best during development
   - In a typical setup, **development** builds use hash‑based artifact names. This allows every build, lint, and test run to be tied directly to a specific commit.
   - When code is **merged into the main branch**, **CI** runs the full build and test pipeline again and then **assigns a semantic version number**.
-
-- From the outside, it’s perfectly reasonable to say the project uses semantic versioning and ignore the hash‑based naming used internally. The only version that matters to users—the released one—is the **semantic version**.
