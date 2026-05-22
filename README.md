@@ -6224,3 +6224,25 @@ Why using pull requests?
   - When code is **merged into the main branch**, **CI** runs the full build and test pipeline again and then **assigns a semantic version number**.
 
 - From the outside, it’s perfectly reasonable to say the project uses semantic versioning and ignore the hash‑based naming used internally. The only version that matters to users—the released one—is the **semantic version**.
+
+**Advice**
+
+- To have a separate repository for getting the configuration right, and when it is done, to copy the right configurations to the actual repository.
+
+- It is possible to install a tool such as [act](https://github.com/nektos/act) that makes it possible to run your workflows locally.
+
+- It is a good idea to **[protect](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)** your most important branch that should never be broken: the main.
+  - From the CI point of view, the most important protection is **requiring status checks to pass before a PR can be merged into the main branch**.
+  - This means that if you have set up GitHub Actions to run, e.g., linting and testing tasks, then until all the lint errors are fixed and all the tests pass, the PR cannot be merged.
+- To set up protection:
+  1. navigate to the repository "Settings" from the top menu inside the repository
+  2. In the left-side menu, select "Branches".
+  3. Click "Add branch ruleset".
+  4. Select the default branch as branch target criteria (that is, the main if not set otherwise).
+  5. Remember also to set the enforcement status as active!
+  6. "Require status checks to pass before merging" is necessary for you to fully utilize the power of GitHub Actions.
+  7. Check "Require branches to be up to date before merging" is a good idea.
+  8. Note that the _checks_ equal to the names of the jobs in your workflow, so mine is defines as follows:
+     ```text
+     simple_deployment_pipeline
+     ```
