@@ -2,7 +2,6 @@ app = "fs-pokedex-lucky"
 primary_region = "ord"
 
 [build]
-builder = "heroku/buildpacks:20"
 
 [env]
   NODE_ENV = "production"
