@@ -24,6 +24,7 @@ primary_region = "ord"
     interval = "30s"
     method = "get"
     path = "/version"
+    port = 3000
     protocol = "http"
     timeout = "5s"
     type = "http"
