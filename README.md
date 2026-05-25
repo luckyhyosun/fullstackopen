@@ -6229,6 +6229,12 @@ Why using pull requests?
 
 - To have a separate repository for getting the configuration right, and when it is done, to copy the right configurations to the actual repository.
 
+- **Permission**:
+  1. Go to your repository settings
+  2. select actions -> general
+  3. ensure that your token has read and write permissions
+     ![Permission img](https://courses.mooc.fi/api/v0/files/course/463de96b-4d52-411e-aa96-8ee315f1211b/images/JdnXjdwAdKrpFvvFd7Wi7lrUdz61Se.png)
+
 - It is possible to install a tool such as [act](https://github.com/nektos/act) that makes it possible to run your workflows locally.
 
 - It is a good idea to **[protect](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)** your most important branch that should never be broken: the main.

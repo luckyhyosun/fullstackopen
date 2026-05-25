@@ -28,6 +28,12 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - name: Notify Discord on success
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: "success"
+          title: "Lucky made it!🍀"
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.75.0
         env:
@@ -37,8 +43,13 @@ jobs:
     needs: [deploy]
     if: ${{ needs.deploy.result == 'failure' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: sarisia/actions-status-discord@v1
-        if: always()
+      - name: Notify Discord on failure
+        uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: "failure"
+          title: "Lucky's build fail...😢"
+          description: "Commit [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) by ${{ github.actor }} broke the build: ${{ github.event.head_commit.message }}"
