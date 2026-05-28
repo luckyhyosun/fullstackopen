@@ -6252,3 +6252,7 @@ Why using pull requests?
      ```text
      simple_deployment_pipeline
      ```
+
+✴️ **Container**
+
+is a modern tool utilized in the latter parts of the software lifecycle. Containers encapsulate your application into a single package. This package will include the application and all of its dependencies. As a result, each container can run isolated from the other containers.
