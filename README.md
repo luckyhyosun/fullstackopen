@@ -6255,4 +6255,11 @@ Why using pull requests?
 
 ✴️ **Container**
 
-is a modern tool utilized in the latter parts of the software lifecycle. Containers encapsulate your application into a single package. This package will include the application and all of its dependencies. As a result, each container can run isolated from the other containers.
+is a modern tool utilized in the latter parts of the software lifecycle. Containers **encapsulate your application into a single package**. This package will include the application and all of its dependencies. As a result, each container can run isolated from the other containers.
+
+Containers isolate applications from the host system, limiting their access to files and system resources by default. Developers can explicitly grant access (for example, mounting specific directories or exposing devices) and define resource limits such as CPU, memory, network, and storage. This controlled isolation improves security, reproducibility, and portability across environments.
+
+To be more specific, containers are a form of OS‑level virtualization. The closest comparison is
+
+- a virtual machine (VM): VMs let you run multiple operating systems on a single physical host, each with its own full OS stack.
+- Containers, by contrast, share the host’s operating system and **run your application in an isolated user-space environment**. Because containers don’t boot a separate OS, they have far less overhead than VMs and are typically used to run a single process or service efficiently.
