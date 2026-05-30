@@ -6263,3 +6263,10 @@ To be more specific, containers are a form of OS‑level virtualization. The clo
 
 - a virtual machine (VM): VMs let you run multiple operating systems on a single physical host, each with its own full OS stack.
 - Containers, by contrast, share the host’s operating system and **run your application in an isolated user-space environment**. Because containers don’t boot a separate OS, they have far less overhead than VMs and are typically used to run a single process or service efficiently.
+
+**Docker**
+
+- run docker
+  ```text
+  docker container run IMAGE-NAME
+  ```
