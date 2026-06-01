@@ -6270,3 +6270,63 @@ To be more specific, containers are a form of OS‑level virtualization. The clo
   ```text
   docker container run IMAGE-NAME
   ```
+- pull docker image
+
+  ```text
+  docker pull hello-world
+  ```
+
+- Start Ubuntu container with bash
+
+  ```text
+  docker run -it ubuntu bash
+  ```
+
+  The prompt will change to something like `root@<container-id>:/#.`
+
+- List all of the containers
+
+  ```text
+  docker container ls -a
+  ```
+
+- Start container
+
+  ```text
+  docker start
+  ```
+
+- Start a specific container
+
+  ```text
+  docker start -i CONTAINER-ID-OR-CONTAINER-NAME
+  ```
+
+- Kill the specific container
+
+  ```text
+  docker kill CONTAINER-ID-OR-CONTAINER-NAME
+  ```
+
+- Install [Nano](https://www.nano-editor.org/) inside of Linux (Ubuntu, Debian)
+  - Since the container is running Ubuntu (Linux), I must use `apt-get` inside it.
+
+    ```text
+    docker start -i CONTAINER-ID-OR-CONTAINER-NAME
+    ```
+
+  - `apt`is a package manage, like Homebrew for mac
+
+    ```text
+    apt-get update && apt-get install -y nano
+    ```
+
+  - `apt-get update` — refreshes the list of available packages from Ubuntu's servers
+  - `apt-get install -y nano` — installs Nano (-y means "yes to all prompts" so it doesn't ask for confirmation)
+
+- Run nano
+  ```
+  nano FILE_PATH
+  ```
+
+  - `FILE_PATH` is like `/usr/src/app/index.js`
