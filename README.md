@@ -6324,9 +6324,39 @@ To be more specific, containers are a form of OS‑level virtualization. The clo
   - `apt-get update` — refreshes the list of available packages from Ubuntu's servers
   - `apt-get install -y nano` — installs Nano (-y means "yes to all prompts" so it doesn't ask for confirmation)
 
+- Add a file inside of container
+
+  ```
+  mkdir -p /usr/src/app
+  ```
+
 - Run nano
+
   ```
   nano FILE_PATH
   ```
 
   - `FILE_PATH` is like `/usr/src/app/index.js`
+
+- Install Node
+  - Start container, update package, install curl
+
+    ```
+    docker run -it ubuntu bash
+    apt-get update
+    apt-get install -y curl
+    ```
+
+  - Download and run the NodeSource setup script (installs Node 20 LTS)
+
+    ```
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+    ```
+
+  - Install Node
+
+    ```
+    apt-get install -y nodejs
+
+    node --version
+    ```
