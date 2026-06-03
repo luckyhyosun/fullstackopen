@@ -6266,6 +6266,8 @@ To be more specific, containers are a form of OS‑level virtualization. The clo
 
 **Docker**
 
+Use [DockerDoc](https://docs.docker.com/) documentation for Docker commands. Also, use [DockerCheatSheet](https://docker.how/) for cheat sheet, hehe.
+
 - run docker
   ```text
   docker container run IMAGE-NAME
@@ -6283,6 +6285,12 @@ To be more specific, containers are a form of OS‑level virtualization. The clo
   ```
 
   The prompt will change to something like `root@<container-id>:/#.`
+
+- Create a container from the image
+
+  ```text
+  docker run -it --name CONTAINER_NAME ubuntu bash
+  ```
 
 - List all of the containers
 
@@ -6360,3 +6368,30 @@ To be more specific, containers are a form of OS‑level virtualization. The clo
 
     node --version
     ```
+
+- Create a new image
+  ```
+  docker commit CONTAINER_NAME NEW_IMAGE_NAME
+  ```
+- Verify the new image exists
+
+  ```
+  docker images
+  ```
+
+- Run the new image — Node is already installed
+  ```
+  docker run -it NEW_IMAGE_NAME bash
+  ```
+- Clean a container
+  ```
+  docker container rm CONTAINER_NAME
+  ```
+- Copy file from your own machine to the container
+  ```
+  docker container cp LOCAL_FILE_ADDRESS CONTAINER_NAME:FILE_ADDRESS
+  ```
+  My case, I used this code:
+  ```
+  cp luckyhyosun/fs-containers/answers/index.js hello-node:/usr/src/app/index.js
+  ```
