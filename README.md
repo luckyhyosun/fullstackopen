@@ -6264,63 +6264,197 @@ To be more specific, containers are a form of OS‑level virtualization. The clo
 - a virtual machine (VM): VMs let you run multiple operating systems on a single physical host, each with its own full OS stack.
 - Containers, by contrast, share the host’s operating system and **run your application in an isolated user-space environment**. Because containers don’t boot a separate OS, they have far less overhead than VMs and are typically used to run a single process or service efficiently.
 
-**Docker**
+**Image vs Container**
 
-Use [DockerDoc](https://docs.docker.com/) documentation for Docker commands. Also, use [DockerCheatSheet](https://docker.how/) for cheat sheet, hehe.
+**Image**
 
-- run docker
+An image is a blueprint — it's a read-only template that contains everything needed to run your app (the OS, Node, your code, etc).
+
+- You build it once with docker build
+- It never changes
+- Think of it like a cooking recipe
+- List the images you have locally
   ```text
-  docker container run IMAGE-NAME
+  docker image ls
   ```
-- pull docker image
-
+- Dlete the image
   ```text
-  docker pull hello-world
-  ```
-
-- Start Ubuntu container with bash
-
-  ```text
-  docker run -it ubuntu bash
+  docker image rm
   ```
 
-  The prompt will change to something like `root@<container-id>:/#.`
+**Container**
 
-- Create a container from the image
+A container is a running instance of an image — it's the actual live environment where your code executes.
 
-  ```text
-  docker run -it --name CONTAINER_NAME ubuntu bash
-  ```
-
+- You create it with docker run
+- You can create many containers from the same image
+- Think of it like the actual cooked meal made from the recipe
 - List all of the containers
-
   ```text
   docker container ls -a
   ```
 
-- Start container
+**Why image must be created first?**
+
+Because a container has nothing to start from without an image. The image defines:
+
+- What OS to use
+- What software is installed (Node, etc.)
+- What files are inside
+- What command to run on startup
+
+A container is just the image brought to life.
+
+**Docker**
+
+Use [DockerDoc](https://docs.docker.com/) documentation for Docker commands. Also, use [DockerCheatSheet](https://docker.how/) for cheat sheet, hehe.
+
+**Basic Docker Commands**
+| Task | Docker command |
+|------|---------------|
+| Build an image | `docker build` |
+| Create & run a container | `docker run` |
+| Only run(start) exisiting container | `docker start` |
+| Stop a container | `docker stop` |
+| List containers | `docker ps` |
+| List images | `docker images` |
+| Copy files into a container | `docker cp` |
+| Save container as new image | `docker commit` |
+
+**Classification**
+| Group | Docker command |
+|------|---------------|
+| container | `run`, `start`, `stop`, `ls` |
+| image | `build`, `pull`, `push`|
+| volume | `create`, `inspect`|
+
+**Practice**
+
+- Download **existing** image + Create docker, in one go
 
   ```text
-  docker start
+  docker container run [IMAGE-NAME]
+  docker run [IMAGE_NAME]
+  docker run --name [CONTAINER_NAME] [IMAGE_NAME]
   ```
 
-- Start a specific container
+  - Create a container from `IMAGE_NAME` and run the container.
+  - downloads image + creates container + runs it
+
+---
+
+- Download **existing** image + Create docker, separately
+  1. downloads image only by pulling docker image
 
   ```text
-  docker start -i CONTAINER-ID-OR-CONTAINER-NAME
+  docker pull [IMAGE_NAME]
   ```
+
+  2. manually creates a container from the image
+
+  ```text
+  docker create [IMAGE_NAME]
+  ```
+
+- Start image container with bash
+
+  ```text
+  docker run -it [IMAGE_NAME] bash
+                         |
+  "open a terminal so I can type commands inside"
+  ```
+
+  - This means : Instead of running a program and exiting, start a shell you can control. Which means, your terminal is directly controlling a Linux environment that is isolated from your computer.
+  - 🔍 Break it into parts
+    1. `docker run` 👉 starts a container
+    2. `[IMAGE_NAME]` 👉 image name
+    3. `bash` 👉 the program you control inside it
+    4. `-it` 👉 connects your terminal to `it` (keyboard + screen)
+
+  - Without bash:
+
+    `docker run [IMAGE_NAME]`: runs whatever the Dockerfile's CMD says, then exits
+
+  - With bash:
+
+    `docker run -it [IMAGE_NAME] bash`: ignores CMD, instead opens a shell so YOU are in control
+
+  - Then, the prompt will change to something like `root@<container-id>:/#.`
 
 - Kill the specific container
 
   ```text
-  docker kill CONTAINER-ID-OR-CONTAINER-NAME
+  docker kill [CONTAINER-ID-OR-CONTAINER-NAME]
   ```
+
+- Clean a container
+
+  ```
+  docker container rm [CONTAINER-ID-OR-CONTAINER-NAME]
+  ```
+
+---
+
+- Build a **new** image and read Dockerfile
+
+  ```text
+  docker build -t [IMAGE_NAME] .
+  ```
+
+  - `-t` means tag, which is the name of image
+  - `.` means location of Dockerfile (current folder)
+  - Docker reads your Dockerfile (**recipe**)
+  - Creates a new image called `[IMAGE_NAME]`
+  - Still no container yet
+
+- Create a container and run the code inside
+
+  ```text
+  docker run [CONTAINER_NAME]
+  ```
+
+  - Docker takes the `[IMAGE_NAME]`
+  - Creates a new container from it
+  - Runs node index.js inside the container
+  - You see the outcome of the image, like `Hello` from `console.log("Hello")`
+
+- A workflow:
+  - `docker build` creates an IMAGE
+  - `docker run` creates a CONTAINER
+    ```
+    Your Mac                Image              Container
+    -----------          -----------          -----------
+    index.js
+    Dockerfile
+        |                     |                    |
+        └── docker build ──► hello-node image
+                                  |
+                                  └── docker run ──► container runs + prints output
+    ```
+
+---
+
+- Save a copy of the current container as a NEW image
+
+  ```
+  docker commit [CONTAINER_NAME] [NEW_IMAGE_NAME]
+  ```
+
+- Copy file from your own machine to the container
+
+  ```
+  docker container cp [LOCAL_FILE_ADDRESS] [CONTAINER_NAME]:[FILE_ADDRESS]
+  ```
+
+  - My case, I used this code: `cp luckyhyosun/fs-containers/answers/index.js hello-node:/usr/src/app/index.js`
+
+---
 
 - Install [Nano](https://www.nano-editor.org/) inside of Linux (Ubuntu, Debian)
   - Since the container is running Ubuntu (Linux), I must use `apt-get` inside it.
 
     ```text
-    docker start -i CONTAINER-ID-OR-CONTAINER-NAME
+    docker start -i [CONTAINER-ID-OR-CONTAINER-NAME]
     ```
 
   - `apt`is a package manage, like Homebrew for mac
@@ -6338,6 +6472,8 @@ Use [DockerDoc](https://docs.docker.com/) documentation for Docker commands. Als
   mkdir -p /usr/src/app
   ```
 
+  - `-p` 👉 Create parent folders automatically if they don’t exist
+
 - Run nano
 
   ```
@@ -6345,6 +6481,7 @@ Use [DockerDoc](https://docs.docker.com/) documentation for Docker commands. Als
   ```
 
   - `FILE_PATH` is like `/usr/src/app/index.js`
+  - `FILE_PATH` can be `Dockerfile`, which can create Dokerfile and go to the editer directly.
 
 - Install Node
   - Start container, update package, install curl
@@ -6368,30 +6505,3 @@ Use [DockerDoc](https://docs.docker.com/) documentation for Docker commands. Als
 
     node --version
     ```
-
-- Create a new image
-  ```
-  docker commit CONTAINER_NAME NEW_IMAGE_NAME
-  ```
-- Verify the new image exists
-
-  ```
-  docker images
-  ```
-
-- Run the new image — Node is already installed
-  ```
-  docker run -it NEW_IMAGE_NAME bash
-  ```
-- Clean a container
-  ```
-  docker container rm CONTAINER_NAME
-  ```
-- Copy file from your own machine to the container
-  ```
-  docker container cp LOCAL_FILE_ADDRESS CONTAINER_NAME:FILE_ADDRESS
-  ```
-  My case, I used this code:
-  ```
-  cp luckyhyosun/fs-containers/answers/index.js hello-node:/usr/src/app/index.js
-  ```
