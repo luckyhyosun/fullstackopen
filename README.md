@@ -6309,6 +6309,34 @@ A container is just the image brought to life.
 
 Use [DockerDoc](https://docs.docker.com/) documentation for Docker commands. Also, use [DockerCheatSheet](https://docker.how/) for cheat sheet, hehe.
 
+[Dockerfile](https://docs.docker.com/build/concepts/dockerfile/) is a simple text file that contains all of the instructions for creating an image.
+
+```text
+FROM node:24
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm ci
+
+ENV DEBUG=express:*
+
+CMD ["npm", "start"]
+```
+
+`npm ci` is better than `npm install` in Dockerfile, because [ci command](https://docs.npmjs.com/cli/v9/commands/npm-ci) deletes the node_modules folder, so creating the `.dockerignore` did not matter. However, `.dockerignore` is an amazing tool when you want to optimize your build process. We will talk briefly about these optimizations later.
+
+`npm ci --omit=dev` can be used to not waste time installing development dependencies.
+
+[Docker compose](https://docs.docker.com/compose/) is a tool for defining and running multi-container applications.
+
+- `docker compose up` to build and run the application
+- `docker compose up --build` to rebuild the images
+- `docker compose down` to close the application
+
+---
+
 **Basic Docker Commands**
 | Task | Docker command |
 |------|---------------|
